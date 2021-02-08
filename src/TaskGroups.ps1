@@ -5,6 +5,7 @@ function Update-TaskGroup {
         [string] $projectName,
         [string] $sourceTaskGroupName,
         [string] $destinationTaskGroupName,
+        [string] $comment,
         [AzureDevOpsServicesAPIClient] $apiClient
     )
 
@@ -15,6 +16,7 @@ function Update-TaskGroup {
     $destinationTaskGroup.category = $sourceTaskGroup.category
     $destinationTaskGroup.inputs = $sourceTaskGroup.inputs
     $destinationTaskGroup.tasks = $sourceTaskGroup.tasks
+    $destinationTaskGroup.comment = $comment
 
     $apiClient.UpdateTaskGroup($projectName, $destinationTaskGroup)
 }
