@@ -44,11 +44,12 @@ class AzureDevOpsServicesAPIClient {
 
         if ($apiVersion) {
             if ($uri.Contains('?')) {
-                $uri += "&api-version=$apiVersion"
+                $uri += '&'
             }
             else {
-                $uri += "?api-version=$apiVersion"
+                $uri += '?'
             }
+            $uri += "api-version=$apiVersion"
         }
 
         $bodyJson = $null

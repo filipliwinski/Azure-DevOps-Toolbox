@@ -1,5 +1,29 @@
 using module ./AzureDevOpsServicesAPIClient.psm1
 
+
+function Export-TaskGroups {
+    param (
+        [string] $projectName,
+        [string] $outputPath = '',
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+
+    if ($null -eq $outputPath -or '' -eq $outputPath) {
+        $outputPath = "."
+    }
+    
+    $taskGroups = $apiClient.GetTaskGroups($projectName)
+
+    if ($taskGroups.count -gt 0) {
+        New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
+    }
+
+    foreach ($taskGroup in $taskGroups) {
+        $name = $taskGroup.name -replace '\*','_'
+        ConvertTo-Json $taskGroup > "$outputPath\$name.json"
+    }
+}
+
 function Update-TaskGroup {
     param(
         [string] $projectName,
