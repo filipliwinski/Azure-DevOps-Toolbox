@@ -64,6 +64,8 @@ class AzureDevOpsServicesAPIClient {
         return $this.CallRestAPI('Get', '_apis/projects', $null, $null)
     }
 
+    #region TaskGroups
+
     [PSObject] GetTaskGroups([string] $projectName) {
         $taskGroups = $this.CallRestAPI('Get', "$projectName/_apis/distributedtask/taskgroups", $this.APIVersion, $null)
         return $taskGroups.value
@@ -92,4 +94,39 @@ class AzureDevOpsServicesAPIClient {
     [void] UpdateTaskGroup([string] $projectName, [PsObject] $taskGroup) {
         $this.CallRestAPI('Put', "$projectName/_apis/distributedtask/taskgroups/$($taskGroup.id)", $this.APIVersion, $taskGroup)
     }
+
+    #endregion TaskGroups
+    #region VariableGroups
+
+    [PSObject] AddVariableGroup([string] $projectName, [PsObject] $variableGroup) {
+        $variableGroup = $this.CallRestAPI('Post', "$projectName/_apis/distributedtask/variablegroups", $this.APIVersion, $variableGroup)
+        return $variableGroup
+    }
+
+    [PSObject] GetVariableGroups([string] $projectName) {
+        $variableGroups = $this.CallRestAPI('Get', "$projectName/_apis/distributedtask/variablegroups", $this.APIVersion, $null)
+        return $variableGroups.value
+    }
+    
+    [PSObject] GetVariableGroupByName([string] $projectName, [string] $variableGroupName) {
+        $variableGroups = $this.GetVariableGroups($projectName)
+        
+        if ($variableGroups.Count -eq 0) {
+            return $null
+        }
+
+        return $variableGroups | Where-Object { $_.name -eq $variableGroupName }
+    }
+
+    [PSObject] GetVariableGroupById([string] $projectName, [int] $variableGroupId) {
+        $variableGroup = $this.CallRestAPI('Get', "$projectName/_apis/distributedtask/variablegroups/$variableGroupId", $this.APIVersion, $null)
+        return $variableGroup
+    }
+
+    [PSObject] UpdateVariableGroup([string] $projectName, [PsObject] $variableGroup) {
+        $variableGroup = $this.CallRestAPI('Put', "$projectName/_apis/distributedtask/variablegroups/$($variableGroup.id)", $this.APIVersion, $variableGroup)
+        return $variableGroup
+    }
+
+    #endregion VariableGroups
 }

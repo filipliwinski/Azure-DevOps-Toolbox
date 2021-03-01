@@ -3,7 +3,7 @@
 
 Bypass the PowerShell Execution Policy:
 
-    Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope LocalMachine
+    Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 
 Enable Verbose:
 
