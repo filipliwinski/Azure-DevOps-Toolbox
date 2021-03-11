@@ -1,4 +1,3 @@
-using module ./AzureDevOpsServicesAPIClient.psm1
 
 
 function Export-TaskGroups {

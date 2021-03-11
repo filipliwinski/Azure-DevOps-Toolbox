@@ -348,4 +348,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-src/temp.ps1
+
+src/[Tt]emp.ps1
+[Tt]emp/

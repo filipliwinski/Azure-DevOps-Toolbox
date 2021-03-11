@@ -1,4 +1,4 @@
-using module ./AzureDevOpsServicesAPIClient.psm1
+
 
 function Add-VariableGroup {
     param(
@@ -76,3 +76,24 @@ function Export-VariableGroup {
     ConvertTo-Json $variableGroup > "$outputPath\$name.json"
 }
 
+function Export-VariableGroups {
+    param (
+        [string] $projectName,
+        [string] $outputPath = '',
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+
+    if ($null -eq $outputPath -or '' -eq $outputPath) {
+        $outputPath = "."
+    }
+    
+    $variableGroups = $apiClient.GetVariableGroups($projectName)
+    
+    if ($null -ne $variableGroups) {
+        New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
+    }
+
+    foreach ($variableGroup in $variableGroups) {
+        ConvertTo-Json $variableGroup > "$outputPath\$($variableGroup.name).json"
+    }
+}

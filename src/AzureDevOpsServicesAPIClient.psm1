@@ -7,6 +7,7 @@ enum AuthFlow {
 class AzureDevOpsServicesAPIClient {
     [string] $APIVersion = '6.0-preview.1'
     [string] $ServiceHost = 'https://dev.azure.com'
+    [string] $ServiceHostVSRM = 'https://vsrm.dev.azure.com'
     [string] $Organization
     [string] $PersonalAccessToken
     [AuthFlow] $Auth
@@ -16,6 +17,8 @@ class AzureDevOpsServicesAPIClient {
         $this.PersonalAccessToken = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(":$personalAccessToken"))
         $this.Auth = [AuthFlow]::PersonalAccessToken
     }
+
+    #region Internals
 
     [PSObject] ComposeHeaders() {
         $authHeader = ''
@@ -36,11 +39,11 @@ class AzureDevOpsServicesAPIClient {
         }
     }
 
-    [PSObject] CallRestAPI([string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
+    [PSObject] CallRestAPI([string] $serviceHost, [string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
 
         $requestHeaders = $this.ComposeHeaders()
 
-        $uri = "$($this.ServiceHost)/$($this.Organization)/$endpoint"
+        $uri = "$serviceHost/$($this.Organization)/$endpoint"
 
         if ($apiVersion) {
             if ($uri.Contains('?')) {
@@ -60,19 +63,29 @@ class AzureDevOpsServicesAPIClient {
         return Invoke-RestMethod -Method $method -Uri $uri -Headers $requestHeaders -Body $bodyJson
     }
 
+    [PSObject] Request([string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
+        return $this.CallRestAPI($this.ServiceHost, $method, $endpoint, $apiVersion, $body)
+    }
+
+    [PSObject] VSRMRequest([string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
+        return $this.CallRestAPI($this.ServiceHostVSRM, $method, $endpoint, $apiVersion, $body)
+    }
+
+    #endregion Internals
+
     [PSObject] GetProjects() {
-        return $this.CallRestAPI('Get', '_apis/projects', $null, $null)
+        return $this.Request('Get', '_apis/projects', $null, $null)
     }
 
     #region TaskGroups
 
     [PSObject] GetTaskGroups([string] $projectName) {
-        $taskGroups = $this.CallRestAPI('Get', "$projectName/_apis/distributedtask/taskgroups", $this.APIVersion, $null)
+        $taskGroups = $this.Request('Get', "$projectName/_apis/distributedtask/taskgroups", $this.APIVersion, $null)
         return $taskGroups.value
     }
 
     [PSObject] GetTaskGroupById([string] $projectName, [string] $taskGroupId) {
-        $taskGroup = $this.CallRestAPI('Get', "$projectName/_apis/distributedtask/taskgroups/$taskGroupId", $this.APIVersion, $null)
+        $taskGroup = $this.Request('Get', "$projectName/_apis/distributedtask/taskgroups/$taskGroupId", $this.APIVersion, $null)
         
         if ($taskGroup.Count -eq 0) {
             return $null
@@ -92,19 +105,19 @@ class AzureDevOpsServicesAPIClient {
     }
 
     [void] UpdateTaskGroup([string] $projectName, [PsObject] $taskGroup) {
-        $this.CallRestAPI('Put', "$projectName/_apis/distributedtask/taskgroups/$($taskGroup.id)", $this.APIVersion, $taskGroup)
+        $this.Request('Put', "$projectName/_apis/distributedtask/taskgroups/$($taskGroup.id)", $this.APIVersion, $taskGroup)
     }
 
     #endregion TaskGroups
     #region VariableGroups
 
     [PSObject] AddVariableGroup([string] $projectName, [PsObject] $variableGroup) {
-        $variableGroup = $this.CallRestAPI('Post', "$projectName/_apis/distributedtask/variablegroups", $this.APIVersion, $variableGroup)
+        $variableGroup = $this.Request('Post', "$projectName/_apis/distributedtask/variablegroups", $this.APIVersion, $variableGroup)
         return $variableGroup
     }
 
     [PSObject] GetVariableGroups([string] $projectName) {
-        $variableGroups = $this.CallRestAPI('Get', "$projectName/_apis/distributedtask/variablegroups", $this.APIVersion, $null)
+        $variableGroups = $this.Request('Get', "$projectName/_apis/distributedtask/variablegroups", $this.APIVersion, $null)
         return $variableGroups.value
     }
     
@@ -119,14 +132,27 @@ class AzureDevOpsServicesAPIClient {
     }
 
     [PSObject] GetVariableGroupById([string] $projectName, [int] $variableGroupId) {
-        $variableGroup = $this.CallRestAPI('Get', "$projectName/_apis/distributedtask/variablegroups/$variableGroupId", $this.APIVersion, $null)
+        $variableGroup = $this.Request('Get', "$projectName/_apis/distributedtask/variablegroups/$variableGroupId", $this.APIVersion, $null)
         return $variableGroup
     }
 
     [PSObject] UpdateVariableGroup([string] $projectName, [PsObject] $variableGroup) {
-        $variableGroup = $this.CallRestAPI('Put', "$projectName/_apis/distributedtask/variablegroups/$($variableGroup.id)", $this.APIVersion, $variableGroup)
+        $variableGroup = $this.Request('Put', "$projectName/_apis/distributedtask/variablegroups/$($variableGroup.id)", $this.APIVersion, $variableGroup)
         return $variableGroup
     }
 
     #endregion VariableGroups
+    #region ReleaseDefinitions
+
+    [PSObject] GetReleaseDefinitions([string] $projectName) {
+        $releaseDefinitions = $this.VSRMRequest('Get', "$projectName/_apis/release/definitions", $this.APIVersion, $null)
+        return $releaseDefinitions.value
+    }
+
+    [PSObject] GetReleaseDefinition([string] $projectName, [int] $definitionId) {
+        $definition = $this.VSRMRequest('Get', "$projectName/_apis/release/definitions/$definitionId", $this.APIVersion, $null)
+        return $definition
+    }
+
+    #endregion ReleaseDefinitions
 }
