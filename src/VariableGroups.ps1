@@ -73,7 +73,7 @@ function Export-VariableGroup {
     }
 
     $name = $variableGroup.name
-    ConvertTo-Json $variableGroup > "$outputPath\$name.json"
+    ConvertTo-Json $variableGroup -Depth 100 > "$outputPath\$name.json"
 }
 
 function Export-VariableGroups {
@@ -94,6 +94,6 @@ function Export-VariableGroups {
     }
 
     foreach ($variableGroup in $variableGroups) {
-        ConvertTo-Json $variableGroup > "$outputPath\$($variableGroup.name).json"
+        ConvertTo-Json $variableGroup -Depth 100 > "$outputPath\$($variableGroup.name).json"
     }
 }

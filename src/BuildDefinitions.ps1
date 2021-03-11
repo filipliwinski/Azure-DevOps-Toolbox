@@ -26,6 +26,6 @@ function Export-BuildDefinitions {
 
     foreach ($definition in $definitions) {
         $name = $definition.name -replace '\*','_'
-        ConvertTo-Json $definition > "$outputPath\$name.json"
+        ConvertTo-Json $definition -Depth 100 > "$outputPath\$name.json"
     }
 }
