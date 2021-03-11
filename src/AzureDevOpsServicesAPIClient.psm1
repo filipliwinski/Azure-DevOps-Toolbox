@@ -72,11 +72,13 @@ class AzureDevOpsServicesAPIClient {
     }
 
     #endregion Internals
+    #region Projects
 
     [PSObject] GetProjects() {
         return $this.Request('Get', '_apis/projects', $null, $null)
     }
 
+    #endregion Projects
     #region TaskGroups
 
     [PSObject] GetTaskGroups([string] $projectName) {
@@ -142,6 +144,19 @@ class AzureDevOpsServicesAPIClient {
     }
 
     #endregion VariableGroups
+    #region BuildDefinitions
+
+    [PSObject] GetBuildDefinitions([string] $projectName) {
+        $definitions = $this.Request('Get', "$projectName/_apis/build/definitions", '6.0', $null)
+        return $definitions.value
+    }
+
+    [PSObject] GetBuildDefinition([string] $projectName, [int] $definitionId) {
+        $definition = $this.Request('Get', "$projectName/_apis/build/definitions/$definitionId", '6.0', $null)
+        return $definition
+    }
+
+    #endregion BuildDefinitions
     #region ReleaseDefinitions
 
     [PSObject] GetReleaseDefinitions([string] $projectName) {
