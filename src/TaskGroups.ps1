@@ -18,7 +18,7 @@ function Export-TaskGroups {
     }
 
     foreach ($taskGroup in $taskGroups) {
-        $name = $taskGroup.name -replace '\*','_'
+        $name = $taskGroup.name -replace '[\[\]\<\>\:\"\/\\\|\?\*]', '_'
         ConvertTo-Json $taskGroup -Depth 100 > "$outputPath\$name.json"
     }
 }
