@@ -8,3 +8,4 @@ Bypass the PowerShell Execution Policy:
 Enable Verbose:
 
     $VerbosePreference = "Continue"
+    
