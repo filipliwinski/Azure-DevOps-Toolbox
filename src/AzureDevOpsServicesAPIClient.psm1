@@ -191,4 +191,21 @@ class AzureDevOpsServicesAPIClient {
     }
 
     #endregion ReleaseDefinitions
+    #region Repositories
+
+    [PSObject] GetRepositories([string] $projectName) {
+        $repositories = $this.Request('Get', "$projectName/_apis/git/repositories", $this.APIVersion, $null)
+        return $repositories.value
+    }
+
+    #endregion Repositories
+    #region PolicyConfigurations
+
+    [PSObject] GetPolicyConfiguration([string] $projectName, [string] $repositoryId, [string] $refName) {
+        $refName = "refs/heads/$refName"
+        $policy = $this.Request('Get', "$projectName/_apis/git/policy/configurations?repositoryId=$repositoryId&refName=$refName", '5.0-preview.1', $null)
+        return $policy.value
+    }
+
+    #endregion PolicyConfigurations
 }
