@@ -22,7 +22,7 @@
 
 . ".\src\git\Repositories.ps1"
 
-function List-PolicyConfiguration {
+function Get-PolicyConfigurationRaw {
     param (
         [string] $projectName,
         [string] $repositoryName,
@@ -33,6 +33,30 @@ function List-PolicyConfiguration {
     $repository = Get-RepositoryByName -projectName $projectName -apiClient $apiClient -repositoryName $repositoryName
 
     $policy = $apiClient.GetPolicyConfiguration($projectName, $repository.id, $refName)
+
+    return $policy
+}
+
+function Get-PolicyConfiguration {
+    param (
+        [string] $projectName,
+        [string] $repositoryName,
+        [string] $refName,
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+
+    $rawPolicy = Get-PolicyConfigurationRaw -projectName $projectName -repositoryName $repositoryName -refName $refName -apiClient $apiClient
+
+    $policy = @{
+        repository = $repositoryName
+        branch = $refName
+        settings = @{
+            'Comment requirements' = $rawPolicy | Where-Object { $_.type.displayName -eq 'Comment requirements' } | Select-Object -ExpandProperty settings
+            'Require a merge strategy' = $rawPolicy | Where-Object { $_.type.displayName -eq 'Require a merge strategy' } | Select-Object -ExpandProperty settings
+            'Required reviewers' = $rawPolicy | Where-Object { $_.type.displayName -eq 'Required reviewers' } | Select-Object -ExpandProperty settings
+            'Minimum number of reviewers' = $rawPolicy | Where-Object { $_.type.displayName -eq 'Minimum number of reviewers' } | Select-Object -ExpandProperty settings
+        }
+    }
 
     return $policy
 }

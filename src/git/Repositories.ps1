@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function List-Repositories {
+function Get-Repositories {
     param (
         [string] $projectName,
         [AzureDevOpsServicesAPIClient] $apiClient
