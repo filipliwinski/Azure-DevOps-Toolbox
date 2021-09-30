@@ -22,6 +22,12 @@
 
 . ".\src\git\Repositories.ps1"
 
+# Branch policies
+$commentRequirements = 'Comment requirements'
+$requireMergeStrategy = 'Require a merge strategy'
+$requiredReviewers = 'Required reviewers'
+$minimumNumberOfReviewers = 'Minimum number of reviewers'
+
 function Get-PolicyConfigurationRaw {
     param (
         [string] $projectName,
@@ -51,10 +57,10 @@ function Get-PolicyConfiguration {
         repository = $repositoryName
         branch = $refName
         settings = @{
-            'Comment requirements' = $rawPolicy | Where-Object { $_.type.displayName -eq 'Comment requirements' } | Select-Object -ExpandProperty settings
-            'Require a merge strategy' = $rawPolicy | Where-Object { $_.type.displayName -eq 'Require a merge strategy' } | Select-Object -ExpandProperty settings
-            'Required reviewers' = $rawPolicy | Where-Object { $_.type.displayName -eq 'Required reviewers' } | Select-Object -ExpandProperty settings
-            'Minimum number of reviewers' = $rawPolicy | Where-Object { $_.type.displayName -eq 'Minimum number of reviewers' } | Select-Object -ExpandProperty settings
+            $commentRequirements = $rawPolicy | Where-Object { $_.type.displayName -eq $commentRequirements } | Select-Object -ExpandProperty settings
+            $requireMergeStrategy = $rawPolicy | Where-Object { $_.type.displayName -eq $requireMergeStrategy } | Select-Object -ExpandProperty settings
+            $requiredReviewers = $rawPolicy | Where-Object { $_.type.displayName -eq $requiredReviewers } | Select-Object -ExpandProperty settings
+            $minimumNumberOfReviewers = $rawPolicy | Where-Object { $_.type.displayName -eq $minimumNumberOfReviewers } | Select-Object -ExpandProperty settings
         }
     }
 

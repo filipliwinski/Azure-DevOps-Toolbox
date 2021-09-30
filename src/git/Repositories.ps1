@@ -20,6 +20,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+<#
+        .SYNOPSIS
+        Gets all repositories for the specified project.
+
+        .DESCRIPTION
+        Gets all repositories for the specified project.
+
+        .PARAMETER projectName
+        Specifies the project name.
+
+        .PARAMETER apiClient
+        Specifies the API client to use.
+
+        .OUTPUTS
+        System.Array. Returns an array with repositories.
+
+        .LINK
+        Online version: https://github.com/filipliwinski/Azure-DevOps-Toolbox/wiki/Repositories#get-repositories
+
+    #>
 function Get-Repositories {
     param (
         [string] $projectName,
@@ -31,6 +51,29 @@ function Get-Repositories {
     return $repositories
 }
 
+<#
+        .SYNOPSIS
+        Gets a repository with the specified name.
+
+        .DESCRIPTION
+        Gets a repository with the specified name.
+
+        .PARAMETER projectName
+        Specifies the project name.
+
+        .PARAMETER repositoryName
+        Specifies the repository name.
+
+        .PARAMETER apiClient
+        Specifies the API client to use.
+
+        .OUTPUTS
+        System.Object. Returns an object with the repository details.
+
+        .LINK
+        Online version: https://github.com/filipliwinski/Azure-DevOps-Toolbox/wiki/Repositories#get-repositorybyname
+
+    #>
 function Get-RepositoryByName {
     param (
         [string] $projectName,
