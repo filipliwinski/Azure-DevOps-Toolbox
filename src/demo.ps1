@@ -41,7 +41,7 @@ Export-BuildDefinitions -projectName $projectName -outputpath '.\temp\buildDefin
 Export-ReleaseDefinitions -projectName $projectName -outputpath '.\temp\releaseDefinitions' -apiClient $apiClient -expand $true
 Export-TaskGroups -projectName $projectName -outputpath '.\temp\taskGroups' -apiClient $apiClient
 Export-VariableGroups -projectName $projectName -outputpath '.\temp\variableGroups' -apiClient $apiClient
-Get-Repositories -projectName $projectName -apiClient $apiClient
+Export-Repositories -projectName $projectName -outputpath '.\temp\repositories' -apiClient $apiClient
 Export-PolicyConfigurationRaw -projectName $projectName -repositoryName "YAML.Templates" -refName "main" -outputpath '.\temp\policyConfigurations' -apiClient $apiClient
 Export-PolicyConfiguration -projectName $projectName -repositoryName "YAML.Templates" -refName "main" -outputpath '.\temp\policyConfigurations' -apiClient $apiClient
 

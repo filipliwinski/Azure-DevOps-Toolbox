@@ -90,10 +90,32 @@ function Get-RepositoryByName {
     return $repositories | Where-Object { $_.name -eq $repositoryName }
 }
 
+<#
+        .SYNOPSIS
+        Exports repositories data as JSON to a file.
+
+        .DESCRIPTION
+        Exports repositories data as JSON to a file.
+
+        .PARAMETER projectName
+        Specifies the project name.
+
+        .PARAMETER outputPath
+        Specifies the location of the output file.
+
+        .PARAMETER apiClient
+        Specifies the API client to use.
+
+        .OUTPUTS
+        None.
+
+        .LINK
+        Online version: https://github.com/filipliwinski/Azure-DevOps-Toolbox/wiki/Repositories#export-repositories
+
+    #>
 function Export-Repositories {
     param (
         [string] $projectName,
-        [string] $repositoryName,
         [string] $outputPath = '',
         [AzureDevOpsServicesAPIClient] $apiClient
     )
