@@ -89,3 +89,23 @@ function Get-RepositoryByName {
 
     return $repositories | Where-Object { $_.name -eq $repositoryName }
 }
+
+function Export-Repositories {
+    param (
+        [string] $projectName,
+        [string] $repositoryName,
+        [string] $outputPath = '',
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+
+    $repositories = $apiClient.GetRepositories($projectName)
+
+    if ($repositories.count -gt 0) {
+        New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
+    }
+
+    foreach ($repository in $repositories) {
+        $name = $repository.name -replace '[\[\]\<\>\:\"\/\\\|\?\*]', '_'
+        ConvertTo-Json $repository -Depth 100 > "$outputPath\$name.json"
+    }
+}

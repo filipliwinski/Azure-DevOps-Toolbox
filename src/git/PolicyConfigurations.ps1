@@ -20,13 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-. ".\src\git\Repositories.ps1"
+. ".\git\Repositories.ps1"
 
 # Branch policies
-$commentRequirements = 'Comment requirements'
-$requireMergeStrategy = 'Require a merge strategy'
-$requiredReviewers = 'Required reviewers'
-$minimumNumberOfReviewers = 'Minimum number of reviewers'
+$commentRequirementsDisplayName = 'Comment requirements'
+$requireMergeStrategyDisplayName = 'Require a merge strategy'
+$requiredReviewersDisplayName = 'Required reviewers'
+$minimumNumberOfReviewersDisplayName = 'Minimum number of reviewers'
 
 function Get-PolicyConfigurationRaw {
     param (
@@ -52,15 +52,24 @@ function Get-PolicyConfiguration {
     )
 
     $rawPolicy = Get-PolicyConfigurationRaw -projectName $projectName -repositoryName $repositoryName -refName $refName -apiClient $apiClient
+    
+    if ("[]" -eq $rawPolicy) {
+        return $null
+    }
+
+    $commentRequirements = $rawPolicy | Where-Object { $_.type.displayName -eq $commentRequirementsDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
+    $requireMergeStrategy = $rawPolicy | Where-Object { $_.type.displayName -eq $requireMergeStrategyDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
+    $requiredReviewers = $rawPolicy | Where-Object { $_.type.displayName -eq $requiredReviewersDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
+    $minimumNumberOfReviewers = $rawPolicy | Where-Object { $_.type.displayName -eq $minimumNumberOfReviewersDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
 
     $policy = @{
         repository = $repositoryName
         branch = $refName
         settings = @{
-            $commentRequirements = $rawPolicy | Where-Object { $_.type.displayName -eq $commentRequirements } | Select-Object -ExpandProperty settings
-            $requireMergeStrategy = $rawPolicy | Where-Object { $_.type.displayName -eq $requireMergeStrategy } | Select-Object -ExpandProperty settings
-            $requiredReviewers = $rawPolicy | Where-Object { $_.type.displayName -eq $requiredReviewers } | Select-Object -ExpandProperty settings
-            $minimumNumberOfReviewers = $rawPolicy | Where-Object { $_.type.displayName -eq $minimumNumberOfReviewers } | Select-Object -ExpandProperty settings
+            $commentRequirementsDisplayName = $commentRequirements
+            $requireMergeStrategyDisplayName = $requireMergeStrategy
+            $requiredReviewersDisplayName = $requiredReviewers
+            $minimumNumberOfReviewersDisplayName = $minimumNumberOfReviewers
         }
     }
 
@@ -80,14 +89,37 @@ function Export-PolicyConfiguration {
         $outputPath = "."
     }
 
-    $repository = Get-RepositoryByName -projectName $projectName -apiClient $apiClient -repositoryName $repositoryName
+    $policy = Get-PolicyConfiguration -projectName $projectName -repositoryName $repositoryName -refName $refName -apiClient $apiClient
 
-    $policy = $apiClient.GetPolicyConfiguration($projectName, $repository.id, $refName)
+    if ($null -ne $policy) {
+        New-Item -ItemType Directory -Force -Path "$outputPath\$repositoryName" | Out-Null
+
+        ConvertTo-Json $policy -Depth 100 > "$outputPath\$repositoryName\$refName.json"
+    }
+}
+
+function Export-PolicyConfigurationRaw {
+    param (
+        [string] $projectName,
+        [string] $repositoryName,
+        [string] $refName,
+        [string] $outputPath = '',
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+
+    if ($null -eq $outputPath -or '' -eq $outputPath) {
+        $outputPath = "."
+    }
+
+    $policy = Get-PolicyConfigurationRaw -projectName $projectName -repositoryName $repositoryName -refName $refName -apiClient $apiClient
 
     if ($policy.count -gt 0) {
-        New-Item -ItemType Directory -Force -Path "$outputPath\$($repository.name)" | Out-Null
+        New-Item -ItemType Directory -Force -Path "$outputPath\$repositoryName" | Out-Null
 
-        ConvertTo-Json $policy -Depth 100 > "$outputPath\$($repository.name)\$refName.json"
+        ConvertTo-Json $policy -Depth 100 > "$outputPath\$repositoryName\$refName.raw.json"
+    }
+    else {
+        return ConvertTo-Json $policy -Depth 100
     }
 }
 

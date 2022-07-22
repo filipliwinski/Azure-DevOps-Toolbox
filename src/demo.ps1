@@ -26,18 +26,23 @@ $organizationName = '<put the name of the organization here>'
 $projectName = '<put the name of the project here>'
 $patToken = '<put the Personal Access Token here>'
 
-. .\src\TaskGroups.ps1
-. .\src\VariableGroups.ps1
-. .\src\BuildDefinitions.ps1
-. .\src\ReleaseDefinitions.ps1
+. .\TaskGroups.ps1
+. .\VariableGroups.ps1
+. .\BuildDefinitions.ps1
+. .\ReleaseDefinitions.ps1
+. .\git\Repositories.ps1
+. .\git\PolicyConfigurations.ps1
 
 $apiClient = [AzureDevOpsServicesAPIClient]::new($organizationName, $patToken)
 
 $VerbosePreference = "Continue"
 
-Export-BuildDefinitions -projectName $projectName -outputpath '.\buildDefinitions' -apiClient $apiClient -expand $true
-Export-ReleaseDefinitions -projectName $projectName -outputpath '.\releaseDefinitions' -apiClient $apiClient -expand $true
-Export-TaskGroups -projectName $projectName -outputpath '.\taskGroups' -apiClient $apiClient
-Export-VariableGroups -projectName $projectName -outputpath '.\variableGroups' -apiClient $apiClient
+Export-BuildDefinitions -projectName $projectName -outputpath '.\temp\buildDefinitions' -apiClient $apiClient -expand $true
+Export-ReleaseDefinitions -projectName $projectName -outputpath '.\temp\releaseDefinitions' -apiClient $apiClient -expand $true
+Export-TaskGroups -projectName $projectName -outputpath '.\temp\taskGroups' -apiClient $apiClient
+Export-VariableGroups -projectName $projectName -outputpath '.\temp\variableGroups' -apiClient $apiClient
+Get-Repositories -projectName $projectName -apiClient $apiClient
+Export-PolicyConfigurationRaw -projectName $projectName -repositoryName "YAML.Templates" -refName "main" -outputpath '.\temp\policyConfigurations' -apiClient $apiClient
+Export-PolicyConfiguration -projectName $projectName -repositoryName "YAML.Templates" -refName "main" -outputpath '.\temp\policyConfigurations' -apiClient $apiClient
 
 $VerbosePreference = "SilentlyContinue"
