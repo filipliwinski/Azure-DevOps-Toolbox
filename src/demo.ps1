@@ -25,6 +25,9 @@ using module .\src\AzureDevOpsServicesAPIClient.psm1
 $organizationName = '<put the name of the organization here>'
 $projectName = '<put the name of the project here>'
 $patToken = '<put the Personal Access Token here>'
+# Uncomment the line below to point to your local Azure DevOps Server.
+# By default points to Azure DevOps Services URL.
+# $serviceHost = '<put the URL of your ADO Server here - {server:port}/tfs>'
 
 . .\TaskGroups.ps1
 . .\VariableGroups.ps1
@@ -33,7 +36,7 @@ $patToken = '<put the Personal Access Token here>'
 . .\git\Repositories.ps1
 . .\git\PolicyConfigurations.ps1
 
-$apiClient = [AzureDevOpsServicesAPIClient]::new($organizationName, $patToken)
+$apiClient = [AzureDevOpsServicesAPIClient]::new($organizationName, $serviceHost, $patToken)
 
 $VerbosePreference = "Continue"
 
@@ -42,7 +45,7 @@ Export-ReleaseDefinitions -projectName $projectName -outputpath '.\temp\releaseD
 Export-TaskGroups -projectName $projectName -outputpath '.\temp\taskGroups' -apiClient $apiClient
 Export-VariableGroups -projectName $projectName -outputpath '.\temp\variableGroups' -apiClient $apiClient
 Export-Repositories -projectName $projectName -outputpath '.\temp\repositories' -apiClient $apiClient
-Export-PolicyConfigurationRaw -projectName $projectName -repositoryName "YAML.Templates" -refName "main" -outputpath '.\temp\policyConfigurations' -apiClient $apiClient
-Export-PolicyConfiguration -projectName $projectName -repositoryName "YAML.Templates" -refName "main" -outputpath '.\temp\policyConfigurations' -apiClient $apiClient
+Export-PolicyConfigurationRaw -projectName $projectName -repositoryName "<put the name of the repository here>" -refName "<put the name of the branch here>" -outputpath '.\temp\policyConfigurations' -apiClient $apiClient
+Export-PolicyConfiguration -projectName $projectName -repositoryName "<put the name of the repository here>" -refName "<put the name of the branch here>" -outputpath '.\temp\policyConfigurations' -apiClient $apiClient
 
 $VerbosePreference = "SilentlyContinue"

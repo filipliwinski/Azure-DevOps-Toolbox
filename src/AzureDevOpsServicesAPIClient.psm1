@@ -33,7 +33,14 @@ class AzureDevOpsServicesAPIClient {
     [string] $PersonalAccessToken
     [AuthFlow] $Auth
 
-    AzureDevOpsServicesAPIClient([string] $organization, [string] $personalAccessToken) {
+    AzureDevOpsServicesAPIClient([string] $organization, [string] $serviceHost, [string] $personalAccessToken) {
+        
+        if ('' -eq $serviceHost) {
+            Write-Host "serviceHost not provided. Using $ServiceHost"
+        } else {
+            $this.ServiceHost = $serviceHost.TrimEnd('/')
+        }
+        
         $this.Organization = $organization
         $this.PersonalAccessToken = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(":$personalAccessToken"))
         $this.Auth = [AuthFlow]::PersonalAccessToken
@@ -80,6 +87,8 @@ class AzureDevOpsServicesAPIClient {
         if ($body) {
             $bodyJson = ConvertTo-Json $body -Depth 10
         }
+
+        Write-Verbose "$($method.ToUpper()) $uri"
 
         return Invoke-RestMethod -Method $method -Uri $uri -Headers $requestHeaders -Body $bodyJson
     }
