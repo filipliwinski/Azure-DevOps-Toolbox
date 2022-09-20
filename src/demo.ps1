@@ -38,7 +38,7 @@ $patToken = '<put the Personal Access Token here>'
 
 $apiClient = [AzureDevOpsServicesAPIClient]::new($organizationName, $serviceHost, $patToken)
 
-$VerbosePreference = "Continue"
+$VerbosePreference = "Continue"   # Show verbose logs
 
 Export-BuildDefinitions -projectName $projectName -outputpath '.\temp\buildDefinitions' -apiClient $apiClient -expand $true
 Export-ReleaseDefinitions -projectName $projectName -outputpath '.\temp\releaseDefinitions' -apiClient $apiClient -expand $true

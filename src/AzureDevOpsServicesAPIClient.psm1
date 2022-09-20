@@ -208,6 +208,14 @@ class AzureDevOpsServicesAPIClient {
     }
 
     #endregion Repositories
+    #region Refs
+
+    [psobject] GetRefs([string] $projectName, [string] $repositoryId) {
+        $refs = $this.Request('Get', "$projectName/_apis/git/repositories/$repositoryId/refs", $this.APIVersion, $null)
+        return $refs
+    }
+
+    #endregion Refs
     #region PolicyConfigurations
 
     [PSObject] GetPolicyConfiguration([string] $projectName, [string] $repositoryId, [string] $refName) {

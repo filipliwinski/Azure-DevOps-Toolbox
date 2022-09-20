@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 . ".\git\Repositories.ps1"
+. ".\git\Refs.ps1"
 
 # Branch policies
 $commentRequirementsDisplayName = 'Comment requirements'
@@ -62,18 +63,55 @@ function Get-PolicyConfiguration {
     $requiredReviewers = $rawPolicy | Where-Object { $_.type.displayName -eq $requiredReviewersDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
     $minimumNumberOfReviewers = $rawPolicy | Where-Object { $_.type.displayName -eq $minimumNumberOfReviewersDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
 
+    if ($null -eq $commentRequirements -and
+        $null -eq $requireMergeStrategy -and
+        $null -eq $requiredReviewers -and
+        $null -eq $minimumNumberOfReviewers) {
+        return $null
+    }
+
     $policy = @{
         repository = $repositoryName
-        branch = $refName
-        settings = @{
-            $commentRequirementsDisplayName = $commentRequirements
-            $requireMergeStrategyDisplayName = $requireMergeStrategy
-            $requiredReviewersDisplayName = $requiredReviewers
+        branch     = $refName
+        settings   = @{
+            $commentRequirementsDisplayName      = $commentRequirements
+            $requireMergeStrategyDisplayName     = $requireMergeStrategy
+            $requiredReviewersDisplayName        = $requiredReviewers
             $minimumNumberOfReviewersDisplayName = $minimumNumberOfReviewers
         }
     }
 
     return $policy
+}
+
+function Get-RefsPolicyConfigurations {
+    param(
+        [string] $projectName,
+        [string] $repositoryName,
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+
+    $repository = Get-RepositoryByName -projectName $projectName -repositoryName $repositoryName -apiClient $apiClient
+
+    $refs = $(Get-Refs -projectName $projectName -repositoryId $repository.id -apiClient $apiClient).value
+    
+    $policies = @()
+    $i = 1
+
+    foreach ($ref in $refs) {
+        $progress = [math]::floor($i / $refs.count * 100)
+        
+        Write-Progress -Activity "Getting policies..." -Status "$progress% Complete" -PercentComplete $progress
+        $i++
+
+        $policy = Get-PolicyConfiguration -projectName $projectName -repositoryName $repositoryName -refName $ref.name -apiClient $apiClient
+
+        if ($null -ne $policy) {
+            $policies += $policy
+        }
+    }
+
+    return $policies
 }
 
 function Export-PolicyConfiguration {
