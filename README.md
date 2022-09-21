@@ -1,11 +1,7 @@
-# Azure DevOps Toolbox
+# Azure DevOps Toolbox 🧰
 
+Azure DevOps Toolbox is a set of PowerShell scripts that helps you manage your Azure DevOps projects. It uses the Azure DevOps REST API and allows to read, write and manage data stored in Azude DevOps as well as export and import them with a few commands.
 
-Bypass the PowerShell Execution Policy:
+The API specification can be found [here](https://github.com/MicrosoftDocs/vsts-rest-api-specs).
 
-    Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
-
-Enable Verbose:
-
-    $VerbosePreference = "Continue"
-    
+⚠ This repository is in an early stage of development.
