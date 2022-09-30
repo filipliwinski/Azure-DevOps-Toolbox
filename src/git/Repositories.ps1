@@ -131,3 +131,72 @@ function Export-Repositories {
         ConvertTo-Json $repository -Depth 100 > "$outputPath\$name.json"
     }
 }
+
+function Migrate-Repositories {
+    param (
+        [string] $sourceProjectName,
+        [string] $destinationProjectId,
+        [string] $destinationProjectName,
+        [AzureDevOpsServicesAPIClient] $sourceApiClient,
+        [AzureDevOpsServicesAPIClient] $destinationApiClient
+    )
+    $repositories = Get-Repositories -projectName $sourceProjectName -apiClient $sourceApiClient
+
+    $firstRepository = $repositories[5]
+    
+    Write-Output $firstRepository
+
+    $repositoryToCreate = @{
+        'name' = $firstRepository.name
+        'project' = @{
+            'id' = $destinationProjectId
+        }
+    }
+    Write-Output $repositoryToCreate | ConvertTo-Json
+
+    $response = Create-Repository -projectName $destinationProjectName -apiClient $destinationApiClient -repositoryToCreate $repositoryToCreate
+    Write-Output $response
+
+    Mirror-Repository -remoteUrl $response.remoteUrl -repository $repositoryToCreate
+}
+
+function Get-Repositories {
+    param (
+        [string] $projectName,
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+    return $apiClient.GetRepositories($projectName)
+}
+
+function Create-Repository {
+    param (
+        [string] $projectName,
+        [PSObject] $repositoryToCreate,
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+    $response = $apiClient.CreateRepository($repositoryToCreate, $projectName)
+    
+    return $response
+}
+
+function Mirror-Repository {
+    param (
+        [string] $remoteUrl,
+        [PSObject] $repository
+    )
+
+    $repoName = $repository.name
+
+    git clone --bare $repository.remoteUrl  temp/repos/$repoName
+
+    $dir = 'temp/repos/'+$repository.name
+    
+    Push-Location $dir
+
+    git push --mirror $remoteUrl 
+
+    $Path = Get-Location | Select-Object -expand Path
+    Set-Location ..
+   # Remove-Item -LiteralPath $Path -Recurse -Force
+    Pop-Location
+}
