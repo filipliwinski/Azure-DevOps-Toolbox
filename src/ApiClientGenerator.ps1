@@ -77,7 +77,7 @@ function CreatePsFunction {
 
     # Adjust description and path
     $description = $object.description -replace '\n', ''
-    $path = $path -replace '{', '{$'
+    $path = $path -replace '{', '$' -replace '}', ''
 
     # Generate function
     $sb = [System.Text.StringBuilder]::new()
