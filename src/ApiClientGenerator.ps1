@@ -64,7 +64,12 @@ function CreatePsFunction {
     foreach ($parameter in $parameters) {
         if($parameter.in -ne $null) {
             $parameterType = $parameter.type ?? 'PSObject'
-            [void]$sbParam.Append("[$parameterType] $" + "$($parameter.name), ")
+            if ($parameterType -eq 'integer') {
+                $parameterType = 'int'
+            }
+            if ($parameter.name -ne 'collection' -and $parameter.name -ne 'organization') {
+                [void]$sbParam.Append("[$parameterType] $" + "$($parameter.name), ")
+            }
 
             if($parameter.name -eq 'body') {
                 $body = '$body'
@@ -73,7 +78,11 @@ function CreatePsFunction {
     }
 
     $sbParamString = $sbParam.ToString()
-    $parametersString = $sbParamString.Substring(0,$sbParamString.Length-2)
+
+    $parametersString = ""
+    if ($sbParamString.Length -gt 2) {
+        $parametersString = $sbParamString.Substring(0,$sbParamString.Length-2)
+    }
 
     # Adjust description and path
     $description = $object.description -replace '\n', ''
@@ -83,7 +92,7 @@ function CreatePsFunction {
     $sb = [System.Text.StringBuilder]::new()
     [void]$sb.AppendLine('    # ' + $description)
     [void]$sb.AppendLine('    [PSObject] ' + $object."x-ms-vss-method" + '(' + $parametersString + ') {')
-    [void]$sb.AppendLine('        return $this.Request(''' + $method + ''', "' + $path + '", $APIVersion, ' + $body + ')')
+    [void]$sb.AppendLine('        return $this.Request(''' + $method + ''', "' + $path + '", $apiVersion, ' + $body + ')')
     [void]$sb.AppendLine('    }')
 
     return $sb.ToString()
@@ -123,10 +132,21 @@ foreach ($specification in $specifications)
 
             $sb = [System.Text.StringBuilder]::new()
             [void]$sb.AppendLine("# This file was auto-generated. Do not edit.")
-            [void]$sb.AppendLine(" ")
-            [void]$sb.AppendLine("class $apiClientName {")
-            [void]$sb.AppendLine('    [string] $APIVersion = ''' + $spec.info.version + '''')
-            [void]$sb.AppendLine('')
+            [void]$sb.AppendLine("")
+            [void]$sb.AppendLine("using module .\AzureDevOpsApiClient.psm1")
+            [void]$sb.AppendLine("")
+            [void]$sb.AppendLine("class $apiClientName : AzureDevOpsApiClient {")
+            [void]$sb.AppendLine('    [string] $apiVersion = ''' + $spec.info.version + '''')
+            [void]$sb.AppendLine('    [string] $organization')
+            [void]$sb.AppendLine('    [string] $collection')
+            [void]$sb.AppendLine("")
+            [void]$sb.AppendLine("    $apiClientName(" + '[string] $organization, [string] $serviceHost, [string] $personalAccessToken) {')
+            [void]$sb.AppendLine('        $this.organization = $organization')
+            [void]$sb.AppendLine('        $this.collection = $organization')
+            [void]$sb.AppendLine('        $this.serviceHost = $serviceHost')
+            [void]$sb.AppendLine('        $this.personalAccessToken = $personalAccessToken')
+            [void]$sb.AppendLine("    }")
+            [void]$sb.AppendLine("")
 
             foreach ($path in $spec.paths) {
                 $paths = $path.psobject.properties.name
