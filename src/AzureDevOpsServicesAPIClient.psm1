@@ -207,8 +207,8 @@ class AzureDevOpsServicesAPIClient {
         return $repositories.value
     }
 
-    [PSObject] CreateRepository([string] $organization, [PSObject] $body, [string] $project, [string] $sourceRef) {
-        return $this.Request('post', "$project/_apis/git/repositories", $this.APIVersion, $body)
+    [PSObject] CreateRepository([PSObject] $body, [string] $project, [string] $sourceRef) {
+        return $this.Request('post', "$project/_apis/git/repositories?sourceRef=$sourceRef", $this.APIVersion, $body)
     }
 
     #endregion Repositories

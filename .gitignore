@@ -275,6 +275,8 @@ FakesAssemblies/
 .ntvs_analysis.dat
 node_modules/
 
+ApiClients
+
 # Visual Studio 6 build log
 *.plg
 

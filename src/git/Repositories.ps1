@@ -142,7 +142,7 @@ function Migrate-Repositories {
     )
     $repositories = Get-Repositories -projectName $sourceProjectName -apiClient $sourceApiClient
 
-    $firstRepository = $repositories[5]
+    $firstRepository = $repositories[2]
     
     Write-Output $firstRepository
 
@@ -157,7 +157,7 @@ function Migrate-Repositories {
     $response = Create-Repository -projectName $destinationProjectName -apiClient $destinationApiClient -repositoryToCreate $repositoryToCreate
     Write-Output $response
 
-    Mirror-Repository -remoteUrl $response.remoteUrl -repository $repositoryToCreate
+    Mirror-Repository -sourceRemoteUrl $firstRepository.remoteUrl -destinationRemoteUrl $response.remoteUrl -repository $repositoryToCreate.name
 }
 
 function Get-Repositories {
@@ -174,28 +174,30 @@ function Create-Repository {
         [PSObject] $repositoryToCreate,
         [AzureDevOpsServicesAPIClient] $apiClient
     )
-    $response = $apiClient.CreateRepository($repositoryToCreate, $projectName)
+    $response = $apiClient.CreateRepository($repositoryToCreate, $projectName, 'users/heads/master')
     
     return $response
 }
 
 function Mirror-Repository {
     param (
-        [string] $remoteUrl,
-        [PSObject] $repository
+        [string] $sourceRemoteUrl,
+        [string] $destinationRemoteUrl,
+        [string] $repositoryName
     )
 
-    $repoName = $repository.name
+    $Path = Get-Location | Select-Object -expand Path
 
-    git clone --bare $repository.remoteUrl  temp/repos/$repoName
+    git clone --bare $sourceRemoteUrl temp/repos/$repositoryName
 
-    $dir = 'temp/repos/'+$repository.name
+    $dir = 'temp/repos/'+$repositoryName
     
     Push-Location $dir
 
-    git push --mirror $remoteUrl 
+    git push --mirror $destinationRemoteUrl 
 
     $Path = Get-Location | Select-Object -expand Path
+    Write-Output $Path
     Set-Location ..
    # Remove-Item -LiteralPath $Path -Recurse -Force
     Pop-Location
