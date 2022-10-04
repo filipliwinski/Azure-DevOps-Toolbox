@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+. .\git\PullRequests.ps1
+
 <#
         .SYNOPSIS
         Gets all repositories for the specified project.
@@ -142,22 +144,26 @@ function Migrate-Repositories {
     )
     $repositories = Get-Repositories -projectName $sourceProjectName -apiClient $sourceApiClient
 
-    $firstRepository = $repositories[2]
+    $firstRepository = $repositories[5]
     
     Write-Output $firstRepository
 
+    $pullRequests = Get-PullRequests -status 'active' -repositoryId $firstRepository.id -projectName $sourceProjectName -apiClient $sourceApiClient
+    
     $repositoryToCreate = @{
         'name' = $firstRepository.name
         'project' = @{
             'id' = $destinationProjectId
         }
+
     }
     Write-Output $repositoryToCreate | ConvertTo-Json
 
-    $response = Create-Repository -projectName $destinationProjectName -apiClient $destinationApiClient -repositoryToCreate $repositoryToCreate
-    Write-Output $response
+    $createdRepo = Create-Repository -projectName $destinationProjectName -apiClient $destinationApiClient -repositoryToCreate $repositoryToCreate
+    Write-Output $createdRepo
+    Mirror-Repository -sourceRemoteUrl $firstRepository.remoteUrl -destinationRemoteUrl $createdRepo.remoteUrl -repository $repositoryToCreate.name
 
-    Mirror-Repository -sourceRemoteUrl $firstRepository.remoteUrl -destinationRemoteUrl $response.remoteUrl -repository $repositoryToCreate.name
+    Mirror-PullRequests -pullRequests $pullRequests -apiClient $destinationApiClient -destinationProjectName $destinationProjectName -destinationRepositoryId  $createdRepo.id
 }
 
 function Get-Repositories {
@@ -186,8 +192,6 @@ function Mirror-Repository {
         [string] $repositoryName
     )
 
-    $Path = Get-Location | Select-Object -expand Path
-
     git clone --bare $sourceRemoteUrl temp/repos/$repositoryName
 
     $dir = 'temp/repos/'+$repositoryName
@@ -196,9 +200,5 @@ function Mirror-Repository {
 
     git push --mirror $destinationRemoteUrl 
 
-    $Path = Get-Location | Select-Object -expand Path
-    Write-Output $Path
-    Set-Location ..
-   # Remove-Item -LiteralPath $Path -Recurse -Force
     Pop-Location
 }
