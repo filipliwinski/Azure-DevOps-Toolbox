@@ -143,27 +143,11 @@ function Migrate-Repositories {
         [AzureDevOpsServicesAPIClient] $destinationApiClient
     )
     $repositories = Get-Repositories -projectName $sourceProjectName -apiClient $sourceApiClient
+    $pipeLineRelatedRepos = Get-PipelineRelatedRepositories -repositories $repositories
+ 
+    Write-Output $pipeLineRelatedRepos
 
-    $firstRepository = $repositories[5]
-    
-    Write-Output $firstRepository
-
-    $pullRequests = Get-PullRequests -status 'active' -repositoryId $firstRepository.id -projectName $sourceProjectName -apiClient $sourceApiClient
-    
-    $repositoryToCreate = @{
-        'name' = $firstRepository.name
-        'project' = @{
-            'id' = $destinationProjectId
-        }
-
-    }
-    Write-Output $repositoryToCreate | ConvertTo-Json
-
-    $createdRepo = Create-Repository -projectName $destinationProjectName -apiClient $destinationApiClient -repositoryToCreate $repositoryToCreate
-    Write-Output $createdRepo
-    Mirror-Repository -sourceRemoteUrl $firstRepository.remoteUrl -destinationRemoteUrl $createdRepo.remoteUrl -repository $repositoryToCreate.name
-
-    Mirror-PullRequests -pullRequests $pullRequests -apiClient $destinationApiClient -destinationProjectName $destinationProjectName -destinationRepositoryId  $createdRepo.id
+    Create-Repositories -projectName $destinationProjectName -apiClient $destinationApiClient -repositories $pipeLineRelatedRepos
 }
 
 function Get-Repositories {
@@ -173,6 +157,29 @@ function Get-Repositories {
     )
     return $apiClient.GetRepositories($projectName)
 }
+
+function Create-Repositories {
+    param (
+        [string] $projectName,
+        [PSObject] $repositories,
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+    foreach ($repository in $repositories) { 
+        
+        $repositoryToCreate = Convert-RepositoryToJson -repository $repository
+
+        $createdRepo = Create-Repository -projectName $destinationProjectName -apiClient $destinationApiClient -repositoryToCreate $repositoryToCreate
+        Write-Output $createdRepo
+   
+        Mirror-Repository -sourceRemoteUrl $repository.remoteUrl -destinationRemoteUrl $createdRepo.remoteUrl -repository $repositoryToCreate.name
+
+    # $pullRequests = Get-PullRequests -status 'active' -repositoryId $repository.id -projectName $sourceProjectName -apiClient $sourceApiClient
+    # Mirror-PullRequests -pullRequests $pullRequests -apiClient $destinationApiClient -destinationProjectName $destinationProjectName -destinationRepositoryId  $createdRepo.id
+
+    }
+    return $response
+}
+
 
 function Create-Repository {
     param (
@@ -194,11 +201,39 @@ function Mirror-Repository {
 
     git clone --bare $sourceRemoteUrl temp/repos/$repositoryName
 
-    $dir = 'temp/repos/'+$repositoryName
+    $dir = 'temp/repos/' + $repositoryName
     
     Push-Location $dir
 
     git push --mirror $destinationRemoteUrl 
 
     Pop-Location
+}
+
+function Get-PipelineRelatedRepositories {
+    param (
+        [psobject] $repositories
+    )
+
+    $pipeLineRelatedRepos = @()
+    foreach ($repository in $repositories) { 
+
+        if ($repository.name -eq 'devops' -or $repository.name -eq 'pipeline-shared-libs') {
+            $pipeLineRelatedRepos += $repository
+        }
+    }
+    return $pipeLineRelatedRepos
+}
+
+function Convert-RepositoryToJson {
+    param (
+        [psobject] $repository
+    )
+    $repositoryJson = @{
+        'name'    = $repository.name
+        'project' = @{
+            'id' = $destinationProjectId
+        }
+    }
+    return $repositoryJson
 }
