@@ -164,18 +164,28 @@ function Create-Repositories {
         [PSObject] $repositories,
         [AzureDevOpsServicesAPIClient] $apiClient
     )
+
+    $existingRepositories = Get-Repositories -projectName $projectName -apiClient $apiClient 
+
     foreach ($repository in $repositories) { 
-        
-        $repositoryToCreate = Convert-RepositoryToJson -repository $repository
 
-        $createdRepo = Create-Repository -projectName $destinationProjectName -apiClient $destinationApiClient -repositoryToCreate $repositoryToCreate
-        Write-Output $createdRepo
-   
-        Mirror-Repository -sourceRemoteUrl $repository.remoteUrl -destinationRemoteUrl $createdRepo.remoteUrl -repository $repositoryToCreate.name
+        if (-not ($existingRepositories.name -contains $repository.name)) {
 
-    # $pullRequests = Get-PullRequests -status 'active' -repositoryId $repository.id -projectName $sourceProjectName -apiClient $sourceApiClient
-    # Mirror-PullRequests -pullRequests $pullRequests -apiClient $destinationApiClient -destinationProjectName $destinationProjectName -destinationRepositoryId  $createdRepo.id
+            $repositoryToCreate = Convert-RepositoryToJson -repository $repository
 
+            $createdRepo = Create-Repository -projectName $destinationProjectName -apiClient $destinationApiClient -repositoryToCreate $repositoryToCreate
+            Mirror-Repository -sourceRemoteUrl $repository.remoteUrl -destinationRemoteUrl $createdRepo.remoteUrl -repository $repositoryToCreate.name
+
+            $pullRequests = Get-PullRequests -status 'active' -repositoryId $repository.id -projectName $sourceProjectName -apiClient $sourceApiClient
+            Mirror-PullRequests -pullRequests $pullRequests -apiClient $destinationApiClient -destinationProjectName $destinationProjectName -destinationRepositoryId  $createdRepo.id
+            # TODO! add here the pipeline export
+        }
+        else {
+            $destinationRepository = $existingRepositories | Where-Object name -eq $repository.name 
+            $pullRequests = Get-PullRequests -status 'active' -repositoryId $repository.id -projectName $sourceProjectName -apiClient $sourceApiClient
+            Mirror-PullRequests -pullRequests $pullRequests -apiClient $destinationApiClient -destinationProjectName $destinationProjectName -destinationRepositoryId  $destinationRepository.id
+            # TODO! add here the pipeline export
+        }
     }
     return $response
 }
@@ -218,7 +228,7 @@ function Get-PipelineRelatedRepositories {
     $pipeLineRelatedRepos = @()
     foreach ($repository in $repositories) { 
 
-        if ($repository.name -eq 'devops' -or $repository.name -eq 'pipeline-shared-libs') {
+        if ($repository.name -eq 'devops' -or $repository.name -eq 'pipeline-shared-libs' -or $repository.name -eq 'release-management') {
             $pipeLineRelatedRepos += $repository
         }
     }
