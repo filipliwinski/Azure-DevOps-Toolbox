@@ -185,7 +185,9 @@ class AzureDevOpsServicesAPIClient {
         $definition = $this.Request('Get', "$projectName/_apis/build/definitions/$definitionId", '6.0', $null)
         return $definition
     }
-
+    [PSObject] CreateBuildDefinition([PSObject] $body, [string] $projectName) {
+        return $this.Request('post', "$projectName/_apis/build/definitions", '6.0', $body)
+    }
     #endregion BuildDefinitions
     #region ReleaseDefinitions
 
@@ -202,9 +204,19 @@ class AzureDevOpsServicesAPIClient {
     #endregion ReleaseDefinitions
     #region Repositories
 
+    [PSObject] GetIdentityByUniqueName([string] $projectName) {
+        $identities = $this.Request('Get', "$projectName/_apis/identities?repositories", $this.APIVersion, $null)
+        return $identities.value
+    }
+
     [PSObject] GetRepositories([string] $projectName) {
         $repositories = $this.Request('Get', "$projectName/_apis/git/repositories", $this.APIVersion, $null)
         return $repositories.value
+    }
+
+    [PSObject] GetRepository([string] $projectName, [string] $id) {
+        $repository = $this.Request('Get', "$projectName/_apis/git/repositories/$id", $this.APIVersion, $null)
+        return $repository
     }
 
     [PSObject] CreateRepository([PSObject] $body, [string] $project, [string] $sourceRef) {

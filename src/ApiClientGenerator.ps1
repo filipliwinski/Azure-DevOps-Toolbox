@@ -62,7 +62,7 @@ function CreatePsFunction {
     $sbParam = [System.Text.StringBuilder]::new()
     $body = '$null'
     foreach ($parameter in $parameters) {
-        if($parameter.in -ne $null) {
+        if($null -ne $parameter.in) {
             $parameterType = $parameter.type ?? 'PSObject'
             if ($parameterType -eq 'integer') {
                 $parameterType = 'int'

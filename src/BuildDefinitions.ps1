@@ -49,3 +49,149 @@ function Export-BuildDefinitions {
         ConvertTo-Json $definition -Depth 100 > "$outputPath\$name.json"
     }
 }
+
+function Import-BuildDefinitions {
+    param (
+        [string] $projectName,
+        [PSObject] $repository,
+        [AzureDevOpsServicesAPIClient] $apiClient,
+        [string] $pipelineFolderName
+    )
+    Write-Output $pipelineFolderName
+
+    if ($pipelineFolderName -eq "pipeline" -or $pipelineFolderName -eq "pipelines" ) {
+
+        New-AzBuildDefinition -projectName $projectName -repository $repository -apiClient $apiClient -pipelineFolderName $pipelineFolderName -isBuildPipeline $true
+        New-AzBuildDefinition -projectName $projectName -repository $repository -apiClient $apiClient -pipelineFolderName $pipelineFolderName -isBuildPipeline $false
+   
+    }
+    else {
+        Write-Warning "$("No pipeline folder found for repo " + $repository.name)"
+        return $null
+    }
+}
+
+function New-AzBuildDefinition {
+    param (
+        [string] $projectName,
+        [PSObject] $repository,
+        [AzureDevOpsServicesAPIClient] $apiClient,
+        [string] $pipelineFolderName,
+        [bool] $isBuildPipeline
+    )
+
+    $buildDefinition = @{
+        triggers                  = @(
+            @{
+                settingsSourceType           = 2
+                batchChanges                 = $false
+                maxConcurrentBuildsPerBranch = 1
+                triggerType                  = 'continuousIntegration'
+            }
+        )
+        jobAuthorizationScope     = 'projectCollection'
+        jobTimeoutInMinutes       = 60
+        jobCancelTimeoutInMinutes = 5
+
+        process                   = Get-DefinitionProcess -isBuild $isBuildPipeline -pipelineFolderName $pipelineFolderName
+        repository                = @{
+            properties         = @{
+                cloneUrl          = $repository.remoteUrl
+                fullName          = $repository.name
+                defaultBranch     = "refs/heads/master"
+                isFork            = "False"
+                safeRepository    = $repository.id
+                reportBuildStatus = $true
+            }
+            id                 = $repository.id
+            type               = "TfsGit"
+            name               = $repository.name
+            url                = $repository.remoteUrl
+            defaultBranch      = "refs/heads/master"
+            checkoutSubmodules = $false
+        }
+        quality                   = 'definition'
+        name                      = Get-DefinitionName -isBuild $isBuildPipeline
+        path                      = Get-DefinitionPath -isBuild $isBuildPipeline
+        type                      = "build"
+        queueStatus               = "enabled"
+        revision                  = 1
+    }
+
+    Write-Output $buildDefinition | ConvertTo-Json
+
+    
+    return $apiClient.CreateBuildDefinition($buildDefinition, $projectName)
+    
+}
+
+function Get-DefinitionProcess {
+    param (
+        [bool] $isBuild,
+        [string] $pipelineFolderName
+    )
+    if ($isBuild) {
+        return Get-DefinitionProcessForBuild -isBuild $isBuildPipeline -pipelineFolderName $pipelineFolderName
+
+    }
+    return Get-DefinitionProcessForPR -isBuild $isBuildPipeline -pipelineFolderName $pipelineFolderName
+}
+
+function Get-DefinitionPath {
+    param (
+        [bool] $isBuild
+    )
+    if ($isBuild) {
+        return "\\Jenkins build pipelines"
+
+    }
+    return "\\Jenkins pr pipelines"
+}
+
+function Get-DefinitionName {
+    param (
+        [bool] $isBuild
+    )
+    if ($isBuild) {
+        return "$($repository.name + "-build-jenkins")"
+
+    }
+    return "$($repository.name + "-pr-jenkins")"
+}
+
+function Get-DefinitionProcessForBuild {
+    param (
+        [bool] $isBuild,
+        [string] $pipelineFolderName
+    )
+
+        if ($pipelineFolderName -eq 'pipeline') {
+            return  @{
+                yamlFilename = 'pipeline/build-jenkins.yml'
+                type         = 2
+            }
+        }
+        return @{
+            yamlFilename = 'pipelines/build-jenkins.yml'
+            type         = 2
+        }
+
+}
+
+function Get-DefinitionProcessForPR {
+    param (
+        [bool] $isBuild,
+        [string] $pipelineFolderName
+    )
+
+    if ($pipelineFolderName -eq 'pipeline') {
+        return  @{
+            yamlFilename = 'pipeline/pr-jenkins.yml'
+            type         = 2
+        }
+    }
+    return  @{
+        yamlFilename = 'pipelines/pr-jenkins.yml'
+        type         = 2
+    }
+}

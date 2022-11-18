@@ -1,8 +1,9 @@
 using module .\AzureDevOpsServicesAPIClient.psm1
 
 . .\git\Repositories.ps1
+. .\BuildDefinitions.ps1
 
-function Migrate-Project {
+function Import-Project {
     param (
         [PSObject] $source,
         [PSObject] $destination
@@ -13,5 +14,7 @@ function Migrate-Project {
 
     Write-Output $sourceApiClient
     Write-Output $destinationApiClient
-    Migrate-Repositories -sourceProjectName $source.projectName -sourceApiClient $sourceApiClient  -destinationProjectName $destination.projectName -destinationApiClient $destinationApiClient -destinationProjectId $destination.projectId
+    # Export-BuildDefinitions -projectName 'NCDPP' -outputpath '.\temp\newBuildDefinitions' -apiClient $destinationApiClient -expand $true
+    # exit
+    Import-Repositories -sourceProjectName $source.projectName -sourceApiClient $sourceApiClient  -destinationProjectName $destination.projectName -destinationApiClient $destinationApiClient -destinationProjectId $destination.projectId
 }
