@@ -32,23 +32,31 @@ function Add-VariableGroup {
 
 function Copy-VariableGroup {
     param(
-        [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $apiClient,
-        [int] $sourceVariableGroupId
+        [string] $sourceProjectName,
+        [string] $targetProjectName,
+        [AzureDevOpsServicesAPIClient] $sourceApiClient,
+        [AzureDevOpsServicesAPIClient] $targetApiClient,
+        [int] $variableGroupId
     )
+    $namePostfix = ""
 
-    $sourceVariableGroup = $apiClient.GetVariableGroupById($projectName, $sourceVariableGroupId)
+    $sourceVariableGroup = $sourceApiClient.GetVariableGroupById($sourceProjectName, $variableGroupId)
+
+    if ($sourceApiClient.ServiceHost -eq $targetApiClient.ServiceHost -and 
+        $sourceApiClient.Organization -eq $targetApiClient.Organization -and
+        $sourceProjectName -eq $targetProjectName) {
+        $namePostfix = "- copy"
+    }
 
     $newVariableGroup = @{
         "description" = $sourceVariableGroup.description
-        "name" = "$($sourceVariableGroup.name) - copy"
+        "name" = "$($sourceVariableGroup.name) $namePostfix"
         "providerData" = $sourceVariableGroup.providerData
         "type" = $sourceVariableGroup.type
-        "variableGroupProjectReferences" = $sourceVariableGroup.variableGroupProjectReferences
         "variables" = $sourceVariableGroup.variables
     }
 
-    return $apiClient.AddVariableGroup($projectName, $newVariableGroup)
+    return $targetApiClient.AddVariableGroup($targetProjectName, $newVariableGroup)
 }
 
 function Get-VariableGroup {
@@ -72,6 +80,16 @@ function Get-VariableGroupByName {
 
     $variableGroup = $apiClient.GetVariableGroupByName($projectName, $variableGroupName)
     return $variableGroup
+}
+
+function Get-VariableGroups {
+    param (
+        [string] $projectName,
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+
+    $variableGroups = $apiClient.GetVariableGroups($projectName)
+    return $variableGroups
 }
 
 function Export-VariableGroup {
