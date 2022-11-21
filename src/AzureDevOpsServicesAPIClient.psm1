@@ -240,6 +240,7 @@ class AzureDevOpsServicesAPIClient {
         $refs = $this.Request('Get', "$projectName/_apis/git/repositories/$repositoryId/refs", $this.APIVersion, $null)
         return $refs
     }
+    
 
     #endregion Refs
     #region PolicyConfigurations

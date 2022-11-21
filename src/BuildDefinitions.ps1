@@ -55,20 +55,15 @@ function Import-BuildDefinitions {
         [string] $projectName,
         [PSObject] $repository,
         [AzureDevOpsServicesAPIClient] $apiClient,
-        [string] $pipelineFolderName
+        [psobject] $definitionYamlFilename
     )
-    Write-Output $pipelineFolderName
+    
 
-    if ($pipelineFolderName -eq "pipeline" -or $pipelineFolderName -eq "pipelines" ) {
+    $definitions = $sourceApiClient.GetBuildDefinitions($projectName)
+    $definitionYamlFilename = $definitions | Select-Object -Property repository | Where-Object {$_.name -eq $repository.name} 
 
-        New-AzBuildDefinition -projectName $projectName -repository $repository -apiClient $apiClient -pipelineFolderName $pipelineFolderName -isBuildPipeline $true
-        New-AzBuildDefinition -projectName $projectName -repository $repository -apiClient $apiClient -pipelineFolderName $pipelineFolderName -isBuildPipeline $false
-   
-    }
-    else {
-        Write-Warning "$("No pipeline folder found for repo " + $repository.name)"
-        return $null
-    }
+    New-AzBuildDefinition -projectName $projectName -repository $repository -apiClient $apiClient -definitionYamlFilename $definitionYamlFilename -isBuildPipeline $true
+    New-AzBuildDefinition -projectName $projectName -repository $repository -apiClient $apiClient -definitionYamlFilename $definitionYamlFilename -isBuildPipeline $false
 }
 
 function New-AzBuildDefinition {
@@ -76,7 +71,7 @@ function New-AzBuildDefinition {
         [string] $projectName,
         [PSObject] $repository,
         [AzureDevOpsServicesAPIClient] $apiClient,
-        [string] $pipelineFolderName,
+        [string] $definitionYamlFilename,
         [bool] $isBuildPipeline
     )
 
@@ -93,7 +88,7 @@ function New-AzBuildDefinition {
         jobTimeoutInMinutes       = 60
         jobCancelTimeoutInMinutes = 5
 
-        process                   = Get-DefinitionProcess -isBuild $isBuildPipeline -pipelineFolderName $pipelineFolderName
+        process                   = Get-DefinitionProcess -isBuild $isBuildPipeline -definitionYamlFilename $definitionYamlFilename
         repository                = @{
             properties         = @{
                 cloneUrl          = $repository.remoteUrl
@@ -116,6 +111,9 @@ function New-AzBuildDefinition {
         type                      = "build"
         queueStatus               = "enabled"
         revision                  = 1
+        queue = @{
+            name = "Default"
+        }
     }
 
     Write-Output $buildDefinition | ConvertTo-Json
@@ -194,4 +192,85 @@ function Get-DefinitionProcessForPR {
         yamlFilename = 'pipelines/pr-jenkins.yml'
         type         = 2
     }
+}
+
+function Copy-BuildDefinition {
+    param (
+        [string] $projectName,
+        [AzureDevOpsServicesAPIClient] $apiClient,
+        [psobject] $buildDefinition
+    )
+    if($buildDefinition.path -contains('Deprecated')){
+        return $null
+    }
+    $repository = $apiClient.GetRepository( $projectName, $buildDefinition.repository.name)
+    $newBuildDefinition = @{
+        triggers                  = @(
+            @{
+                settingsSourceType           = 2
+                batchChanges                 = $false
+                maxConcurrentBuildsPerBranch = 1
+                triggerType                  = 'continuousIntegration'
+            }
+        )
+        jobAuthorizationScope     = 'projectCollection'
+        jobTimeoutInMinutes       = 60
+        jobCancelTimeoutInMinutes = 5
+
+        process                   = $buildDefinition.process
+        repository                = @{
+            properties         = @{
+                cloneUrl          = $repository.remoteUrl
+                fullName          = $repository.name
+                defaultBranch     = "refs/heads/master"
+                isFork            = "False"
+                safeRepository    = $repository.id
+                reportBuildStatus = $true
+            }
+            id                 = $repository.id
+            type               = "TfsGit"
+            name               = $repository.name
+            url                = $repository.remoteUrl
+            defaultBranch      = $repository.defaultBranch
+            checkoutSubmodules = $false
+        }
+        quality                   = 'definition'
+        name                      = $buildDefinition.name
+        path                      = $buildDefinition.path
+        type                      = "build"
+        queueStatus               = "enabled"
+        revision                  = 1
+        queue = @{
+            name = "Default"
+        }
+    }
+ Write-Output "repository name: $($buildDefinition.name)"
+ Write-Output "definition $($repository.name)"
+    Create-BuildDefinition -projectName $projectName -apiClient $apiClient -buildDefinition $newBuildDefinition
+    
+}
+function Get-BuildDefinitions {
+    param (
+        [string] $projectName,
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+    $definitions = $sourceApiClient.GetBuildDefinitions($projectName)
+
+    for ($i = 0; $i -lt $definitions.Count; $i++) {     
+        $definitions[$i] = $sourceApiClient.GetBuildDefinition($projectName, $definitions[$i].id)
+    #     if($i -lt 5){
+    #         return $definitions
+    #     }
+    # }
+    }
+    return $definitions
+}
+
+function Create-BuildDefinition {
+    param (
+        [string] $projectName,
+        [AzureDevOpsServicesAPIClient] $apiClient,
+        [psobject] $buildDefinition
+    )
+    return $apiClient.CreateBuildDefinition($buildDefinition, $projectName)
 }

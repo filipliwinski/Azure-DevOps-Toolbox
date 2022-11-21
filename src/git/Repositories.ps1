@@ -147,8 +147,9 @@ function Import-Repositories {
     $nonPipelineRelatedRepos = Get-NonPipelineRelatedRepositories -repositories $repositories
     Write-Output $pipeLineRelatedRepos
 
-    New-AzDevOpsRepositories -projectName $destinationProjectName -apiClient $destinationApiClient -repositories $pipeLineRelatedRepos
-    New-AzDevOpsRepositories -projectName $destinationProjectName -apiClient $destinationApiClient -repositories $nonPipelineRelatedRepos
+  
+    New-AzDevOpsRepositories -projectName $destinationProjectName -apiClient $destinationApiClient -repositories $pipeLineRelatedRepos -definitions $definitions 
+    New-AzDevOpsRepositories -projectName $destinationProjectName -apiClient $destinationApiClient -repositories $nonPipelineRelatedRepos -definitions $definitions
 }
 
 function Get-Repositories {
@@ -163,7 +164,8 @@ function New-AzDevOpsRepositories {
     param (
         [string] $projectName,
         [PSObject] $repositories,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [AzureDevOpsServicesAPIClient] $apiClient,
+        [PSObject] $definitions
     )
 
     $existingRepositories = Get-Repositories -projectName $projectName -apiClient $apiClient 
@@ -171,7 +173,7 @@ function New-AzDevOpsRepositories {
     foreach ($repository in $repositories) { 
 
         $pipelineFolderName = Get-FolderNameForRepo -repositoryName $repository.name
-  
+        
         if (-not ($existingRepositories.name -contains $repository.name)) {
 
             $repositoryToCreate = Convert-RepositoryToJson -repository $repository
@@ -180,21 +182,21 @@ function New-AzDevOpsRepositories {
            
             Copy-Repository -sourceRemoteUrl $repository.remoteUrl -destinationRemoteUrl $createdRepo.remoteUrl -repository $repositoryToCreate.name
           
-            $result = Import-BuildDefinitions -projectName $destinationProjectName -repository $repositoryToCreate -apiClient $destinationApiClient -pipelineFolderName $pipelineFolderName
-            Write-Output $result | ConvertTo-Json
+            # $result = Import-BuildDefinitions -projectName $destinationProjectName -repository $repositoryToCreate -apiClient $destinationApiClient -pipelineFolderName $pipelineFolderName
+            # Write-Output $result | ConvertTo-Json
        
-            $pullRequests = Get-PullRequests -status 'active' -repositoryId $repository.id -projectName $sourceProjectName -apiClient $sourceApiClient 
+            # $pullRequests = Get-PullRequests -status 'active' -repositoryId $repository.id -projectName $sourceProjectName -apiClient $sourceApiClient 
             # Import-PullRequests -pullRequests $pullRequests -apiClient $destinationApiClient -destinationProjectName $destinationProjectName -destinationRepositoryId  $createdRepo.id
             # TODO! add here the pipeline export
         }
         else {
-       
+            $definitionYamlFilename = $definitions | Where-Object {$_.repository.name -eq $repository.name}
             $destinationRepository = $existingRepositories | Where-Object name -eq $repository.name 
            
-            $result = Import-BuildDefinitions -projectName $destinationProjectName -repository $destinationRepository -apiClient $destinationApiClient -pipelineFolderName $pipelineFolderName
+            $result = Import-BuildDefinitions -projectName $destinationProjectName -repository $destinationRepository -apiClient $destinationApiClient -definitionYamlFilename $definitionYamlFilename
             Write-Output $result 
 
-            $pullRequests = Get-PullRequests -status 'active' -repositoryId $repository.id -projectName $sourceProjectName -apiClient $sourceApiClient
+            # $pullRequests = Get-PullRequests -status 'active' -repositoryId $repository.id -projectName $sourceProjectName -apiClient $sourceApiClient
             # Import-PullRequests -pullRequests $pullRequests -apiClient $destinationApiClient -destinationProjectName $destinationProjectName -destinationRepositoryId  $destinationRepository.id
             # TODO! add here the pipeline export
         }
