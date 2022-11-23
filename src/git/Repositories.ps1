@@ -50,7 +50,7 @@ function Get-Repositories {
 
     $repositories = $apiClient.GetRepositories($projectName)
 
-    return $repositories
+    return $repositories.value
 }
 
 <#
@@ -90,6 +90,17 @@ function Get-RepositoryByName {
     }
 
     return $repositories | Where-Object { $_.name -eq $repositoryName }
+}
+
+function New-Repository {
+    param (
+        [string] $projectName,
+        [PSObject] $repository,
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+    $response = $apiClient.CreateRepository($repository, $projectName, 'users/heads/master')
+    
+    return $response
 }
 
 <#
@@ -134,94 +145,60 @@ function Export-Repositories {
     }
 }
 
-function Import-Repositories {
+function Copy-Repositories {
     param (
         [string] $sourceProjectName,
-        [string] $destinationProjectId,
-        [string] $destinationProjectName,
+        [string] $targetProjectName,
         [AzureDevOpsServicesAPIClient] $sourceApiClient,
-        [AzureDevOpsServicesAPIClient] $destinationApiClient
+        [AzureDevOpsServicesAPIClient] $targetApiClient
     )
-    $repositories = Get-Repositories -projectName $sourceProjectName -apiClient $sourceApiClient
-  
-    New-AzDevOpsRepositories -projectName $destinationProjectName -apiClient $destinationApiClient -repositories $repositories 
-}
-
-function Get-Repositories {
-    param (
-        [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $apiClient
-    )
-    return $apiClient.GetRepositories($projectName)
-}
-
-function New-AzDevOpsRepositories {
-    param (
-        [string] $projectName,
-        [PSObject] $repositories,
-        [AzureDevOpsServicesAPIClient] $apiClient,
-    )
-
-    $existingRepositories = Get-Repositories -projectName $projectName -apiClient $apiClient 
-
-    foreach ($repository in $repositories) { 
-        
-        if (-not ($existingRepositories.name -contains $repository.name)) {
-
-            $repositoryToCreate = Convert-RepositoryToJson -repository $repository
-
-            $createdRepo = New-AzDevOpsRepository -projectName $destinationProjectName -apiClient $destinationApiClient -repositoryToCreate $repositoryToCreate
-           
-            Copy-Repository -sourceRemoteUrl $repository.remoteUrl -destinationRemoteUrl $createdRepo.remoteUrl -repository $repositoryToCreate.name
-        }
-        else {
-            Write-Output $($"Repository with name $repository already exist")
-        }
-    }
-    return $response
-}
-
-
-function New-AzDevOpsRepository {
-    param (
-        [string] $projectName,
-        [PSObject] $repositoryToCreate,
-        [AzureDevOpsServicesAPIClient] $apiClient
-    )
-    $response = $apiClient.CreateRepository($repositoryToCreate, $projectName, 'users/heads/master')
     
-    return $response
+    $repositories = Get-Repositories -projectName $sourceProjectName -apiClient $sourceApiClient
+    $i = 0
+
+    foreach ($repository in $repositories) {
+        $progress = [math]::floor($i / $repositories.count * 100)
+
+        Write-Progress -Activity "Copying repositories..." -Status "$progress% Complete [$($repository.name)]" -PercentComplete $progress
+        $i++
+
+        Copy-Repository -projectName $targetProjectName -repository $repository -apiClient $targetApiClient
+    }
+
+    Write-Progress -Activity "Copying repositories..." -Completed
 }
 
 function Copy-Repository {
     param (
-        [string] $sourceRemoteUrl,
-        [string] $destinationRemoteUrl,
-        [string] $repositoryName
+        [string] $projectName,
+        [PSObject] $repository,
+        [AzureDevOpsServicesAPIClient] $apiClient
     )
 
-    git clone --bare $sourceRemoteUrl temp/repos/$repositoryName
-
-    $dir = 'temp/repos/' + $repositoryName
-    
-    Push-Location $dir
-
-    git push --mirror $destinationRemoteUrl 
-
-    Pop-Location
-
-    return $pipelineFolderName
-}
-
-function Convert-RepositoryToJson {
-    param (
-        [psobject] $repository
-    )
-    $repositoryJson = @{
-        'name'    = $repository.name
-        'project' = @{
-            'id' = $destinationProjectId
-        }
+    $newRepository = @{
+        'name' = $repository.name
     }
-    return $repositoryJson
+
+    try {
+        $newRepository = New-Repository -projectName $projectName -repository $newRepository -apiClient $apiClient
+
+        $tempLocation = 'temp/repos/' + $repository.name
+
+        git clone --bare $repository.remoteUrl $tempLocation
+        
+        Push-Location $tempLocation
+
+        git push --mirror $newRepository.remoteUrl
+
+        Pop-Location
+
+        Remove-Item -Recurse -Force $tempLocation
+
+        return $newRepository
+    }
+    catch {
+        Write-Host "The repository $($repository.name) already exists."
+    }
+    
+    return $null
 }
