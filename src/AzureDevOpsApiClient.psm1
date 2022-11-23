@@ -28,10 +28,14 @@ enum AuthFlow {
 class AzureDevOpsApiClient {
     [string] $ServiceHost = 'https://dev.azure.com'
     [string] $ServiceHostVSRM = 'https://vsrm.dev.azure.com'
+    [string] $Organization
+    [string] $Collection
     [string] $PersonalAccessToken
     [AuthFlow] $Auth
 
-    AzureDevOpsApiClient([string] $serviceHost, [string] $personalAccessToken) {
+    AzureDevOpsApiClient() {}
+
+    AzureDevOpsApiClient([string] $serviceHost, [string] $organization, [string] $personalAccessToken) {
 
         if ('' -eq $serviceHost) {
             Write-Host "serviceHost not provided. Using $ServiceHost"
@@ -40,6 +44,7 @@ class AzureDevOpsApiClient {
         }
 
         $this.Organization = $organization
+        $this.Collection = $organization
         $this.PersonalAccessToken = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(":$personalAccessToken"))
         $this.Auth = [AuthFlow]::PersonalAccessToken
     }

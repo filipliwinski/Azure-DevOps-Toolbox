@@ -39,9 +39,9 @@ function ExtractMethods {
     }
     else {
         # System.Object[]
-        for ($i = 0; $i -lt $object.Count; $i++) {
+        $methodsArray = $methods.Split(' ')
+        for ($i = 0; $i -lt $methodsArray.Count; $i++) {
             # System.Management.Automation.PSCustomObject
-            $methodsArray = $methods.Split(' ')
             $functions += CreatePsFunction -object $objectValue[$i] -path $path -method $methodsArray[$i]
         }
     }
@@ -62,16 +62,20 @@ function CreatePsFunction {
     $sbParam = [System.Text.StringBuilder]::new()
     $body = '$null'
     foreach ($parameter in $parameters) {
-        if($parameter.in -ne $null) {
+        if($null -ne $parameter.in) {
+            $parameterName = $parameter.name.Replace('$','')
             $parameterType = $parameter.type ?? 'PSObject'
             if ($parameterType -eq 'integer') {
                 $parameterType = 'int'
             }
-            if ($parameter.name -ne 'collection' -and $parameter.name -ne 'organization') {
-                [void]$sbParam.Append("[$parameterType] $" + "$($parameter.name), ")
+            if ($parameterName -ne 'collection' -and $parameterName -ne 'organization') {
+                if ($parameterName.Contains('.')) {
+                    $parameterName = $parameterName.Split('.')[1]
+                }
+                [void]$sbParam.Append("[$parameterType] $" + "$($parameterName), ")
             }
 
-            if($parameter.name -eq 'body') {
+            if($parameterName -eq 'body') {
                 $body = '$body'
             }
         }
@@ -87,12 +91,15 @@ function CreatePsFunction {
     # Adjust description and path
     $description = $object.description -replace '\n', ''
     $path = $path -replace '{', '$' -replace '}', ''
+    $path = $path -replace 'organization', '($this.Organization)'
+    $path = $path -replace 'collection', '($this.Collection)'
+    $path = $path.trimstart('/')
 
     # Generate function
     $sb = [System.Text.StringBuilder]::new()
     [void]$sb.AppendLine('    # ' + $description)
     [void]$sb.AppendLine('    [PSObject] ' + $object."x-ms-vss-method" + '(' + $parametersString + ') {')
-    [void]$sb.AppendLine('        return $this.Request(''' + $method + ''', "' + $path + '", $apiVersion, ' + $body + ')')
+    [void]$sb.AppendLine('        return $this.Request(''' + $method + ''', "' + $path + '", $this.apiVersion, ' + $body + ')')
     [void]$sb.AppendLine('    }')
 
     return $sb.ToString()
@@ -133,19 +140,14 @@ foreach ($specification in $specifications)
             $sb = [System.Text.StringBuilder]::new()
             [void]$sb.AppendLine("# This file was auto-generated. Do not edit.")
             [void]$sb.AppendLine("")
-            [void]$sb.AppendLine("using module .\AzureDevOpsApiClient.psm1")
+            [void]$sb.AppendLine("using module .\..\..\AzureDevOpsApiClient.psm1")
             [void]$sb.AppendLine("")
             [void]$sb.AppendLine("class $apiClientName : AzureDevOpsApiClient {")
             [void]$sb.AppendLine('    [string] $apiVersion = ''' + $spec.info.version + '''')
-            [void]$sb.AppendLine('    [string] $organization')
-            [void]$sb.AppendLine('    [string] $collection')
+            [void]$sb.AppendLine('    # [string] $organization')
+            [void]$sb.AppendLine('    # [string] $collection')
             [void]$sb.AppendLine("")
-            [void]$sb.AppendLine("    $apiClientName(" + '[string] $organization, [string] $serviceHost, [string] $personalAccessToken) {')
-            [void]$sb.AppendLine('        $this.organization = $organization')
-            [void]$sb.AppendLine('        $this.collection = $organization')
-            [void]$sb.AppendLine('        $this.serviceHost = $serviceHost')
-            [void]$sb.AppendLine('        $this.personalAccessToken = $personalAccessToken')
-            [void]$sb.AppendLine("    }")
+            [void]$sb.AppendLine("    $apiClientName(" + '[string] $organization, [string] $serviceHost, [string] $personalAccessToken) : base ($serviceHost, $organization, $personalAccessToken) {}')
             [void]$sb.AppendLine("")
 
             foreach ($path in $spec.paths) {

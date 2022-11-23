@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+$apiClient = [GitOnpremApiClient]::new($organization, $tfsServiceHost, $patToken)
+
 <#
         .SYNOPSIS
         Gets all repositories for the specified project.
@@ -77,17 +79,22 @@ function Get-Repositories {
 function Get-RepositoryByName {
     param (
         [string] $projectName,
-        [string] $repositoryName,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [string] $repositoryName
+        # [AzureDevOpsServicesAPIClient] $apiClient
     )
 
-    $repositories = $apiClient.GetRepositories($projectName)
+    $repository = $apiClient.GetRepository($repositoryName, $projectName)
 
-    if ($repositories.Count -eq 0) {
-        return $null
-    }
+    return $repository
+}
 
-    return $repositories | Where-Object { $_.name -eq $repositoryName }
+function Remove-Repository {
+    param (
+        [string] $projectName,
+        [string] $repositoryId
+    )
+
+    $apiClient.DeleteRepository($repositoryId, $projectName)
 }
 
 <#
