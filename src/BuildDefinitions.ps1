@@ -50,149 +50,6 @@ function Export-BuildDefinitions {
     }
 }
 
-function Import-BuildDefinitions {
-    param (
-        [string] $projectName,
-        [PSObject] $repository,
-        [AzureDevOpsServicesAPIClient] $apiClient,
-        [psobject] $definitionYamlFilename
-    )
-    
-
-    $definitions = $sourceApiClient.GetBuildDefinitions($projectName)
-    $definitionYamlFilename = $definitions | Select-Object -Property repository | Where-Object {$_.name -eq $repository.name} 
-
-    New-AzBuildDefinition -projectName $projectName -repository $repository -apiClient $apiClient -definitionYamlFilename $definitionYamlFilename -isBuildPipeline $true
-    New-AzBuildDefinition -projectName $projectName -repository $repository -apiClient $apiClient -definitionYamlFilename $definitionYamlFilename -isBuildPipeline $false
-}
-
-function New-AzBuildDefinition {
-    param (
-        [string] $projectName,
-        [PSObject] $repository,
-        [AzureDevOpsServicesAPIClient] $apiClient,
-        [string] $definitionYamlFilename,
-        [bool] $isBuildPipeline
-    )
-
-    $buildDefinition = @{
-        triggers                  = @(
-            @{
-                settingsSourceType           = 2
-                batchChanges                 = $false
-                maxConcurrentBuildsPerBranch = 1
-                triggerType                  = 'continuousIntegration'
-            }
-        )
-        jobAuthorizationScope     = 'projectCollection'
-        jobTimeoutInMinutes       = 60
-        jobCancelTimeoutInMinutes = 5
-
-        process                   = Get-DefinitionProcess -isBuild $isBuildPipeline -definitionYamlFilename $definitionYamlFilename
-        repository                = @{
-            properties         = @{
-                cloneUrl          = $repository.remoteUrl
-                fullName          = $repository.name
-                defaultBranch     = "refs/heads/master"
-                isFork            = "False"
-                safeRepository    = $repository.id
-                reportBuildStatus = $true
-            }
-            id                 = $repository.id
-            type               = "TfsGit"
-            name               = $repository.name
-            url                = $repository.remoteUrl
-            defaultBranch      = "refs/heads/master"
-            checkoutSubmodules = $false
-        }
-        quality                   = 'definition'
-        name                      = Get-DefinitionName -isBuild $isBuildPipeline
-        path                      = Get-DefinitionPath -isBuild $isBuildPipeline
-        type                      = "build"
-        queueStatus               = "enabled"
-        revision                  = 1
-        queue = @{
-            name = "Default"
-        }
-    }
-
-    Write-Output $buildDefinition | ConvertTo-Json
-
-    
-    return $apiClient.CreateBuildDefinition($buildDefinition, $projectName)
-    
-}
-
-function Get-DefinitionProcess {
-    param (
-        [bool] $isBuild,
-        [string] $pipelineFolderName
-    )
-    if ($isBuild) {
-        return Get-DefinitionProcessForBuild -isBuild $isBuildPipeline -pipelineFolderName $pipelineFolderName
-
-    }
-    return Get-DefinitionProcessForPR -isBuild $isBuildPipeline -pipelineFolderName $pipelineFolderName
-}
-
-function Get-DefinitionPath {
-    param (
-        [bool] $isBuild
-    )
-    if ($isBuild) {
-        return "\\Jenkins build pipelines"
-
-    }
-    return "\\Jenkins pr pipelines"
-}
-
-function Get-DefinitionName {
-    param (
-        [bool] $isBuild
-    )
-    if ($isBuild) {
-        return "$($repository.name + "-build-jenkins")"
-
-    }
-    return "$($repository.name + "-pr-jenkins")"
-}
-
-function Get-DefinitionProcessForBuild {
-    param (
-        [bool] $isBuild,
-        [string] $pipelineFolderName
-    )
-
-        if ($pipelineFolderName -eq 'pipeline') {
-            return  @{
-                yamlFilename = 'pipeline/build-jenkins.yml'
-                type         = 2
-            }
-        }
-        return @{
-            yamlFilename = 'pipelines/build-jenkins.yml'
-            type         = 2
-        }
-
-}
-
-function Get-DefinitionProcessForPR {
-    param (
-        [bool] $isBuild,
-        [string] $pipelineFolderName
-    )
-
-    if ($pipelineFolderName -eq 'pipeline') {
-        return  @{
-            yamlFilename = 'pipeline/pr-jenkins.yml'
-            type         = 2
-        }
-    }
-    return  @{
-        yamlFilename = 'pipelines/pr-jenkins.yml'
-        type         = 2
-    }
-}
 
 function Copy-BuildDefinition {
     param (
@@ -246,7 +103,7 @@ function Copy-BuildDefinition {
     }
  Write-Output "repository name: $($buildDefinition.name)"
  Write-Output "definition $($repository.name)"
-    Create-BuildDefinition -projectName $projectName -apiClient $apiClient -buildDefinition $newBuildDefinition
+ Add-BuildDefinition -projectName $projectName -apiClient $apiClient -buildDefinition $newBuildDefinition
     
 }
 function Get-BuildDefinitions {
@@ -258,15 +115,14 @@ function Get-BuildDefinitions {
 
     for ($i = 0; $i -lt $definitions.Count; $i++) {     
         $definitions[$i] = $sourceApiClient.GetBuildDefinition($projectName, $definitions[$i].id)
-    #     if($i -lt 5){
-    #         return $definitions
-    #     }
-    # }
+        if($i -lt 5){
+            return $definitions
+        }
     }
     return $definitions
 }
 
-function Create-BuildDefinition {
+function Add-BuildDefinition {
     param (
         [string] $projectName,
         [AzureDevOpsServicesAPIClient] $apiClient,

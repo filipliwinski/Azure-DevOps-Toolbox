@@ -143,13 +143,8 @@ function Import-Repositories {
         [AzureDevOpsServicesAPIClient] $destinationApiClient
     )
     $repositories = Get-Repositories -projectName $sourceProjectName -apiClient $sourceApiClient
-    $pipeLineRelatedRepos = Get-PipelineRelatedRepositories -repositories $repositories
-    $nonPipelineRelatedRepos = Get-NonPipelineRelatedRepositories -repositories $repositories
-    Write-Output $pipeLineRelatedRepos
-
   
-    New-AzDevOpsRepositories -projectName $destinationProjectName -apiClient $destinationApiClient -repositories $pipeLineRelatedRepos -definitions $definitions 
-    New-AzDevOpsRepositories -projectName $destinationProjectName -apiClient $destinationApiClient -repositories $nonPipelineRelatedRepos -definitions $definitions
+    New-AzDevOpsRepositories -projectName $destinationProjectName -apiClient $destinationApiClient -repositories $repositories 
 }
 
 function Get-Repositories {
@@ -165,14 +160,11 @@ function New-AzDevOpsRepositories {
         [string] $projectName,
         [PSObject] $repositories,
         [AzureDevOpsServicesAPIClient] $apiClient,
-        [PSObject] $definitions
     )
 
     $existingRepositories = Get-Repositories -projectName $projectName -apiClient $apiClient 
 
     foreach ($repository in $repositories) { 
-
-        $pipelineFolderName = Get-FolderNameForRepo -repositoryName $repository.name
         
         if (-not ($existingRepositories.name -contains $repository.name)) {
 
@@ -181,24 +173,9 @@ function New-AzDevOpsRepositories {
             $createdRepo = New-AzDevOpsRepository -projectName $destinationProjectName -apiClient $destinationApiClient -repositoryToCreate $repositoryToCreate
            
             Copy-Repository -sourceRemoteUrl $repository.remoteUrl -destinationRemoteUrl $createdRepo.remoteUrl -repository $repositoryToCreate.name
-          
-            # $result = Import-BuildDefinitions -projectName $destinationProjectName -repository $repositoryToCreate -apiClient $destinationApiClient -pipelineFolderName $pipelineFolderName
-            # Write-Output $result | ConvertTo-Json
-       
-            # $pullRequests = Get-PullRequests -status 'active' -repositoryId $repository.id -projectName $sourceProjectName -apiClient $sourceApiClient 
-            # Import-PullRequests -pullRequests $pullRequests -apiClient $destinationApiClient -destinationProjectName $destinationProjectName -destinationRepositoryId  $createdRepo.id
-            # TODO! add here the pipeline export
         }
         else {
-            $definitionYamlFilename = $definitions | Where-Object {$_.repository.name -eq $repository.name}
-            $destinationRepository = $existingRepositories | Where-Object name -eq $repository.name 
-           
-            $result = Import-BuildDefinitions -projectName $destinationProjectName -repository $destinationRepository -apiClient $destinationApiClient -definitionYamlFilename $definitionYamlFilename
-            Write-Output $result 
-
-            # $pullRequests = Get-PullRequests -status 'active' -repositoryId $repository.id -projectName $sourceProjectName -apiClient $sourceApiClient
-            # Import-PullRequests -pullRequests $pullRequests -apiClient $destinationApiClient -destinationProjectName $destinationProjectName -destinationRepositoryId  $destinationRepository.id
-            # TODO! add here the pipeline export
+            Write-Output $($"Repository with name $repository already exist")
         }
     }
     return $response
@@ -236,36 +213,6 @@ function Copy-Repository {
     return $pipelineFolderName
 }
 
-function Get-PipelineRelatedRepositories {
-    param (
-        [psobject] $repositories
-    )
-
-    $pipeLineRelatedRepos = @()
-    foreach ($repository in $repositories) { 
-
-        if ($repository.name -eq 'devops' -or $repository.name -eq 'pipeline-shared-libs' -or $repository.name -eq 'release-management') {
-            $pipeLineRelatedRepos += $repository
-        }
-    }
-    return $pipeLineRelatedRepos
-}
-
-function Get-NonPipelineRelatedRepositories {
-    param (
-        [psobject] $repositories
-    )
-
-    $pipeLineRelatedRepos = @()
-    foreach ($repository in $repositories) { 
-
-        if ($repository.name -ne 'devops' -or $repository.name -ne 'pipeline-shared-libs' -or $repository.name -ne 'release-management') {
-            $pipeLineRelatedRepos += $repository
-        }
-    }
-    return $pipeLineRelatedRepos
-}
-
 function Convert-RepositoryToJson {
     param (
         [psobject] $repository
@@ -277,22 +224,4 @@ function Convert-RepositoryToJson {
         }
     }
     return $repositoryJson
-}
-
-function Get-FolderNameForRepo {
-    param (
-        [string] $repositoryName
-    )
-    if ($repositoryName -eq 'verification-store' -or 
-        $repositoryName -eq 'mitbasic-identity-provider' -or 
-        $repositoryName -eq 'identity-registry-store' -or 
-        $repositoryName -eq 'identity-registry-batch-reindexer' -or 
-        $repositoryName -eq 'identity-api' -or 
-        $repositoryName -eq 'event-api' -or 
-        $repositoryName -eq 'contact-subscription-store' -or 
-        $repositoryName -eq 'common-resource-servers' -or
-        $repositoryName -eq 'distribution-activator') {
-        return "pipeline"
-    }
-    return "pipelines"
 }
