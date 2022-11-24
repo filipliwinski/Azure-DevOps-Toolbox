@@ -57,6 +57,7 @@ function Copy-BuildDefinition {
         [AzureDevOpsServicesAPIClient] $apiClient,
         [psobject] $buildDefinition
     )
+    
     if($buildDefinition.path -contains('Deprecated')){
         return $null
     }
@@ -111,15 +112,16 @@ function Get-BuildDefinitions {
         [string] $projectName,
         [AzureDevOpsServicesAPIClient] $apiClient
     )
-    $definitions = $sourceApiClient.GetBuildDefinitions($projectName)
+    return $sourceApiClient.GetBuildDefinitions($projectName)
+    # $definitions = $sourceApiClient.GetBuildDefinitions($projectName)
 
-    for ($i = 0; $i -lt $definitions.Count; $i++) {     
-        $definitions[$i] = $sourceApiClient.GetBuildDefinition($projectName, $definitions[$i].id)
-        if($i -lt 5){
-            return $definitions
-        }
-    }
-    return $definitions
+    # for ($i = 0; $i -lt $definitions.Count; $i++) {     
+    #     $definitions[$i] = $sourceApiClient.GetBuildDefinition($projectName, $definitions[$i].id)
+    #     if($i -lt 5){
+    #         return $definitions
+    #     }
+    # }
+    # return $definitions
 }
 
 function Add-BuildDefinition {

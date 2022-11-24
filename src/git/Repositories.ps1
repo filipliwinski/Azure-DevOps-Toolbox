@@ -159,7 +159,7 @@ function New-AzDevOpsRepositories {
     param (
         [string] $projectName,
         [PSObject] $repositories,
-        [AzureDevOpsServicesAPIClient] $apiClient,
+        [AzureDevOpsServicesAPIClient] $apiClient
     )
 
     $existingRepositories = Get-Repositories -projectName $projectName -apiClient $apiClient 
@@ -175,7 +175,7 @@ function New-AzDevOpsRepositories {
             Copy-Repository -sourceRemoteUrl $repository.remoteUrl -destinationRemoteUrl $createdRepo.remoteUrl -repository $repositoryToCreate.name
         }
         else {
-            Write-Output $($"Repository with name $repository already exist")
+            Write-Output $($"Repository with name"+ $repository.name +"already exist")
         }
     }
     return $response
