@@ -20,7 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-using module .\src\AzureDevOpsServicesAPIClient.psm1
+# Include API Clients for a specific API version
+. ".\ApiClients\azure-devops-server-6.0.ps1"
 
 $organizationName = '<put the name of the organization here>'
 $projectName = '<put the name of the project here>'
@@ -36,7 +37,7 @@ $patToken = '<put the Personal Access Token here>'
 . .\git\Repositories.ps1
 . .\git\PolicyConfigurations.ps1
 
-$apiClient = [AzureDevOpsServicesAPIClient]::new($organizationName, $serviceHost, $patToken)
+# $apiClient = [AzureDevOpsServicesAPIClient]::new($organizationName, $serviceHost, $patToken)
 
 $VerbosePreference = "Continue"   # Show verbose logs
 

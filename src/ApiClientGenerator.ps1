@@ -185,5 +185,25 @@ foreach ($specification in $specifications)
         }
     }
 }
-#
 
+Write-Progress -Activity "Generating clients..." -Completed
+
+# Generate scripts to include ApiClients modules
+$apiClientsDirectory = '.\ApiClients'
+
+$apiClientVersions = Get-ChildItem $apiClientsDirectory -directory
+
+foreach ($version in $apiClientVersions) {
+    $apiClients = Get-ChildItem $version -file
+    $sb = [System.Text.StringBuilder]::new()
+    [void]$sb.AppendLine("# This file was auto-generated. Do not edit.")
+    [void]$sb.AppendLine("")
+
+    foreach ($apiClient in $apiClients) {
+        $relativePath = Get-Item $apiClient | Resolve-Path -Relative
+        $relativePath = $relativePath -replace "\\ApiClients", ""
+        [void]$sb.AppendLine("using module ""$relativePath""")
+    }
+
+    $sb.ToString() | Out-File -FilePath "$apiClientsDirectory\$($version.PSChildName).ps1"
+}
