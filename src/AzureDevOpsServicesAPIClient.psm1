@@ -26,7 +26,7 @@ enum AuthFlow {
 }
 
 class AzureDevOpsServicesAPIClient {
-    [string] $APIVersion = '6.0-preview.1'
+    [string] $APIVersion = '6.0'
     [string] $ServiceHost = 'https://dev.azure.com'
     [string] $ServiceHostVSRM = 'https://vsrm.dev.azure.com'
     [string] $Organization
@@ -204,9 +204,9 @@ class AzureDevOpsServicesAPIClient {
     #endregion ReleaseDefinitions
     #region Repositories
 
-    [PSObject] GetIdentityByUniqueName([string] $projectName) {
-        $identities = $this.Request('Get', "$projectName/_apis/identities?repositories", $this.APIVersion, $null)
-        return $identities.value
+    # Create a git repository in a team project.
+    [PSObject] CreateRepository([PSObject] $body, [string] $project) {
+        return $this.Request('post', "$project/_apis/git/repositories", $this.APIVersion, $body)
     }
 
     [PSObject] GetRepositories([string] $projectName) {
@@ -218,6 +218,18 @@ class AzureDevOpsServicesAPIClient {
         $repository = $this.Request('Get', "$projectName/_apis/git/repositories/$id", $this.APIVersion, $null)
         return $repository
     }
+
+    # Retrieve a pull request.
+    [PSObject] GetPullRequest([string] $repositoryId, [int] $pullRequestId, [string] $project) {
+        return $this.Request('get', "$project/_apis/git/repositories/$repositoryId/pullrequests/$pullRequestId", $this.APIVersion, $null)
+    }
+
+    # Create a pull request.
+    [PSObject] CreatePullRequest([PSObject] $body, [string] $repositoryId, [string] $project) {
+        return $this.Request('post', "$project/_apis/git/repositories/$repositoryId/pullrequests", $this.APIVersion, $body)
+    }
+
+    #endregion Repositories
 
     [PSObject] CreateRepository([PSObject] $body, [string] $project, [string] $sourceRef) {
         return $this.Request('post', "$project/_apis/git/repositories", $this.APIVersion, $body)

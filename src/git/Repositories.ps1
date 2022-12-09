@@ -202,3 +202,27 @@ function Copy-Repository {
     
     return $null
 }
+
+
+
+function Get-PullRequest {
+    param (
+        [string] $projectName,
+        [string] $repositoryId,
+        [int] $pullRequestId,
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+
+    return $apiClient.GetPullRequest($repositoryId, $pullRequestId, $projectName)
+}
+
+function Create-PullRequest {
+    param (
+        [PSObject] $body,
+        [string] $projectName,
+        [string] $repositoryId,
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+
+    return $apiClient.CreatePullRequest($body, $repositoryId, $projectName)
+}
