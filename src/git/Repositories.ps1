@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+. .\git\PullRequests.ps1
+
 <#
         .SYNOPSIS
         Gets all repositories for the specified project.
@@ -48,7 +50,7 @@ function Get-Repositories {
 
     $repositories = $apiClient.GetRepositories($projectName)
 
-    return $repositories
+    return $repositories.value
 }
 
 <#
@@ -88,6 +90,17 @@ function Get-RepositoryByName {
     }
 
     return $repositories | Where-Object { $_.name -eq $repositoryName }
+}
+
+function New-Repository {
+    param (
+        [string] $projectName,
+        [PSObject] $repository,
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+    $response = $apiClient.CreateRepository($repository, $projectName, 'users/heads/master')
+    
+    return $response
 }
 
 <#
@@ -130,4 +143,62 @@ function Export-Repositories {
         $name = $repository.name -replace '[\[\]\<\>\:\"\/\\\|\?\*]', '_'
         ConvertTo-Json $repository -Depth 100 > "$outputPath\$name.json"
     }
+}
+
+function Copy-Repositories {
+    param (
+        [string] $sourceProjectName,
+        [string] $targetProjectName,
+        [AzureDevOpsServicesAPIClient] $sourceApiClient,
+        [AzureDevOpsServicesAPIClient] $targetApiClient
+    )
+    
+    $repositories = Get-Repositories -projectName $sourceProjectName -apiClient $sourceApiClient
+    $i = 0
+
+    foreach ($repository in $repositories) {
+        $progress = [math]::floor($i / $repositories.count * 100)
+
+        Write-Progress -Activity "Copying repositories..." -Status "$progress% Complete [$($repository.name)]" -PercentComplete $progress
+        $i++
+
+        Copy-Repository -projectName $targetProjectName -repository $repository -apiClient $targetApiClient
+    }
+
+    Write-Progress -Activity "Copying repositories..." -Completed
+}
+
+function Copy-Repository {
+    param (
+        [string] $projectName,
+        [PSObject] $repository,
+        [AzureDevOpsServicesAPIClient] $apiClient
+    )
+
+    $newRepository = @{
+        'name' = $repository.name
+    }
+
+    try {
+        $newRepository = New-Repository -projectName $projectName -repository $newRepository -apiClient $apiClient
+
+        $tempLocation = 'temp/repos/' + $repository.name
+
+        git clone --bare $repository.remoteUrl $tempLocation
+        
+        Push-Location $tempLocation
+
+        git push --mirror $newRepository.remoteUrl
+
+        Pop-Location
+
+        Remove-Item -Recurse -Force $tempLocation
+
+        return $newRepository
+    }
+    catch {
+        Write-Host "The repository $($repository.name) already exists."
+    }
+    
+    return $null
 }

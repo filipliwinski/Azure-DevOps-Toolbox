@@ -275,6 +275,8 @@ FakesAssemblies/
 .ntvs_analysis.dat
 node_modules/
 
+ApiClients
+
 # Visual Studio 6 build log
 *.plg
 
@@ -349,6 +351,9 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
+src/ApiClients
 src/demo_local.ps1
 src/[Tt]emp.ps1
 [Tt]emp/
+
+temp

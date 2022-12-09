@@ -32,3 +32,4 @@ function Get-Refs {
     $refs = $apiClient.GetRefs($projectName, $repositoryId)
     return $refs
 }
+

@@ -185,7 +185,9 @@ class AzureDevOpsServicesAPIClient {
         $definition = $this.Request('Get', "$projectName/_apis/build/definitions/$definitionId", '6.0', $null)
         return $definition
     }
-
+    [PSObject] CreateBuildDefinition([PSObject] $body, [string] $projectName) {
+        return $this.Request('post', "$projectName/_apis/build/definitions", '6.0', $body)
+    }
     #endregion BuildDefinitions
     #region ReleaseDefinitions
 
@@ -202,18 +204,43 @@ class AzureDevOpsServicesAPIClient {
     #endregion ReleaseDefinitions
     #region Repositories
 
+    [PSObject] GetIdentityByUniqueName([string] $projectName) {
+        $identities = $this.Request('Get', "$projectName/_apis/identities?repositories", $this.APIVersion, $null)
+        return $identities.value
+    }
+
     [PSObject] GetRepositories([string] $projectName) {
         $repositories = $this.Request('Get', "$projectName/_apis/git/repositories", $this.APIVersion, $null)
-        return $repositories.value
+        return $repositories
+    }
+
+    [PSObject] GetRepository([string] $projectName, [string] $id) {
+        $repository = $this.Request('Get', "$projectName/_apis/git/repositories/$id", $this.APIVersion, $null)
+        return $repository
+    }
+
+    [PSObject] CreateRepository([PSObject] $body, [string] $project, [string] $sourceRef) {
+        return $this.Request('post', "$project/_apis/git/repositories", $this.APIVersion, $body)
     }
 
     #endregion Repositories
     #region Refs
 
+    # This API is used to find what pull requests are related to a given commit.  It can be used to either find the pull request that created a particular merge commit or it can be used to find all pull requests that have ever merged a particular commit.  The input is a list of queries which each contain a list of commits. For each commit that you search against, you will get back a dictionary of commit -> pull requests.
+    [PSObject] GetPullRequestsByRepository([string] $status, [string] $repositoryId, [string] $project) {
+        return $this.Request('get', "$project/_apis/git/repositories/$repositoryId/pullrequests?searchCriteria.status=$status", $this.ApiVersion, $null)
+    }
+
+    # Create a pull request.
+    [PSObject] CreatePullRequest([PSObject] $body, [string] $repositoryId, [string] $project) {
+        return $this.Request('post', "$project/_apis/git/repositories/$repositoryId/pullrequests", $this.ApiVersion, $body)
+    }
+
     [psobject] GetRefs([string] $projectName, [string] $repositoryId) {
         $refs = $this.Request('Get', "$projectName/_apis/git/repositories/$repositoryId/refs", $this.APIVersion, $null)
         return $refs
     }
+    
 
     #endregion Refs
     #region PolicyConfigurations
