@@ -62,7 +62,7 @@ function CreatePsFunction {
     $sbParam = [System.Text.StringBuilder]::new()
     $body = '$null'
     foreach ($parameter in $parameters) {
-        if($null -ne $parameter.in) {
+        if($null -ne $parameter.in -and 'path' -eq $parameter.in) {
             $parameterName = $parameter.name.Replace('$','')
             $parameterType = $parameter.type ?? 'PSObject'
             if ($parameterType -eq 'integer') {
@@ -207,3 +207,5 @@ foreach ($version in $apiClientVersions) {
 
     $sb.ToString() | Out-File -FilePath "$apiClientsDirectory\$($version.PSChildName).ps1"
 }
+
+# Remove-Item -Path $localRepoLocation -Recurse -Force
