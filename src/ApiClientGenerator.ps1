@@ -62,18 +62,20 @@ function CreatePsFunction {
     $sbParam = [System.Text.StringBuilder]::new()
     $body = '$null'
     foreach ($parameter in $parameters) {
-        if($null -ne $parameter.in -and 'path' -eq $parameter.in) {
+        if($null -ne $parameter.in -and 
+            $parameter.in -eq 'path' -and 
+            $parameter.name -ne 'collection' -and
+            $parameter.name -ne 'organization' -and
+            $parameter.name -ne 'project') {
             $parameterName = $parameter.name.Replace('$','')
             $parameterType = $parameter.type ?? 'PSObject'
             if ($parameterType -eq 'integer') {
                 $parameterType = 'int'
             }
-            if ($parameterName -ne 'collection' -and $parameterName -ne 'organization') {
-                if ($parameterName.Contains('.')) {
-                    $parameterName = $parameterName.Split('.')[1]
-                }
-                [void]$sbParam.Append("[$parameterType] $" + "$($parameterName), ")
+            if ($parameterName.Contains('.')) {
+                $parameterName = $parameterName.Split('.')[1]
             }
+            [void]$sbParam.Append("[$parameterType] $" + "$($parameterName), ")
 
             if($parameterName -eq 'body') {
                 $body = '$body'
@@ -91,8 +93,10 @@ function CreatePsFunction {
     # Adjust description and path
     $description = $object.description -replace '\n', ''
     $path = $path -replace '{', '$' -replace '}', ''
-    $path = $path -replace 'organization', '($this.Organization)'
-    $path = $path -replace 'collection', '($this.Collection)'
+    $path = $path -replace '\$organization', ''
+    $path = $path -replace '\$collection', ''
+    $path = $path -replace '\$project', ''
+    $path = $path -replace '/_apis', ''
     $path = $path.trimstart('/')
 
     # Generate function
@@ -101,7 +105,7 @@ function CreatePsFunction {
     [void]$sb.AppendLine('    [PSObject] ' + $object."x-ms-vss-method" + '(' + $parametersString + ') {')
     [void]$sb.AppendLine('        return $this.Request(''' + $method + ''', "' + $path + '", $this.apiVersion, ' + $body + ')')
     [void]$sb.AppendLine('    }')
-
+    
     return $sb.ToString()
 }
 
@@ -144,10 +148,8 @@ foreach ($specification in $specifications)
             [void]$sb.AppendLine("")
             [void]$sb.AppendLine("class $apiClientName : AzureDevOpsApiClient {")
             [void]$sb.AppendLine('    [string] $apiVersion = ''' + $spec.info.version + '''')
-            [void]$sb.AppendLine('    # [string] $organization')
-            [void]$sb.AppendLine('    # [string] $collection')
             [void]$sb.AppendLine("")
-            [void]$sb.AppendLine("    $apiClientName(" + '[string] $organization, [string] $serviceHost, [string] $personalAccessToken) : base ($serviceHost, $organization, $personalAccessToken) {}')
+            [void]$sb.AppendLine("    $apiClientName(" + '[string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken) : base ($serviceHost, $organization, $projectName, $personalAccessToken) {}')
             [void]$sb.AppendLine("")
 
             foreach ($path in $spec.paths) {

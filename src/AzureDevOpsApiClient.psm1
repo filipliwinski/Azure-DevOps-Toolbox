@@ -29,13 +29,14 @@ class AzureDevOpsApiClient {
     [string] $ServiceHost = 'https://dev.azure.com'
     [string] $ServiceHostVSRM = 'https://vsrm.dev.azure.com'
     [string] $Organization
-    [string] $Collection
+    # [string] $Collection
+    [string] $ProjectName
     [string] $PersonalAccessToken
     [AuthFlow] $Auth
 
     AzureDevOpsApiClient() {}
 
-    AzureDevOpsApiClient([string] $serviceHost, [string] $organization, [string] $personalAccessToken) {
+    AzureDevOpsApiClient([string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken) {
 
         if ('' -eq $serviceHost) {
             Write-Host "serviceHost not provided. Using $ServiceHost"
@@ -44,7 +45,8 @@ class AzureDevOpsApiClient {
         }
 
         $this.Organization = $organization
-        $this.Collection = $organization
+        $this.ProjectName = $projectName
+        # $this.Collection = $organization
         $this.PersonalAccessToken = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(":$personalAccessToken"))
         $this.Auth = [AuthFlow]::PersonalAccessToken
     }
@@ -72,7 +74,7 @@ class AzureDevOpsApiClient {
 
         $requestHeaders = $this.ComposeHeaders()
 
-        $uri = "$serviceHost/$endpoint"
+        $uri = "$serviceHost/$($this.Organization)/$($this.ProjectName)/_apis/$endpoint"
 
         if ($apiVersion) {
             if ($uri.Contains('?')) {

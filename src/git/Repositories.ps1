@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-$apiClient = [GitOnpremApiClient]::new($organization, $tfsServiceHost, $patToken)
+$apiClient = [GitOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken)
 
 <#
         .SYNOPSIS
