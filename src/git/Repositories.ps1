@@ -44,11 +44,11 @@ $apiClient = [GitOnpremApiClient]::new($tfsServiceHost, $organization, $projectN
     #>
 function Get-Repositories {
     param (
-        [string] $projectName
+        # [string] $projectName
         # [AzureDevOpsServicesAPIClient] $apiClient
     )
 
-    $repositories = $apiClient.GetRepositories($projectName, $null, $null, $null)
+    $repositories = $apiClient.GetRepositories()
 
     return $repositories.value
 }

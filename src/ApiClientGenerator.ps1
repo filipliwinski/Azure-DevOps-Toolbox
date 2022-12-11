@@ -23,6 +23,19 @@
 $remoteRepoLocation = "https://github.com/MicrosoftDocs/vsts-rest-api-specs.git"
 $localRepoLocation = "c:/temp/vsts-rest-api-specs"
 
+function ComputeFunctionHash {
+    param (
+        [String] $function
+    )
+
+    $stringAsStream = [System.IO.MemoryStream]::new()
+    $writer = [System.IO.StreamWriter]::new($stringAsStream)
+    $writer.write($function)
+    $writer.Flush()
+    $stringAsStream.Position = 0
+    return Get-FileHash -InputStream $stringAsStream -Algorithm MD5 | Select-Object Hash
+}
+
 function ExtractMethods {
     param (
         [Object] $object,
@@ -31,22 +44,26 @@ function ExtractMethods {
 
     $methods = $object.psobject.properties.name
     $objectValue = $object.psobject.properties.value
-    $functions = @()
+    $functions = @{}
 
     if ($objectValue.GetType() -eq [System.Management.Automation.PSCustomObject]) {
         # System.Management.Automation.PSCustomObject
-        $functions += CreatePsFunction -object $objectValue -path $path -method $methods
+        $function = CreatePsFunction -object $objectValue -path $path -method $methods
+        $functionHash = ComputeFunctionHash -function $function
+        $functions.Add($functionHash, $function)
     }
     else {
         # System.Object[]
         $methodsArray = $methods.Split(' ')
         for ($i = 0; $i -lt $methodsArray.Count; $i++) {
             # System.Management.Automation.PSCustomObject
-            $functions += CreatePsFunction -object $objectValue[$i] -path $path -method $methodsArray[$i]
+            $function = CreatePsFunction -object $objectValue[$i] -path $path -method $methodsArray[$i]
+            $functionHash = ComputeFunctionHash -function $function
+            $functions.Add($functionHash, $function)
         }
     }
 
-    return $functions
+    return $functions.Values
 }
 
 function CreatePsFunction {
@@ -63,7 +80,7 @@ function CreatePsFunction {
     $body = '$null'
     foreach ($parameter in $parameters) {
         if($null -ne $parameter.in -and 
-            $parameter.in -eq 'path' -and 
+            ($parameter.in -eq 'path' -or $parameter.in -eq 'body') -and 
             $parameter.name -ne 'collection' -and
             $parameter.name -ne 'organization' -and
             $parameter.name -ne 'project') {
@@ -92,6 +109,7 @@ function CreatePsFunction {
 
     # Adjust description and path
     $description = $object.description -replace '\n', ''
+    $path = $path -replace '\$', ''
     $path = $path -replace '{', '$' -replace '}', ''
     $path = $path -replace '\$organization', ''
     $path = $path -replace '\$collection', ''
@@ -99,10 +117,17 @@ function CreatePsFunction {
     $path = $path -replace '/_apis', ''
     $path = $path.trimstart('/')
 
+    $functionName = $object."x-ms-vss-method"
+
+    # Handle duplicates for Head calls
+    if ($method -eq 'head') {
+        $functionName = $functionName + '_Head'
+    }
+
     # Generate function
     $sb = [System.Text.StringBuilder]::new()
     [void]$sb.AppendLine('    # ' + $description)
-    [void]$sb.AppendLine('    [PSObject] ' + $object."x-ms-vss-method" + '(' + $parametersString + ') {')
+    [void]$sb.AppendLine('    [PSObject] ' + $functionName + '(' + $parametersString + ') {')
     [void]$sb.AppendLine('        return $this.Request(''' + $method + ''', "' + $path + '", $this.apiVersion, ' + $body + ')')
     [void]$sb.AppendLine('    }')
     
@@ -110,6 +135,7 @@ function CreatePsFunction {
 }
 
 if (!(Test-Path -Path $localRepoLocation)) {
+    Write-Host "Cloning $remoteRepoLocation..."
     git clone $remoteRepoLocation $localRepoLocation
 }
 
