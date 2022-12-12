@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-$apiClient = [GitOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken, 
+$gitApiClient = [GitOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken, 
                                     $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
 
 <#
@@ -42,7 +42,7 @@ function Get-Repositories {
         [switch] $useTargetProject
     )
 
-    $repositories = $apiClient.GetRepositories($useTargetProject)
+    $repositories = $gitApiClient.GetRepositories($useTargetProject)
 
     return $repositories.value
 }
@@ -70,7 +70,7 @@ function Get-RepositoryByName {
         [string] $repositoryName
     )
 
-    $repository = $apiClient.GetRepository($useTargetProject, $repositoryName)
+    $repository = $gitApiClient.GetRepository($useTargetProject, $repositoryName)
 
     return $repository
 }
@@ -81,16 +81,16 @@ function Remove-Repository {
         [string] $repositoryId
     )
 
-    $apiClient.DeleteRepository($useTargetProject, $repositoryId)
+    $gitApiClient.DeleteRepository($useTargetProject, $repositoryId)
 }
 
 function New-Repository {
     param (
         [string] $projectName,
         [PSObject] $repository,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [AzureDevOpsServicesAPIClient] $gitApiClient
     )
-    $response = $apiClient.CreateRepository($repository, $projectName, 'users/heads/master')
+    $response = $gitApiClient.CreateRepository($repository, $projectName, 'users/heads/master')
     
     return $response
 }
@@ -118,7 +118,7 @@ function Export-Repositories {
         [string] $outputPath = ''
     )
 
-    $repositories = $apiClient.GetRepositories($useTargetProject)
+    $repositories = $gitApiClient.GetRepositories($useTargetProject)
 
     if ($repositories.count -gt 0) {
         New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
@@ -157,7 +157,7 @@ function Copy-Repository {
     param (
         [string] $projectName,
         [PSObject] $repository,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [AzureDevOpsServicesAPIClient] $gitApiClient
     )
 
     $newRepository = @{
@@ -165,7 +165,7 @@ function Copy-Repository {
     }
 
     try {
-        $newRepository = New-Repository -projectName $projectName -repository $newRepository -apiClient $apiClient
+        $newRepository = New-Repository -projectName $projectName -repository $newRepository -apiClient $gitApiClient
 
         $tempLocation = 'temp/repos/' + $repository.name
 
@@ -195,10 +195,10 @@ function Get-PullRequest {
         [string] $projectName,
         [string] $repositoryId,
         [int] $pullRequestId,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [AzureDevOpsServicesAPIClient] $gitApiClient
     )
 
-    return $apiClient.GetPullRequest($repositoryId, $pullRequestId, $projectName)
+    return $gitApiClient.GetPullRequest($repositoryId, $pullRequestId, $projectName)
 }
 
 function Create-PullRequest {
@@ -206,8 +206,8 @@ function Create-PullRequest {
         [PSObject] $body,
         [string] $projectName,
         [string] $repositoryId,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [AzureDevOpsServicesAPIClient] $gitApiClient
     )
 
-    return $apiClient.CreatePullRequest($body, $repositoryId, $projectName)
+    return $gitApiClient.CreatePullRequest($body, $repositoryId, $projectName)
 }

@@ -20,86 +20,80 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-$apiClient = [TaskAgentOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken, 
+$taskAgentApiClient = [TaskAgentOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken, 
                                     $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
 
 function Add-VariableGroup {
     param(
-        [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $apiClient,
+        [switch] $useTargetProject,
         [PSObject] $variableGroup
     )
 
-    return $apiClient.AddVariableGroup($projectName, $variableGroup)
+    return $taskAgentApiClient.AddVariableGroup($useTargetProject, $variableGroup)
 }
 
 function Copy-VariableGroup {
     param(
-        [string] $sourceProjectName,
-        [string] $targetProjectName,
-        [AzureDevOpsServicesAPIClient] $sourceApiClient,
-        [AzureDevOpsServicesAPIClient] $targetApiClient,
+        [switch] $useTargetProject,
         [int] $variableGroupId
     )
     $namePostfix = ""
 
-    $sourceVariableGroup = $sourceApiClient.GetVariableGroupById($sourceProjectName, $variableGroupId)
+    $sourceVariableGroup = Get-VariableGroup -useTargetProject:$useTargetProject -variableGroupId $variableGroupId
 
-    if ($sourceApiClient.ServiceHost -eq $targetApiClient.ServiceHost -and 
-        $sourceApiClient.Organization -eq $targetApiClient.Organization -and
-        $sourceProjectName -eq $targetProjectName) {
-        $namePostfix = "- copy"
+    if (-not $useTargetProject) {
+        $namePostfix = " - copy"
     }
 
     $newVariableGroup = @{
         "description" = $sourceVariableGroup.description
-        "name" = "$($sourceVariableGroup.name) $namePostfix"
+        "name" = "$($sourceVariableGroup.name)$namePostfix"
         "providerData" = $sourceVariableGroup.providerData
         "type" = $sourceVariableGroup.type
         "variables" = $sourceVariableGroup.variables
     }
 
-    return $targetApiClient.AddVariableGroup($targetProjectName, $newVariableGroup)
+    return $taskAgentApiClient.AddVariableGroup($useTargetProject, $newVariableGroup)
+}
+
+function Get-VariableGroups {
+    param (
+        [switch] $useTargetProject
+    )
+
+    $variableGroups = $taskAgentApiClient.GetVariableGroupsById($useTargetProject)
+    return $variableGroups
 }
 
 function Get-VariableGroup {
     param (
-        [string] $projectName,
-        [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient,
+        [switch] $useTargetProject,
         [int] $variableGroupId
     )
 
-    $variableGroup = $apiClient.GetVariableGroupById($projectName, $variableGroupId)
+    $variableGroup = $taskAgentApiClient.GetVariableGroup($useTargetProject, $variableGroupId)
     return $variableGroup
 }
 
 function Get-VariableGroupByName {
     param (
-        [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $apiClient,
+        [string] $useTargetProject,
         [string] $variableGroupName
     )
 
-    $variableGroup = $apiClient.GetVariableGroupByName($projectName, $variableGroupName)
-    return $variableGroup
-}
+    $variableGroups = Get-VariableGroups -useTargetProject:$useTargetProject
 
-function Get-VariableGroups {
-    param (
-        [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $apiClient
-    )
+    if ($variableGroups.Count -eq 0) {
+        return $null
+    }
 
-    $variableGroups = $apiClient.GetVariableGroups($projectName)
-    return $variableGroups
+    return $variableGroups | Where-Object { $_.name -eq $variableGroupName }
 }
 
 function Export-VariableGroup {
     param (
-        [string] $projectName,
+        [string] $useTargetProject,
         [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient,
         [int] $variableGroupId
     )
 
@@ -107,7 +101,7 @@ function Export-VariableGroup {
         $outputPath = "."
     }
 
-    $variableGroup = $apiClient.GetVariableGroupById($projectName, $variableGroupId)
+    $variableGroup = Get-VariableGroup -useTargetProject:$useTargetProject -variableGroupId $variableGroupId
 
     if ($null -ne $variableGroup) {
         New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
@@ -119,16 +113,15 @@ function Export-VariableGroup {
 
 function Export-VariableGroups {
     param (
-        [string] $projectName,
-        [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [string] $useTargetProject,
+        [string] $outputPath = ''
     )
 
     if ($null -eq $outputPath -or '' -eq $outputPath) {
         $outputPath = "."
     }
 
-    $variableGroups = $apiClient.GetVariableGroups($projectName)
+    $variableGroups = Get-VariableGroups -useTargetProject:$useTargetProject
 
     if ($null -ne $variableGroups) {
         New-Item -ItemType Directory -Force -Path $outputPath | Out-Null

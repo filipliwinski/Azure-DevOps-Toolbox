@@ -38,7 +38,7 @@ function Get-PolicyConfigurationRaw {
 
     $repository = Get-RepositoryByName -useTargetProject:$useTargetProject -repositoryName $repositoryName
 
-    $policy = $apiClient.GetPolicyConfiguration($useTargetProject, $repository.id, $refName)
+    $policy = $gitApiClient.GetPolicyConfiguration($useTargetProject, $repository.id, $refName)
 
     return $policy
 }

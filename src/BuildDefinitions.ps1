@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-$apiClient = [BuildOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken, 
+$buildApiClient = [BuildOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken, 
                                     $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
 
 function Export-Definitions {
@@ -34,11 +34,11 @@ function Export-Definitions {
         $outputPath = "."
     }
 
-    $definitions = $apiClient.GetDefinitions($useTargetProject)
+    $definitions = $buildApiClient.GetDefinitions($useTargetProject)
 
     if ($expand) {
         for ($i = 0; $i -lt $definitions.Count; $i++) {
-            $definitions[$i] = $apiClient.GetDefinition($useTargetProject, $definitions[$i].id)
+            $definitions[$i] = $buildApiClient.GetDefinition($useTargetProject, $definitions[$i].id)
         }
     }
 
@@ -56,14 +56,14 @@ function Export-Definitions {
 function Copy-BuildDefinition {
     param (
         [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $apiClient,
+        [AzureDevOpsServicesAPIClient] $buildApiClient,
         [psobject] $buildDefinition
     )
     
     if($buildDefinition.path -contains('Deprecated')){
         return $null
     }
-    $repository = $apiClient.GetRepository( $projectName, $buildDefinition.repository.name)
+    $repository = $buildApiClient.GetRepository( $projectName, $buildDefinition.repository.name)
     $newBuildDefinition = @{
         triggers                  = @(
             @{
@@ -106,13 +106,13 @@ function Copy-BuildDefinition {
     }
  Write-Output "repository name: $($buildDefinition.name)"
  Write-Output "definition $($repository.name)"
- Add-BuildDefinition -projectName $projectName -apiClient $apiClient -buildDefinition $newBuildDefinition
+ Add-BuildDefinition -projectName $projectName -apiClient $buildApiClient -buildDefinition $newBuildDefinition
     
 }
 function Get-BuildDefinitions {
     param (
         [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [AzureDevOpsServicesAPIClient] $buildApiClient
     )
     return $sourceApiClient.GetBuildDefinitions($projectName)
     # $definitions = $sourceApiClient.GetBuildDefinitions($projectName)
@@ -129,8 +129,8 @@ function Get-BuildDefinitions {
 function Add-BuildDefinition {
     param (
         [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $apiClient,
+        [AzureDevOpsServicesAPIClient] $buildApiClient,
         [psobject] $buildDefinition
     )
-    return $apiClient.CreateBuildDefinition($buildDefinition, $projectName)
+    return $buildApiClient.CreateBuildDefinition($buildDefinition, $projectName)
 }
