@@ -5,3 +5,13 @@ Azure DevOps Toolbox is a set of PowerShell scripts that helps you manage your A
 The API specification can be found [here](https://github.com/MicrosoftDocs/vsts-rest-api-specs).
 
 ⚠ This repository is in an early stage of development.
+
+## Requirements
+
+- PowerShell 7+
+- Git
+- Visual Studio Code with the PowerShell extension (recommended)
+
+## Notes for developers
+
+If you make changes to any PowerShell modules (.psm1 files) you must close and reopen your PS terminal each time. Otherwise PowerShell won't reload modules but will continue to use the old versions.

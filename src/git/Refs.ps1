@@ -24,12 +24,11 @@
 
 function Get-Refs {
     param(
-        [string] $repositoryId,
-        [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [switch] $useTargetProject,
+        [string] $repositoryId
     )
 
-    $refs = $apiClient.GetRefs($projectName, $repositoryId)
+    $refs = $apiClient.GetRefs($useTargetProject, $repositoryId)
     return $refs
 }
 

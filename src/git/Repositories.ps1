@@ -20,7 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-. .\git\PullRequests.ps1
+$apiClient = [GitOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken, 
+                                    $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
 
 <#
         .SYNOPSIS
@@ -28,12 +29,6 @@
 
         .DESCRIPTION
         Gets all repositories for the specified project.
-
-        .PARAMETER projectName
-        Specifies the project name.
-
-        .PARAMETER apiClient
-        Specifies the API client to use.
 
         .OUTPUTS
         System.Array. Returns an array with repositories.
@@ -44,11 +39,10 @@
     #>
 function Get-Repositories {
     param (
-        [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [switch] $useTargetProject
     )
 
-    $repositories = $apiClient.GetRepositories($projectName)
+    $repositories = $apiClient.GetRepositories($useTargetProject)
 
     return $repositories.value
 }
@@ -60,14 +54,8 @@ function Get-Repositories {
         .DESCRIPTION
         Gets a repository with the specified name.
 
-        .PARAMETER projectName
-        Specifies the project name.
-
         .PARAMETER repositoryName
         Specifies the repository name.
-
-        .PARAMETER apiClient
-        Specifies the API client to use.
 
         .OUTPUTS
         System.Object. Returns an object with the repository details.
@@ -78,18 +66,22 @@ function Get-Repositories {
     #>
 function Get-RepositoryByName {
     param (
-        [string] $projectName,
-        [string] $repositoryName,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [switch] $useTargetProject,
+        [string] $repositoryName
     )
 
-    $repositories = $apiClient.GetRepositories($projectName)
+    $repository = $apiClient.GetRepository($useTargetProject, $repositoryName)
 
-    if ($repositories.Count -eq 0) {
-        return $null
-    }
+    return $repository
+}
 
-    return $repositories | Where-Object { $_.name -eq $repositoryName }
+function Remove-Repository {
+    param (
+        [switch] $useTargetProject,
+        [string] $repositoryId
+    )
+
+    $apiClient.DeleteRepository($useTargetProject, $repositoryId)
 }
 
 function New-Repository {
@@ -110,14 +102,8 @@ function New-Repository {
         .DESCRIPTION
         Exports repositories data as JSON to a file.
 
-        .PARAMETER projectName
-        Specifies the project name.
-
         .PARAMETER outputPath
         Specifies the location of the output file.
-
-        .PARAMETER apiClient
-        Specifies the API client to use.
 
         .OUTPUTS
         None.
@@ -128,12 +114,11 @@ function New-Repository {
     #>
 function Export-Repositories {
     param (
-        [string] $projectName,
-        [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [switch] $useTargetProject,
+        [string] $outputPath = ''
     )
 
-    $repositories = $apiClient.GetRepositories($projectName)
+    $repositories = $apiClient.GetRepositories($useTargetProject)
 
     if ($repositories.count -gt 0) {
         New-Item -ItemType Directory -Force -Path $outputPath | Out-Null

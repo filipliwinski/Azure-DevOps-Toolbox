@@ -22,6 +22,20 @@
 
 $remoteRepoLocation = "https://github.com/MicrosoftDocs/vsts-rest-api-specs.git"
 $localRepoLocation = "c:/temp/vsts-rest-api-specs"
+$useTargetProjectVariable = '$useTargetProject'
+
+function ComputeFunctionHash {
+    param (
+        [String] $function
+    )
+
+    $stringAsStream = [System.IO.MemoryStream]::new()
+    $writer = [System.IO.StreamWriter]::new($stringAsStream)
+    $writer.write($function)
+    $writer.Flush()
+    $stringAsStream.Position = 0
+    return Get-FileHash -InputStream $stringAsStream -Algorithm MD5 | Select-Object Hash
+}
 
 function ExtractMethods {
     param (
@@ -31,22 +45,26 @@ function ExtractMethods {
 
     $methods = $object.psobject.properties.name
     $objectValue = $object.psobject.properties.value
-    $functions = @()
+    $functions = @{}
 
     if ($objectValue.GetType() -eq [System.Management.Automation.PSCustomObject]) {
         # System.Management.Automation.PSCustomObject
-        $functions += CreatePsFunction -object $objectValue -path $path -method $methods
+        $function = CreatePsFunction -object $objectValue -path $path -method $methods
+        $functionHash = ComputeFunctionHash -function $function
+        $functions.Add($functionHash, $function)
     }
     else {
         # System.Object[]
-        for ($i = 0; $i -lt $object.Count; $i++) {
+        $methodsArray = $methods.Split(' ')
+        for ($i = 0; $i -lt $methodsArray.Count; $i++) {
             # System.Management.Automation.PSCustomObject
-            $methodsArray = $methods.Split(' ')
-            $functions += CreatePsFunction -object $objectValue[$i] -path $path -method $methodsArray[$i]
+            $function = CreatePsFunction -object $objectValue[$i] -path $path -method $methodsArray[$i]
+            $functionHash = ComputeFunctionHash -function $function
+            $functions.Add($functionHash, $function)
         }
     }
 
-    return $functions
+    return $functions.Values
 }
 
 function CreatePsFunction {
@@ -62,16 +80,22 @@ function CreatePsFunction {
     $sbParam = [System.Text.StringBuilder]::new()
     $body = '$null'
     foreach ($parameter in $parameters) {
-        if($null -ne $parameter.in) {
+        if($null -ne $parameter.in -and 
+            ($parameter.in -eq 'path' -or $parameter.in -eq 'body') -and 
+            $parameter.name -ne 'collection' -and
+            $parameter.name -ne 'organization' -and
+            $parameter.name -ne 'project') {
+            $parameterName = $parameter.name.Replace('$','')
             $parameterType = $parameter.type ?? 'PSObject'
             if ($parameterType -eq 'integer') {
                 $parameterType = 'int'
             }
-            if ($parameter.name -ne 'collection' -and $parameter.name -ne 'organization') {
-                [void]$sbParam.Append("[$parameterType] $" + "$($parameter.name), ")
+            if ($parameterName.Contains('.')) {
+                $parameterName = $parameterName.Split('.')[1]
             }
+            [void]$sbParam.Append("[$parameterType] $" + "$($parameterName), ")
 
-            if($parameter.name -eq 'body') {
+            if($parameterName -eq 'body') {
                 $body = '$body'
             }
         }
@@ -84,21 +108,39 @@ function CreatePsFunction {
         $parametersString = $sbParamString.Substring(0,$sbParamString.Length-2)
     }
 
+    # Include [bool] $useTargetProject parameter
+    $parametersString = "[bool] $useTargetProjectVariable, " + $parametersString
+    $parametersString = $parametersString.TrimEnd(', ')
+
     # Adjust description and path
     $description = $object.description -replace '\n', ''
+    $path = $path -replace '\$', ''
     $path = $path -replace '{', '$' -replace '}', ''
+    $path = $path -replace '\$organization', ''
+    $path = $path -replace '\$collection', ''
+    $path = $path -replace '\$project', ''
+    $path = $path -replace '/_apis', ''
+    $path = $path.TrimStart('/')
+
+    $functionName = $object."x-ms-vss-method"
+
+    # Handle duplicates for Head calls
+    if ($method -eq 'head') {
+        $functionName = $functionName + '_Head'
+    }
 
     # Generate function
     $sb = [System.Text.StringBuilder]::new()
     [void]$sb.AppendLine('    # ' + $description)
-    [void]$sb.AppendLine('    [PSObject] ' + $object."x-ms-vss-method" + '(' + $parametersString + ') {')
-    [void]$sb.AppendLine('        return $this.Request(''' + $method + ''', "' + $path + '", $apiVersion, ' + $body + ')')
+    [void]$sb.AppendLine('    [PSObject] ' + $functionName + '(' + $parametersString + ') {')
+    [void]$sb.AppendLine('        return $this.Request(' + $useTargetProjectVariable + ', ''' + $method + ''', "' + $path + '", $this.apiVersion, ' + $body + ')')
     [void]$sb.AppendLine('    }')
-
+    
     return $sb.ToString()
 }
 
 if (!(Test-Path -Path $localRepoLocation)) {
+    Write-Host "Cloning $remoteRepoLocation..."
     git clone $remoteRepoLocation $localRepoLocation
 }
 
@@ -133,20 +175,18 @@ foreach ($specification in $specifications)
             $sb = [System.Text.StringBuilder]::new()
             [void]$sb.AppendLine("# This file was auto-generated. Do not edit.")
             [void]$sb.AppendLine("")
-            [void]$sb.AppendLine("using module .\AzureDevOpsApiClient.psm1")
+            [void]$sb.AppendLine("using module .\..\..\AzureDevOpsApiClient.psm1")
             [void]$sb.AppendLine("")
             [void]$sb.AppendLine("class $apiClientName : AzureDevOpsApiClient {")
             [void]$sb.AppendLine('    [string] $apiVersion = ''' + $spec.info.version + '''')
-            [void]$sb.AppendLine('    [string] $organization')
-            [void]$sb.AppendLine('    [string] $collection')
             [void]$sb.AppendLine("")
-            [void]$sb.AppendLine("    $apiClientName(" + '[string] $organization, [string] $serviceHost, [string] $personalAccessToken) {')
-            [void]$sb.AppendLine('        $this.organization = $organization')
-            [void]$sb.AppendLine('        $this.collection = $organization')
-            [void]$sb.AppendLine('        $this.serviceHost = $serviceHost')
-            [void]$sb.AppendLine('        $this.personalAccessToken = $personalAccessToken')
-            [void]$sb.AppendLine("    }")
+            [void]$sb.AppendLine("    # $apiClientName(" + '[string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)')
+            [void]$sb.AppendLine('    #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}')
             [void]$sb.AppendLine("")
+            [void]$sb.AppendLine("    $apiClientName(" + '[string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)')
+            [void]$sb.AppendLine('        : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}')
+            [void]$sb.AppendLine("")
+            
 
             foreach ($path in $spec.paths) {
                 $paths = $path.psobject.properties.name
@@ -183,5 +223,27 @@ foreach ($specification in $specifications)
         }
     }
 }
-#
 
+Write-Progress -Activity "Generating clients..." -Completed
+
+# Generate scripts to include ApiClients modules
+$apiClientsDirectory = '.\ApiClients'
+
+$apiClientVersions = Get-ChildItem $apiClientsDirectory -directory
+
+foreach ($version in $apiClientVersions) {
+    $apiClients = Get-ChildItem $version -file
+    $sb = [System.Text.StringBuilder]::new()
+    [void]$sb.AppendLine("# This file was auto-generated. Do not edit.")
+    [void]$sb.AppendLine("")
+
+    foreach ($apiClient in $apiClients) {
+        $relativePath = Get-Item $apiClient | Resolve-Path -Relative
+        $relativePath = $relativePath -replace "\\ApiClients", ""
+        [void]$sb.AppendLine("using module ""$relativePath""")
+    }
+
+    $sb.ToString() | Out-File -FilePath "$apiClientsDirectory\$($version.PSChildName).ps1"
+}
+
+# Remove-Item -Path $localRepoLocation -Recurse -Force
