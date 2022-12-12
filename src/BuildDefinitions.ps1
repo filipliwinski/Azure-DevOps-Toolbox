@@ -55,15 +55,14 @@ function Export-Definitions {
 
 function Copy-BuildDefinition {
     param (
-        [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $buildApiClient,
+        [switch] $useTargetProject,
         [psobject] $buildDefinition
     )
     
     if($buildDefinition.path -contains('Deprecated')){
         return $null
     }
-    $repository = $buildApiClient.GetRepository( $projectName, $buildDefinition.repository.name)
+    $repository = $buildApiClient.GetRepository( $projectName, $buildDefinition.repository.name)    # TODO Fix dependency
     $newBuildDefinition = @{
         triggers                  = @(
             @{
@@ -106,31 +105,22 @@ function Copy-BuildDefinition {
     }
  Write-Output "repository name: $($buildDefinition.name)"
  Write-Output "definition $($repository.name)"
- Add-BuildDefinition -projectName $projectName -apiClient $buildApiClient -buildDefinition $newBuildDefinition
+ New-Definition -useTargetProject:$useTargetProject -buildDefinition $newBuildDefinition
     
 }
-function Get-BuildDefinitions {
+function Get-Definitions {
     param (
-        [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $buildApiClient
+        [switch] $useTargetProject
     )
-    return $sourceApiClient.GetBuildDefinitions($projectName)
-    # $definitions = $sourceApiClient.GetBuildDefinitions($projectName)
 
-    # for ($i = 0; $i -lt $definitions.Count; $i++) {     
-    #     $definitions[$i] = $sourceApiClient.GetBuildDefinition($projectName, $definitions[$i].id)
-    #     if($i -lt 5){
-    #         return $definitions
-    #     }
-    # }
-    # return $definitions
+    return $buildApiClient.GetDefinitions($useTargetProject)
 }
 
-function Add-BuildDefinition {
+function New-Definition {
     param (
-        [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $buildApiClient,
+        [switch] $useTargetProject,
         [psobject] $buildDefinition
     )
-    return $buildApiClient.CreateBuildDefinition($buildDefinition, $projectName)
+
+    return $buildApiClient.CreateDefinition($useTargetProject, $buildDefinition)
 }
