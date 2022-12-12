@@ -20,11 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Export-BuildDefinitions {
+$apiClient = [BuildOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken, 
+                                    $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
+
+function Export-Definitions {
     param (
-        [string] $projectName,
+        [switch] $useTargetProject,
         [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient,
         [bool] $expand = $false
     )
 
@@ -32,11 +34,11 @@ function Export-BuildDefinitions {
         $outputPath = "."
     }
 
-    $definitions = $apiClient.GetBuildDefinitions($projectName)
+    $definitions = $apiClient.GetDefinitions($useTargetProject)
 
     if ($expand) {
         for ($i = 0; $i -lt $definitions.Count; $i++) {
-            $definitions[$i] = $apiClient.GetBuildDefinition($projectName, $definitions[$i].id)
+            $definitions[$i] = $apiClient.GetDefinition($useTargetProject, $definitions[$i].id)
         }
     }
 
