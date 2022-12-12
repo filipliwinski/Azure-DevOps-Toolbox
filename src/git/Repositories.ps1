@@ -20,7 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-$apiClient = [GitOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken)
+$apiClient = [GitOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken, 
+                                    $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
 
 <#
         .SYNOPSIS
@@ -44,11 +45,10 @@ $apiClient = [GitOnpremApiClient]::new($tfsServiceHost, $organization, $projectN
     #>
 function Get-Repositories {
     param (
-        # [string] $projectName
-        # [AzureDevOpsServicesAPIClient] $apiClient
+        [switch] $useTargetProject
     )
 
-    $repositories = $apiClient.GetRepositories()
+    $repositories = $apiClient.GetRepositories($useTargetProject)
 
     return $repositories.value
 }

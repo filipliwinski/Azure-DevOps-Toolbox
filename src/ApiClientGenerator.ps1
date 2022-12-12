@@ -22,6 +22,7 @@
 
 $remoteRepoLocation = "https://github.com/MicrosoftDocs/vsts-rest-api-specs.git"
 $localRepoLocation = "c:/temp/vsts-rest-api-specs"
+$useTargetProjectVariable = '$useTargetProject'
 
 function ComputeFunctionHash {
     param (
@@ -107,6 +108,10 @@ function CreatePsFunction {
         $parametersString = $sbParamString.Substring(0,$sbParamString.Length-2)
     }
 
+    # Include [bool] $useTargetProject parameter
+    $parametersString = "[bool] $useTargetProjectVariable, " + $parametersString
+    $parametersString = $parametersString.TrimEnd(', ')
+
     # Adjust description and path
     $description = $object.description -replace '\n', ''
     $path = $path -replace '\$', ''
@@ -115,7 +120,7 @@ function CreatePsFunction {
     $path = $path -replace '\$collection', ''
     $path = $path -replace '\$project', ''
     $path = $path -replace '/_apis', ''
-    $path = $path.trimstart('/')
+    $path = $path.TrimStart('/')
 
     $functionName = $object."x-ms-vss-method"
 
@@ -128,7 +133,7 @@ function CreatePsFunction {
     $sb = [System.Text.StringBuilder]::new()
     [void]$sb.AppendLine('    # ' + $description)
     [void]$sb.AppendLine('    [PSObject] ' + $functionName + '(' + $parametersString + ') {')
-    [void]$sb.AppendLine('        return $this.Request(''' + $method + ''', "' + $path + '", $this.apiVersion, ' + $body + ')')
+    [void]$sb.AppendLine('        return $this.Request(' + $useTargetProjectVariable + ', ''' + $method + ''', "' + $path + '", $this.apiVersion, ' + $body + ')')
     [void]$sb.AppendLine('    }')
     
     return $sb.ToString()
@@ -175,8 +180,13 @@ foreach ($specification in $specifications)
             [void]$sb.AppendLine("class $apiClientName : AzureDevOpsApiClient {")
             [void]$sb.AppendLine('    [string] $apiVersion = ''' + $spec.info.version + '''')
             [void]$sb.AppendLine("")
-            [void]$sb.AppendLine("    $apiClientName(" + '[string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken) : base ($serviceHost, $organization, $projectName, $personalAccessToken) {}')
+            [void]$sb.AppendLine("    # $apiClientName(" + '[string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)')
+            [void]$sb.AppendLine('    #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}')
             [void]$sb.AppendLine("")
+            [void]$sb.AppendLine("    $apiClientName(" + '[string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)')
+            [void]$sb.AppendLine('        : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}')
+            [void]$sb.AppendLine("")
+            
 
             foreach ($path in $spec.paths) {
                 $paths = $path.psobject.properties.name

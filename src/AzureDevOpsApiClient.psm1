@@ -26,37 +26,57 @@ enum AuthFlow {
 }
 
 class AzureDevOpsApiClient {
-    [string] $ServiceHost = 'https://dev.azure.com'
-    [string] $ServiceHostVSRM = 'https://vsrm.dev.azure.com'
-    [string] $Organization
-    # [string] $Collection
-    [string] $ProjectName
-    [string] $PersonalAccessToken
+    [string] $SourceServiceHost = 'https://dev.azure.com'
+    [string] $SourceServiceHostVSRM = 'https://vsrm.dev.azure.com'
+    [string] $SourceOrganization
+    [string] $SourceProjectName
+    [string] $SourcePersonalAccessToken
+    [string] $TargetServiceHost = 'https://dev.azure.com'
+    [string] $TargetServiceHostVSRM = 'https://vsrm.dev.azure.com'
+    [string] $TargetOrganization
+    [string] $TargetProjectName
+    [string] $TargetPersonalAccessToken
     [AuthFlow] $Auth
 
     AzureDevOpsApiClient() {}
 
-    AzureDevOpsApiClient([string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken) {
+    AzureDevOpsApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken,
+                         [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken) {
 
-        if ('' -eq $serviceHost) {
-            Write-Host "serviceHost not provided. Using $ServiceHost"
+        if ('' -eq $sourceServiceHost) {
+            Write-Verbose "sourceServiceHost not provided. Using $($this.SourceServiceHost)"
         } else {
-            $this.ServiceHost = $serviceHost.TrimEnd('/')
+            $this.SourceServiceHost = $SourceServiceHost.TrimEnd('/')
         }
 
-        $this.Organization = $organization
-        $this.ProjectName = $projectName
-        # $this.Collection = $organization
-        $this.PersonalAccessToken = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(":$personalAccessToken"))
+        if ('' -eq $targetServiceHost) {
+            Write-Verbose "targetServiceHost not provided. Using $($this.SourceServiceHost)"
+        } else {
+            $this.TargetServiceHost = $TargetServiceHost.TrimEnd('/')
+        }
+
+        $this.SourceOrganization = $sourceOrganization
+        $this.SourceProjectName = $sourceProjectName
+        $this.SourcePersonalAccessToken = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(":$sourcePersonalAccessToken"))
+
+        $this.TargetOrganization = $targetOrganization
+        $this.TargetProjectName = $targetProjectName
+        $this.TargetPersonalAccessToken = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(":$targetPersonalAccessToken"))
+
         $this.Auth = [AuthFlow]::PersonalAccessToken
     }
 
-    [PSObject] ComposeHeaders() {
+    [PSObject] ComposeHeaders([bool] $useTargetProject) {
         $authHeader = ''
+        $personalAccessToken = $this.SourcePersonalAccessToken
+
+        if ($useTargetProject) {
+            $personalAccessToken = $this.TargetPersonalAccessToken
+        }
 
         switch ($this.Auth) {
             { [AuthFlow]::PersonalAccessToken } {
-                $authHeader = "Basic $($this.PersonalAccessToken)"
+                $authHeader = "Basic $personalAccessToken"
                 break;
             }
             default {
@@ -70,11 +90,23 @@ class AzureDevOpsApiClient {
         }
     }
 
-    [PSObject] CallRestAPI([string] $serviceHost, [string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
+    [PSObject] CallRestAPI([bool] $isVSRMRequest, [bool] $useTargetProject, [string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
 
-        $requestHeaders = $this.ComposeHeaders()
+        $requestHeaders = $this.ComposeHeaders($useTargetProject)
 
-        $uri = "$serviceHost/$($this.Organization)/$($this.ProjectName)/_apis/$endpoint"
+        if ($useTargetProject) {
+            $serviceHost = $this.TargetServiceHost
+            if ($isVSRMRequest) {
+                $serviceHost = $this.TargetServiceHostVSRM
+            }
+            $uri = "$serviceHost/$($this.TargetOrganization)/$($this.TargetProjectName)/_apis/$endpoint"
+        } else {
+            $serviceHost = $this.SourceServiceHost
+            if ($isVSRMRequest) {
+                $serviceHost = $this.SourceServiceHostVSRM
+            }
+            $uri = "$serviceHost/$($this.SourceOrganization)/$($this.SourceProjectName)/_apis/$endpoint"
+        }
 
         if ($apiVersion) {
             if ($uri.Contains('?')) {
@@ -96,11 +128,11 @@ class AzureDevOpsApiClient {
         return Invoke-RestMethod -Method $method -Uri $uri -Headers $requestHeaders -Body $bodyJson
     }
 
-    [PSObject] Request([string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
-        return $this.CallRestAPI($this.ServiceHost, $method, $endpoint, $apiVersion, $body)
+    [PSObject] Request([bool] $useTargetProject, [string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
+        return $this.CallRestAPI($false, $useTargetProject, $method, $endpoint, $apiVersion, $body)
     }
 
-    [PSObject] VSRMRequest([string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
-        return $this.CallRestAPI($this.ServiceHostVSRM, $method, $endpoint, $apiVersion, $body)
+    [PSObject] VSRMRequest([bool] $useTargetProject, [string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
+        return $this.CallRestAPI($true, $useTargetProject, $method, $endpoint, $apiVersion, $body)
     }
 }
