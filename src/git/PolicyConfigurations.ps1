@@ -31,28 +31,26 @@ $minimumNumberOfReviewersDisplayName = 'Minimum number of reviewers'
 
 function Get-PolicyConfigurationRaw {
     param (
-        [string] $projectName,
+        [switch] $useTargetProject,
         [string] $repositoryName,
-        [string] $refName,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [string] $refName
     )
 
-    $repository = Get-RepositoryByName -projectName $projectName -apiClient $apiClient -repositoryName $repositoryName
+    $repository = Get-RepositoryByName -useTargetProject:$useTargetProject -repositoryName $repositoryName
 
-    $policy = $apiClient.GetPolicyConfiguration($projectName, $repository.id, $refName)
+    $policy = $apiClient.GetPolicyConfiguration($useTargetProject, $repository.id, $refName)
 
     return $policy
 }
 
 function Get-PolicyConfiguration {
     param (
-        [string] $projectName,
+        [switch] $useTargetProject,
         [string] $repositoryName,
-        [string] $refName,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [string] $refName
     )
 
-    $rawPolicy = Get-PolicyConfigurationRaw -projectName $projectName -repositoryName $repositoryName -refName $refName -apiClient $apiClient
+    $rawPolicy = Get-PolicyConfigurationRaw -useTargetProject:$useTargetProject -repositoryName $repositoryName -refName $refName
     
     if ("[]" -eq $rawPolicy) {
         return $null
@@ -86,14 +84,13 @@ function Get-PolicyConfiguration {
 
 function Get-RefsPolicyConfigurations {
     param(
-        [string] $projectName,
-        [string] $repositoryName,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [switch] $useTargetProject,
+        [string] $repositoryName
     )
 
-    $repository = Get-RepositoryByName -projectName $projectName -repositoryName $repositoryName -apiClient $apiClient
+    $repository = Get-RepositoryByName -useTargetProject:$useTargetProject -repositoryName $repositoryName
 
-    $refs = $(Get-Refs -projectName $projectName -repositoryId $repository.id -apiClient $apiClient).value
+    $refs = $(Get-Refs -useTargetProject:$useTargetProject -repositoryId $repository.id).value
     
     $policies = @()
     $i = 1
@@ -104,7 +101,7 @@ function Get-RefsPolicyConfigurations {
         Write-Progress -Activity "Getting policies..." -Status "$progress% Complete" -PercentComplete $progress
         $i++
 
-        $policy = Get-PolicyConfiguration -projectName $projectName -repositoryName $repositoryName -refName $ref.name -apiClient $apiClient
+        $policy = Get-PolicyConfiguration -useTargetProject:$useTargetProject -repositoryName $repositoryName -refName $ref.name
 
         if ($null -ne $policy) {
             $policies += $policy
@@ -116,18 +113,17 @@ function Get-RefsPolicyConfigurations {
 
 function Export-PolicyConfiguration {
     param (
-        [string] $projectName,
+        [switch] $useTargetProject,
         [string] $repositoryName,
         [string] $refName,
-        [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [string] $outputPath = ''
     )
 
     if ($null -eq $outputPath -or '' -eq $outputPath) {
         $outputPath = "."
     }
 
-    $policy = Get-PolicyConfiguration -projectName $projectName -repositoryName $repositoryName -refName $refName -apiClient $apiClient
+    $policy = Get-PolicyConfiguration -useTargetProject:$useTargetProject -repositoryName $repositoryName -refName $refName
 
     if ($null -ne $policy) {
         New-Item -ItemType Directory -Force -Path "$outputPath\$repositoryName" | Out-Null
@@ -138,18 +134,17 @@ function Export-PolicyConfiguration {
 
 function Export-PolicyConfigurationRaw {
     param (
-        [string] $projectName,
+        [switch] $useTargetProject,
         [string] $repositoryName,
         [string] $refName,
-        [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [string] $outputPath = ''
     )
 
     if ($null -eq $outputPath -or '' -eq $outputPath) {
         $outputPath = "."
     }
 
-    $policy = Get-PolicyConfigurationRaw -projectName $projectName -repositoryName $repositoryName -refName $refName -apiClient $apiClient
+    $policy = Get-PolicyConfigurationRaw -useTargetProject:$useTargetProject -repositoryName $repositoryName -refName $refName
 
     if ($policy.count -gt 0) {
         New-Item -ItemType Directory -Force -Path "$outputPath\$repositoryName" | Out-Null
@@ -161,4 +156,5 @@ function Export-PolicyConfigurationRaw {
     }
 }
 
+# TODO
 function Compare-PolicyConfigurations {}
