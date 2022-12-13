@@ -350,6 +350,7 @@ MigrationBackup/
 .ionide/
 
 src/ApiClients
+src/local_config
 src/demo_local.ps1
 src/[Tt]emp.ps1
 [Tt]emp/

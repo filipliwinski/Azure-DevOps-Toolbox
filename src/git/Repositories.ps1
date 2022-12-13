@@ -86,11 +86,15 @@ function Remove-Repository {
 
 function New-Repository {
     param (
-        [string] $projectName,
-        [PSObject] $repository,
-        [AzureDevOpsServicesAPIClient] $gitApiClient
+        [switch] $useTargetProject,
+        [string] $name
     )
-    $response = $gitApiClient.CreateRepository($repository, $projectName, 'users/heads/master')
+
+    $repository = @{
+        'name' = $name
+    }
+
+    $response = $gitApiClient.CreateRepository($useTargetProject, $repository)
     
     return $response
 }
@@ -132,22 +136,22 @@ function Export-Repositories {
 
 function Copy-Repositories {
     param (
-        [string] $sourceProjectName,
-        [string] $targetProjectName,
-        [AzureDevOpsServicesAPIClient] $sourceApiClient,
-        [AzureDevOpsServicesAPIClient] $targetApiClient
+        [switch] $useTargetProject,
+        [psobject] $repositoriesToExclude
     )
     
-    $repositories = Get-Repositories -projectName $sourceProjectName -apiClient $sourceApiClient
+    $repositories = Get-Repositories -useTargetProject:$false
     $i = 0
 
     foreach ($repository in $repositories) {
         $progress = [math]::floor($i / $repositories.count * 100)
 
-        Write-Progress -Activity "Copying repositories..." -Status "$progress% Complete [$($repository.name)]" -PercentComplete $progress
-        $i++
+        if (-Not ($repositoriesToExclude.Contains(2))) {
+            Write-Progress -Activity "Copying repositories..." -Status "$progress% Complete [$($repository.name)]" -PercentComplete $progress
+            $i++
 
-        Copy-Repository -projectName $targetProjectName -repository $repository -apiClient $targetApiClient
+            Copy-Repository -useTargetProject:$useTargetProject -repository $repository
+        }
     }
 
     Write-Progress -Activity "Copying repositories..." -Completed
@@ -155,19 +159,22 @@ function Copy-Repositories {
 
 function Copy-Repository {
     param (
-        [string] $projectName,
-        [PSObject] $repository,
-        [AzureDevOpsServicesAPIClient] $gitApiClient
+        [switch] $useTargetProject,
+        [PSObject] $repository
     )
 
-    $newRepository = @{
-        'name' = $repository.name
+    $newRepositoryName = $repository.name
+
+    # TODO: Remove this temporary check
+    if ($newRepositoryName -eq 'web-view-client-api')
+    {
+        $newRepositoryName = 'view-client-api'
     }
 
     try {
-        $newRepository = New-Repository -projectName $projectName -repository $newRepository -apiClient $gitApiClient
+        $newRepository = New-Repository -useTargetProject:$useTargetProject -name $newRepositoryName
 
-        $tempLocation = 'temp/repos/' + $repository.name
+        $tempLocation = 'temp/repos/' + $newRepository.name
 
         git clone --bare $repository.remoteUrl $tempLocation
         
@@ -190,24 +197,24 @@ function Copy-Repository {
 
 
 
-function Get-PullRequest {
-    param (
-        [string] $projectName,
-        [string] $repositoryId,
-        [int] $pullRequestId,
-        [AzureDevOpsServicesAPIClient] $gitApiClient
-    )
+# function Get-PullRequest {
+#     param (
+#         [string] $projectName,
+#         [string] $repositoryId,
+#         [int] $pullRequestId,
+#         [AzureDevOpsServicesAPIClient] $gitApiClient
+#     )
 
-    return $gitApiClient.GetPullRequest($repositoryId, $pullRequestId, $projectName)
-}
+#     return $gitApiClient.GetPullRequest($repositoryId, $pullRequestId, $projectName)
+# }
 
-function Create-PullRequest {
-    param (
-        [PSObject] $body,
-        [string] $projectName,
-        [string] $repositoryId,
-        [AzureDevOpsServicesAPIClient] $gitApiClient
-    )
+# function Create-PullRequest {
+#     param (
+#         [PSObject] $body,
+#         [string] $projectName,
+#         [string] $repositoryId,
+#         [AzureDevOpsServicesAPIClient] $gitApiClient
+#     )
 
-    return $gitApiClient.CreatePullRequest($body, $repositoryId, $projectName)
-}
+#     return $gitApiClient.CreatePullRequest($body, $repositoryId, $projectName)
+# }
