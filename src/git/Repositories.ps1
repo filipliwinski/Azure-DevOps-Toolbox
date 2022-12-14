@@ -67,10 +67,10 @@ function Get-Repositories {
 function Get-RepositoryByName {
     param (
         [switch] $useTargetProject,
-        [string] $repositoryName
+        [string] $name
     )
 
-    $repository = $gitApiClient.GetRepository($useTargetProject, $repositoryName)
+    $repository = $gitApiClient.GetRepository($useTargetProject, $name)
 
     return $repository
 }
@@ -78,10 +78,10 @@ function Get-RepositoryByName {
 function Remove-Repository {
     param (
         [switch] $useTargetProject,
-        [string] $repositoryId
+        [string] $id
     )
 
-    $gitApiClient.DeleteRepository($useTargetProject, $repositoryId)
+    $gitApiClient.DeleteRepository($useTargetProject, $id)
 }
 
 function New-Repository {
@@ -137,21 +137,19 @@ function Export-Repositories {
 function Copy-Repositories {
     param (
         [switch] $useTargetProject,
-        [psobject] $repositoriesToExclude
+        [switch] $showGitOutput,
+        [psobject] $repositories
     )
     
-    $repositories = Get-Repositories -useTargetProject:$false
     $i = 0
 
     foreach ($repository in $repositories) {
         $progress = [math]::floor($i / $repositories.count * 100)
 
-        if (-Not ($repositoriesToExclude.Contains(2))) {
-            Write-Progress -Activity "Copying repositories..." -Status "$progress% Complete [$($repository.name)]" -PercentComplete $progress
-            $i++
+        Write-Progress -Activity "Copying repositories..." -Status "$progress% complete ($($repository.name) - $($repository.size/1000000) MB compressed)" -PercentComplete $progress
+        $i++
 
-            Copy-Repository -useTargetProject:$useTargetProject -repository $repository
-        }
+        Copy-Repository -useTargetProject:$useTargetProject -showGitOutput:$showGitOutput -repository $repository | Out-Null
     }
 
     Write-Progress -Activity "Copying repositories..." -Completed
@@ -160,10 +158,16 @@ function Copy-Repositories {
 function Copy-Repository {
     param (
         [switch] $useTargetProject,
+        [switch] $showGitOutput,
         [PSObject] $repository
     )
 
-    $newRepositoryName = $repository.name
+    if ($useTargetProject) {
+        $newRepositoryName = $repository.name
+    }
+    else {
+        $newRepositoryName = $repository.name + "_copy"
+    }
 
     # TODO: Remove this temporary check
     if ($newRepositoryName -eq 'web-view-client-api')
@@ -174,17 +178,29 @@ function Copy-Repository {
     try {
         $newRepository = New-Repository -useTargetProject:$useTargetProject -name $newRepositoryName
 
-        $tempLocation = 'temp/repos/' + $newRepository.name
+        $tempLocation = 'temp/repos/' + $repository.name
 
-        git clone --bare $repository.remoteUrl $tempLocation
+        if ($showGitOutput) {
+            git clone --bare $repository.remoteUrl $tempLocation
+        }
+        else {
+            git clone --bare $repository.remoteUrl $tempLocation --quiet
+        }
         
         Push-Location $tempLocation
 
-        git push --mirror $newRepository.remoteUrl
+        if ($showGitOutput) {
+            git push --mirror $newRepository.remoteUrl
+        }
+        else {
+            git push --mirror $newRepository.remoteUrl --quiet
+        }
 
         Pop-Location
 
         Remove-Item -Recurse -Force $tempLocation
+
+        Write-Host "Copied the repository $($repository.name) ($($repository.size/1000000) MB compressed)."
 
         return $newRepository
     }
@@ -194,8 +210,6 @@ function Copy-Repository {
     
     return $null
 }
-
-
 
 # function Get-PullRequest {
 #     param (
