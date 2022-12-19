@@ -47,6 +47,17 @@ function Get-Repositories {
     return $repositories.value
 }
 
+function Get-Repository {
+    param (
+        [switch] $useTargetProject,
+        [string] $id
+    )
+
+    $repository = $gitApiClient.GetRepository($useTargetProject, $id)
+
+    return $repository
+}
+
 <#
         .SYNOPSIS
         Gets a repository with the specified name.

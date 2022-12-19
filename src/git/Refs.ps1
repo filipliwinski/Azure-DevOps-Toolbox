@@ -29,6 +29,6 @@ function Get-Refs {
     )
 
     $refs = $gitApiClient.GetRefs($useTargetProject, $repositoryId)
-    return $refs
+    return $refs.value
 }
 
