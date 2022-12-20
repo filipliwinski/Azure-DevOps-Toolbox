@@ -212,13 +212,13 @@ function Move-Definitions {
         $i++
 
         # Check if definition is excluded
-        if ($definitionsToExclude.Contains($definition.name)) {
+        if ($null -ne $definitionsToExclude -and $definitionsToExclude.Contains($definition.name)) {
             Write-Host "Definition $($definition.name) excluded."
             continue
         }
 
         # Check if definition exist in target
-        if ($existingTargetDefinitions.Contains($definition.name)) {
+        if ($null -ne $existingTargetDefinitions -and $existingTargetDefinitions.Contains($definition.name)) {
             Write-Host "Definition $($definition.name) excluded - the definition exists in the target project."
             continue
         }
