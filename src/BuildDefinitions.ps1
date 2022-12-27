@@ -33,7 +33,8 @@ function New-Definition {
         [string] $repositoryId,
         [string] $repositoryType,
         [int] $processType,
-        [string] $processYamlFilename
+        [string] $processYamlFilename,
+        [string] $defaultAgentPoolName
     )
 
     $definition = @{
@@ -46,6 +47,9 @@ function New-Definition {
         process = @{
             type = $processType
             yamlFilename = $processYamlFilename
+        }
+        queue = @{
+            name = $defaultAgentPoolName
         }
     }
 
@@ -182,7 +186,14 @@ function Copy-Definition {
 #  Write-Output "repository name: $($buildDefinition.name)"
 #  Write-Output "definition $($repository.name)"
 
-    New-Definition -useTargetProject:$useTargetProject -name $definition.name -path $definition.path -repositoryId $definition.repository.id -repositoryType $definition.repository.type -processType $definition.process.type -processYamlFilename $definition.process.yamlFilename
+    New-Definition -useTargetProject:$useTargetProject `
+        -name $definition.name `
+        -path $definition.path `
+        -repositoryId $definition.repository.id `
+        -repositoryType $definition.repository.type `
+        -processType $definition.process.type `
+        -processYamlFilename $definition.process.yamlFilename `
+        -defaultAgentPoolName $definition.queue.name
 }
 
 #endregion Definitions
