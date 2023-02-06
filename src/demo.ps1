@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2021 Filip Liwiński
+# Copyright (c) 2021-2023 Filip Liwiński
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -36,8 +36,6 @@ $patToken = '<put the Personal Access Token here>'
 . .\ReleaseDefinitions.ps1
 . .\git\Repositories.ps1
 . .\git\PolicyConfigurations.ps1
-
-# $apiClient = [AzureDevOpsServicesAPIClient]::new($organizationName, $serviceHost, $patToken)
 
 $VerbosePreference = "Continue"   # Show verbose logs
 
