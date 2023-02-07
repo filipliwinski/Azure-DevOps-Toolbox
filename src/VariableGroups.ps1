@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2021 Filip Liwiński
+# Copyright (c) 2021-2023 Filip Liwiński
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,71 +25,66 @@ $apiClient = [TaskAgentOnpremApiClient]::new($tfsServiceHost, $organization, $pr
 
 function Add-VariableGroup {
     param(
-        [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $apiClient,
+        [switch] $useTargetProject,
         [PSObject] $variableGroup
     )
 
-    return $apiClient.AddVariableGroup($projectName, $variableGroup)
+    return $apiClient.AddVariableGroup($useTargetProject, $variableGroup)
 }
 
 function Copy-VariableGroup {
     param(
-        [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $apiClient,
-        [int] $sourceVariableGroupId
+        [switch] $useTargetProject,
+        [int] $id
     )
 
-    $sourceVariableGroup = $apiClient.GetVariableGroupById($projectName, $sourceVariableGroupId)
+    $variableGroup = $apiClient.GetVariableGroup($useTargetProject, $id)
 
     $newVariableGroup = @{
-        "description" = $sourceVariableGroup.description
-        "name" = "$($sourceVariableGroup.name) - copy"
-        "providerData" = $sourceVariableGroup.providerData
-        "type" = $sourceVariableGroup.type
-        "variableGroupProjectReferences" = $sourceVariableGroup.variableGroupProjectReferences
-        "variables" = $sourceVariableGroup.variables
+        "description" = $variableGroup.description
+        "name" = "$($variableGroup.name) - copy"
+        "providerData" = $variableGroup.providerData
+        "type" = $variableGroup.type
+        "variableGroupProjectReferences" = $variableGroup.variableGroupProjectReferences
+        "variables" = $variableGroup.variables
     }
 
-    return $apiClient.AddVariableGroup($projectName, $newVariableGroup)
+    return $apiClient.AddVariableGroup($useTargetProject, $newVariableGroup)
 }
 
 function Get-VariableGroup {
     param (
-        [string] $projectName,
-        [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient,
-        [int] $variableGroupId
+        [switch] $useTargetProject,
+        [int] $id
     )
 
-    $variableGroup = $apiClient.GetVariableGroupById($projectName, $variableGroupId)
+    $variableGroup = $apiClient.GetVariableGroup($useTargetProject, $id)
     return $variableGroup
 }
 
-function Get-VariableGroupByName {
-    param (
-        [string] $projectName,
-        [AzureDevOpsServicesAPIClient] $apiClient,
-        [string] $variableGroupName
-    )
+# function Get-VariableGroupByName {
+#     param (
+#         [string] $projectName,
+#         [AzureDevOpsServicesAPIClient] $apiClient,
+#         [string] $variableGroupName
+#     )
 
-    $variableGroup = $apiClient.GetVariableGroupByName($projectName, $variableGroupName)
-    return $variableGroup
-}
+#     $variableGroup = $apiClient.GetVariableGroupByName($projectName, $variableGroupName)
+#     return $variableGroup
+# }
 
 function Export-VariableGroup {
     param (
-        [string] $projectName,
+        [switch] $useTargetProject,
         [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient,
-        [int] $variableGroupId
+        [int] $id
     )
 
     if ($null -eq $outputPath -or '' -eq $outputPath) {
         $outputPath = "."
     }
 
-    $variableGroup = $apiClient.GetVariableGroupById($projectName, $variableGroupId)
+    $variableGroup = $apiClient.GetVariableGroup($useTargetProject, $id)
 
     if ($null -ne $variableGroup) {
         New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
@@ -101,16 +96,15 @@ function Export-VariableGroup {
 
 function Export-VariableGroups {
     param (
-        [string] $projectName,
-        [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [switch] $useTargetProject,
+        [string] $outputPath = ''
     )
 
     if ($null -eq $outputPath -or '' -eq $outputPath) {
         $outputPath = "."
     }
 
-    $variableGroups = $apiClient.GetVariableGroups($projectName)
+    $variableGroups = $apiClient.GetVariableGroups($useTargetProject)
 
     if ($null -ne $variableGroups) {
         New-Item -ItemType Directory -Force -Path $outputPath | Out-Null

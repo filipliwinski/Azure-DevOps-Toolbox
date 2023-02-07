@@ -20,18 +20,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+$apiClient = [TaskAgentOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken, 
+                                    $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
+
 function Export-TaskGroups {
     param (
-        [string] $projectName,
-        [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [switch] $useTargetProject,
+        [string] $outputPath = ''
     )
 
     if ($null -eq $outputPath -or '' -eq $outputPath) {
         $outputPath = "."
     }
 
-    $taskGroups = $apiClient.GetTaskGroups($projectName)
+    $taskGroups = $apiClient.GetTaskGroups($useTargetProject)
 
     if ($taskGroups.count -gt 0) {
         New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
@@ -43,23 +45,21 @@ function Export-TaskGroups {
     }
 }
 
-function Update-TaskGroup {
-    param(
-        [string] $projectName,
-        [string] $sourceTaskGroupName,
-        [string] $destinationTaskGroupName,
-        [string] $comment,
-        [AzureDevOpsServicesAPIClient] $apiClient
-    )
+# function Update-TaskGroup {
+#     param(
+#         [string] $sourceTaskGroupName,
+#         [string] $destinationTaskGroupName,
+#         [string] $comment
+#     )
 
-    $sourceTaskGroup = $apiClient.GetTaskGroupByName($projectName, $sourceTaskGroupName)
-    $destinationTaskGroup = $apiClient.GetTaskGroupByName($projectName, $destinationTaskGroupName)
+#     $sourceTaskGroup = $apiClient.GetTaskGroupByName($projectName, $sourceTaskGroupName)
+#     $destinationTaskGroup = $apiClient.GetTaskGroupByName($projectName, $destinationTaskGroupName)
 
-    $destinationTaskGroup.description = $sourceTaskGroup.description
-    $destinationTaskGroup.category = $sourceTaskGroup.category
-    $destinationTaskGroup.inputs = $sourceTaskGroup.inputs
-    $destinationTaskGroup.tasks = $sourceTaskGroup.tasks
-    $destinationTaskGroup.comment = $comment
+#     $destinationTaskGroup.description = $sourceTaskGroup.description
+#     $destinationTaskGroup.category = $sourceTaskGroup.category
+#     $destinationTaskGroup.inputs = $sourceTaskGroup.inputs
+#     $destinationTaskGroup.tasks = $sourceTaskGroup.tasks
+#     $destinationTaskGroup.comment = $comment
 
-    $apiClient.UpdateTaskGroup($projectName, $destinationTaskGroup)
-}
+#     $apiClient.UpdateTaskGroup($projectName, $destinationTaskGroup)
+# }

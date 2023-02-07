@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2021 Filip Liwiński
+# Copyright (c) 2021-2023 Filip Liwiński
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,11 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+$apiClient = [ReleaseOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken, 
+                                    $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
+
 function Export-ReleaseDefinitions {
     param (
-        [string] $projectName,
+        [switch] $useTargetProject,
         [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient,
         [bool] $expand = $false
     )
 
@@ -32,11 +34,11 @@ function Export-ReleaseDefinitions {
         $outputPath = "."
     }
 
-    $definitions = $apiClient.GetReleaseDefinitions($projectName)
+    $definitions = $apiClient.GetReleaseDefinitions($useTargetProject)
 
     if ($expand) {
         for ($i = 0; $i -lt $definitions.Count; $i++) {
-            $definitions[$i] = $apiClient.GetReleaseDefinition($projectName, $definitions[$i].id)
+            $definitions[$i] = $apiClient.GetReleaseDefinition($useTargetProject, $definitions[$i].id)
         }
     }
 
