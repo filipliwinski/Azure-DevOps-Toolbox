@@ -18,12 +18,13 @@ function Copy-VariableGroup {
         [switch] $useTargetProject,
         [int] $id
     )
+    $namePostfix = "- copy"
 
     $variableGroup = $apiClient.GetVariableGroup($useTargetProject, $id)
 
     $newVariableGroup = @{
         "description" = $variableGroup.description
-        "name" = "$($variableGroup.name) - copy"
+        "name" = "$($variableGroup.name) $namePostfix"
         "providerData" = $variableGroup.providerData
         "type" = $variableGroup.type
         "variableGroupProjectReferences" = $variableGroup.variableGroupProjectReferences
@@ -43,16 +44,14 @@ function Get-VariableGroup {
     return $variableGroup
 }
 
-# function Get-VariableGroupByName {
-#     param (
-#         [string] $projectName,
-#         [AzureDevOpsServicesAPIClient] $apiClient,
-#         [string] $variableGroupName
-#     )
+function Get-VariableGroups {
+    param (
+        [switch] $useTargetProject
+    )
 
-#     $variableGroup = $apiClient.GetVariableGroupByName($projectName, $variableGroupName)
-#     return $variableGroup
-# }
+    $variableGroups = $apiClient.GetVariableGroupsById($useTargetProject)
+    return $variableGroups
+}
 
 function Export-VariableGroup {
     param (
