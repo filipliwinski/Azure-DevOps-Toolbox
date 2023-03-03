@@ -6,6 +6,7 @@ enum AuthFlow {
     PersonalAccessToken = 1
 }
 
+# Base API client used by all auto-generated clients
 class AzureDevOpsApiClient {
     [string] $SourceServiceHost = 'https://dev.azure.com'
     [string] $SourceServiceHostVSRM = 'https://vsrm.dev.azure.com'
