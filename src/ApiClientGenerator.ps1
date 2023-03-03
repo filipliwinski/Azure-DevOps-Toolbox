@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2022 Filip Liwiński
+# Copyright (c) Filip Liwiński
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -80,8 +80,8 @@ function CreatePsFunction {
     $sbParam = [System.Text.StringBuilder]::new()
     $body = '$null'
     foreach ($parameter in $parameters) {
-        if($null -ne $parameter.in -and 
-            ($parameter.in -eq 'path' -or $parameter.in -eq 'body') -and 
+        if($null -ne $parameter.in -and
+            ($parameter.in -eq 'path' -or $parameter.in -eq 'body') -and
             $parameter.name -ne 'collection' -and
             $parameter.name -ne 'organization' -and
             $parameter.name -ne 'project') {
@@ -135,7 +135,7 @@ function CreatePsFunction {
     [void]$sb.AppendLine('    [PSObject] ' + $functionName + '(' + $parametersString + ') {')
     [void]$sb.AppendLine('        return $this.Request(' + $useTargetProjectVariable + ', ''' + $method + ''', "' + $path + '", $this.apiVersion, ' + $body + ')')
     [void]$sb.AppendLine('    }')
-    
+
     return $sb.ToString()
 }
 
@@ -186,7 +186,7 @@ foreach ($specification in $specifications)
             [void]$sb.AppendLine("    $apiClientName(" + '[string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)')
             [void]$sb.AppendLine('        : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}')
             [void]$sb.AppendLine("")
-            
+
 
             foreach ($path in $spec.paths) {
                 $paths = $path.psobject.properties.name
