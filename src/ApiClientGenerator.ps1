@@ -9,6 +9,9 @@ $localRepoLocation = "c:/temp/vsts-rest-api-specs"
 # Define the name of the variable used for selecting the target project
 $useTargetProjectVariable = '$useTargetProject'
 
+# Location of auto-generated API Clients
+$apiClientsDirectory = '.\..\auto_generated\ApiClients'
+
 function ComputeFunctionHash {
     param (
         [String] $function
@@ -198,7 +201,7 @@ foreach ($specification in $specifications)
             [void]$sb.AppendLine("}")
             $apiClientClass = $sb.ToString()
 
-            $apiClientDirectory = "ApiClients\$($apiVersion.name)"
+            $apiClientDirectory = "$apiClientsDirectory\$($apiVersion.name)"
 
             if (!(Test-Path -Path $apiClientDirectory)) {
                 New-Item $apiClientDirectory -ItemType Directory
@@ -212,7 +215,9 @@ foreach ($specification in $specifications)
 Write-Progress -Activity "Generating clients..." -Completed
 
 # Generate scripts to include ApiClients modules
-$apiClientsDirectory = '.\ApiClients'
+if (!(Test-Path -Path $apiClientsDirectory)) {
+    New-Item $apiClientsDirectory -ItemType Directory
+}
 
 $apiClientVersions = Get-ChildItem $apiClientsDirectory -directory
 

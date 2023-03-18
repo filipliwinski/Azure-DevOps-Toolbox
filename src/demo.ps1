@@ -2,7 +2,7 @@
 # Licensed under the MIT License. See the LICENSE file in the project root for license information.
 
 # Include API Clients for a specific API version
-. ".\ApiClients\azure-devops-server-6.0.ps1"
+. ".\..\auto_generated\ApiClients\azure-devops-server-6.0.ps1"
 
 $organization = '<put the name of the organization here>'
 $projectName = '<put the name of the project here>'
