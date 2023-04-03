@@ -1,7 +1,7 @@
 # Copyright (c) Filip Liwiński
 # Licensed under the MIT License. See the LICENSE file in the project root for license information.
 
-$apiClient = [GitOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken,
+$gitApiClient = [GitOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken,
                                     $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
 
 <#
@@ -23,7 +23,7 @@ function Get-Repositories {
         [switch] $useTargetProject
     )
 
-    $repositories = $apiClient.GetRepositories($useTargetProject)
+    $repositories = $gitApiClient.GetRepositories($useTargetProject)
 
     return $repositories.value
 }
@@ -51,7 +51,7 @@ function Get-RepositoryByName {
         [string] $repositoryName
     )
 
-    $repository = $apiClient.GetRepository($useTargetProject, $repositoryName)
+    $repository = $gitApiClient.GetRepository($useTargetProject, $repositoryName)
 
     return $repository
 }
@@ -62,7 +62,7 @@ function Remove-Repository {
         [string] $repositoryId
     )
 
-    $apiClient.DeleteRepository($useTargetProject, $repositoryId)
+    $gitApiClient.DeleteRepository($useTargetProject, $repositoryId)
 }
 
 <#
@@ -88,7 +88,7 @@ function Export-Repositories {
         [string] $outputPath = ''
     )
 
-    $repositories = $apiClient.GetRepositories($useTargetProject)
+    $repositories = $gitApiClient.GetRepositories($useTargetProject)
 
     if ($repositories.count -gt 0) {
         New-Item -ItemType Directory -Force -Path $outputPath | Out-Null

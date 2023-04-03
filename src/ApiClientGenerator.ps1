@@ -163,7 +163,7 @@ foreach ($specification in $specifications)
             $sb = [System.Text.StringBuilder]::new()
             [void]$sb.AppendLine("# This file was auto-generated. Do not edit.")
             [void]$sb.AppendLine("")
-            [void]$sb.AppendLine("using module .\..\..\AzureDevOpsApiClient.psm1")
+            [void]$sb.AppendLine("using module .\..\..\..\src\AzureDevOpsApiClient.psm1")
             [void]$sb.AppendLine("")
             [void]$sb.AppendLine("class $apiClientName : AzureDevOpsApiClient {")
             [void]$sb.AppendLine('    [string] $apiVersion = ''' + $spec.info.version + '''')
@@ -229,7 +229,8 @@ foreach ($version in $apiClientVersions) {
 
     foreach ($apiClient in $apiClients) {
         $relativePath = Get-Item $apiClient | Resolve-Path -Relative
-        $relativePath = $relativePath -replace "\\ApiClients", ""
+        $stringToRemove = $apiClientsDirectory.Trim('.', '\')
+        $relativePath = $relativePath.Replace("$stringToRemove\", "").Replace("..", ".")
         [void]$sb.AppendLine("using module ""$relativePath""")
     }
 

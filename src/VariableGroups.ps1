@@ -1,7 +1,7 @@
 # Copyright (c) Filip Liwiński
 # Licensed under the MIT License. See the LICENSE file in the project root for license information.
 
-$apiClient = [TaskAgentOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken,
+$taskAgentApiClient = [TaskAgentOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken,
                                     $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
 
 function Add-VariableGroup {
@@ -10,7 +10,7 @@ function Add-VariableGroup {
         [PSObject] $variableGroup
     )
 
-    return $apiClient.AddVariableGroup($useTargetProject, $variableGroup)
+    return $taskAgentApiClient.AddVariableGroup($useTargetProject, $variableGroup)
 }
 
 function Copy-VariableGroup {
@@ -20,7 +20,7 @@ function Copy-VariableGroup {
     )
     $namePostfix = "- copy"
 
-    $variableGroup = $apiClient.GetVariableGroup($useTargetProject, $id)
+    $variableGroup = $taskAgentApiClient.GetVariableGroup($useTargetProject, $id)
 
     $newVariableGroup = @{
         "description" = $variableGroup.description
@@ -31,7 +31,7 @@ function Copy-VariableGroup {
         "variables" = $variableGroup.variables
     }
 
-    return $apiClient.AddVariableGroup($useTargetProject, $newVariableGroup)
+    return $taskAgentApiClient.AddVariableGroup($useTargetProject, $newVariableGroup)
 }
 
 function Get-VariableGroup {
@@ -40,7 +40,7 @@ function Get-VariableGroup {
         [int] $id
     )
 
-    $variableGroup = $apiClient.GetVariableGroup($useTargetProject, $id)
+    $variableGroup = $taskAgentApiClient.GetVariableGroup($useTargetProject, $id)
     return $variableGroup
 }
 
@@ -49,7 +49,7 @@ function Get-VariableGroups {
         [switch] $useTargetProject
     )
 
-    $variableGroups = $apiClient.GetVariableGroupsById($useTargetProject)
+    $variableGroups = $taskAgentApiClient.GetVariableGroupsById($useTargetProject)
     return $variableGroups
 }
 
@@ -64,7 +64,7 @@ function Export-VariableGroup {
         $outputPath = "."
     }
 
-    $variableGroup = $apiClient.GetVariableGroup($useTargetProject, $id)
+    $variableGroup = $taskAgentApiClient.GetVariableGroup($useTargetProject, $id)
 
     if ($null -ne $variableGroup) {
         New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
@@ -84,7 +84,7 @@ function Export-VariableGroups {
         $outputPath = "."
     }
 
-    $variableGroups = $apiClient.GetVariableGroups($useTargetProject)
+    $variableGroups = $taskAgentApiClient.GetVariableGroups($useTargetProject)
 
     if ($null -ne $variableGroups) {
         New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
