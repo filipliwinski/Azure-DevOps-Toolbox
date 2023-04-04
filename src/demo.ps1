@@ -1,8 +1,8 @@
 # Copyright (c) Filip Liwiński
 # Licensed under the MIT License. See the LICENSE file in the project root for license information.
 
-# Include API Clients for a specific API version
-. ".\..\auto_generated\ApiClients\azure-devops-server-6.0.ps1"
+# Include API Clients for a specific API version, e.g.: azure-devops-server-6.0
+. ".\..\auto_generated\ApiClients\<provide the target API version>.ps1"
 
 $organization = '<put the name of the organization here>'
 $projectName = '<put the name of the project here>'
