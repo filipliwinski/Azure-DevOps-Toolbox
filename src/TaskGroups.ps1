@@ -1,7 +1,7 @@
 # Copyright (c) Filip Liwiński
 # Licensed under the MIT License. See the LICENSE file in the project root for license information.
 
-$apiClient = [TaskAgentOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken,
+$taskAgentApiClient = [TaskAgentOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken,
                                     $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
 
 function Export-TaskGroups {
@@ -14,7 +14,7 @@ function Export-TaskGroups {
         $outputPath = "."
     }
 
-    $taskGroups = $apiClient.GetTaskGroups($useTargetProject)
+    $taskGroups = $taskAgentApiClient.GetTaskGroups($useTargetProject)
 
     if ($taskGroups.count -gt 0) {
         New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
@@ -33,8 +33,8 @@ function Export-TaskGroups {
 #         [string] $comment
 #     )
 
-#     $sourceTaskGroup = $apiClient.GetTaskGroupByName($projectName, $sourceTaskGroupName)
-#     $destinationTaskGroup = $apiClient.GetTaskGroupByName($projectName, $destinationTaskGroupName)
+#     $sourceTaskGroup = $taskAgentApiClient.GetTaskGroupByName($projectName, $sourceTaskGroupName)
+#     $destinationTaskGroup = $taskAgentApiClient.GetTaskGroupByName($projectName, $destinationTaskGroupName)
 
 #     $destinationTaskGroup.description = $sourceTaskGroup.description
 #     $destinationTaskGroup.category = $sourceTaskGroup.category
@@ -42,5 +42,5 @@ function Export-TaskGroups {
 #     $destinationTaskGroup.tasks = $sourceTaskGroup.tasks
 #     $destinationTaskGroup.comment = $comment
 
-#     $apiClient.UpdateTaskGroup($projectName, $destinationTaskGroup)
+#     $taskAgentApiClient.UpdateTaskGroup($projectName, $destinationTaskGroup)
 # }

@@ -1,7 +1,7 @@
 # Copyright (c) Filip Liwiński
 # Licensed under the MIT License. See the LICENSE file in the project root for license information.
 
-$apiClient = [ReleaseOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken,
+$releaseApiClient = [ReleaseOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken,
                                     $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
 
 function Export-ReleaseDefinitions {
@@ -15,11 +15,11 @@ function Export-ReleaseDefinitions {
         $outputPath = "."
     }
 
-    $definitions = $apiClient.GetReleaseDefinitions($useTargetProject)
+    $definitions = $releaseApiClient.GetReleaseDefinitions($useTargetProject)
 
     if ($expand) {
         for ($i = 0; $i -lt $definitions.Count; $i++) {
-            $definitions[$i] = $apiClient.GetReleaseDefinition($useTargetProject, $definitions[$i].id)
+            $definitions[$i] = $releaseApiClient.GetReleaseDefinition($useTargetProject, $definitions[$i].id)
         }
     }
 
