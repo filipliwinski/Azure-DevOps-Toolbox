@@ -18,17 +18,17 @@ The API specification can be found [here](https://github.com/MicrosoftDocs/vsts-
 2. Open a PowerShell terminal window in the location of the cloned repository.
 3. In the terminal window go into the `src\` folder:
 
-`cd .\src\`
+    `cd src`
 
 4. Generate ApiClient modules by running the ApiClientGenerator script:
 
-`.\ApiClientGenerator.ps1`
+    `.\ApiClientGenerator.ps1`
 
 5. Wait until the API Clients are generated. Once they are ready, configure the `demo.ps1` script with your target API version. Just include one of the `.ps1` files from the `ApiClients` folder in line 24 of `demo.ps1`.
 6. Configure the `demo.ps1` script with your organization name, project name and PAT token.
 7. Now you can include other `.ps1` scripts from the `src/` folder and start managing your Azure DevOps project like a pro. Just be aware that there is no prompt before deleting things (and no Undo button or `dryRun` flag). Be careful when using `Remove-` commands! Run the demo script to see Azure DevOps Toolbox in action:
 
-`./demo.ps1`
+    `.\demo.ps1`
 
 ## Notes for developers
 
