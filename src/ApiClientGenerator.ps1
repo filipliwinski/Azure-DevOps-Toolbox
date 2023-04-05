@@ -1,28 +1,16 @@
-# MIT License
-
-# Copyright (c) 2022 Filip Liwiński
-
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# Copyright (c) Filip Liwiński
+# Licensed under the MIT License. See the LICENSE file in the project root for license information.
 
 $remoteRepoLocation = "https://github.com/MicrosoftDocs/vsts-rest-api-specs.git"
+
+# The API specification is stored in this location to avoid too long file names
 $localRepoLocation = "c:/temp/vsts-rest-api-specs"
+
+# Define the name of the variable used for selecting the target project
 $useTargetProjectVariable = '$useTargetProject'
+
+# Location of auto-generated API Clients
+$apiClientsDirectory = '.\..\auto_generated\ApiClients'
 
 function ComputeFunctionHash {
     param (
@@ -80,8 +68,8 @@ function CreatePsFunction {
     $sbParam = [System.Text.StringBuilder]::new()
     $body = '$null'
     foreach ($parameter in $parameters) {
-        if($null -ne $parameter.in -and 
-            ($parameter.in -eq 'path' -or $parameter.in -eq 'body') -and 
+        if($null -ne $parameter.in -and
+            ($parameter.in -eq 'path' -or $parameter.in -eq 'body') -and
             $parameter.name -ne 'collection' -and
             $parameter.name -ne 'organization' -and
             $parameter.name -ne 'project') {
@@ -135,7 +123,6 @@ function CreatePsFunction {
     [void]$sb.AppendLine('    [PSObject] ' + $functionName + '(' + $parametersString + ') {')
     [void]$sb.AppendLine('        return $this.Request(' + $useTargetProjectVariable + ', ''' + $method + ''', "' + $path + '", $this.apiVersion, ' + $body + ')')
     [void]$sb.AppendLine('    }')
-    
     return $sb.ToString()
 }
 
@@ -175,7 +162,7 @@ foreach ($specification in $specifications)
             $sb = [System.Text.StringBuilder]::new()
             [void]$sb.AppendLine("# This file was auto-generated. Do not edit.")
             [void]$sb.AppendLine("")
-            [void]$sb.AppendLine("using module .\..\..\AzureDevOpsApiClient.psm1")
+            [void]$sb.AppendLine("using module .\..\..\..\src\AzureDevOpsApiClient.psm1")
             [void]$sb.AppendLine("")
             [void]$sb.AppendLine("class $apiClientName : AzureDevOpsApiClient {")
             [void]$sb.AppendLine('    [string] $apiVersion = ''' + $spec.info.version + '''')
@@ -186,7 +173,6 @@ foreach ($specification in $specifications)
             [void]$sb.AppendLine("    $apiClientName(" + '[string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)')
             [void]$sb.AppendLine('        : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}')
             [void]$sb.AppendLine("")
-            
 
             foreach ($path in $spec.paths) {
                 $paths = $path.psobject.properties.name
@@ -213,7 +199,7 @@ foreach ($specification in $specifications)
             [void]$sb.AppendLine("}")
             $apiClientClass = $sb.ToString()
 
-            $apiClientDirectory = "ApiClients\$($apiVersion.name)"
+            $apiClientDirectory = "$apiClientsDirectory\$($apiVersion.name)"
 
             if (!(Test-Path -Path $apiClientDirectory)) {
                 New-Item $apiClientDirectory -ItemType Directory
@@ -227,7 +213,9 @@ foreach ($specification in $specifications)
 Write-Progress -Activity "Generating clients..." -Completed
 
 # Generate scripts to include ApiClients modules
-$apiClientsDirectory = '.\ApiClients'
+if (!(Test-Path -Path $apiClientsDirectory)) {
+    New-Item $apiClientsDirectory -ItemType Directory
+}
 
 $apiClientVersions = Get-ChildItem $apiClientsDirectory -directory
 
@@ -239,7 +227,8 @@ foreach ($version in $apiClientVersions) {
 
     foreach ($apiClient in $apiClients) {
         $relativePath = Get-Item $apiClient | Resolve-Path -Relative
-        $relativePath = $relativePath -replace "\\ApiClients", ""
+        $stringToRemove = $apiClientsDirectory.Trim('.', '\')
+        $relativePath = $relativePath.Replace("$stringToRemove\", "").Replace("..", ".")
         [void]$sb.AppendLine("using module ""$relativePath""")
     }
 
