@@ -28,16 +28,23 @@ function ComputeFunctionHash {
 function ExtractMethods {
     param (
         [Object] $object,
-        [String] $path
+        [String] $path,
+        [String] $apiVersion
     )
 
     $methods = $object.psobject.properties.name
     $objectValue = $object.psobject.properties.value
     $functions = @{}
+    $customApiVersion = $null
+    $overrideApiVersion = $objectValue.'x-ms-docs-override-version'
+
+    if ($overrideApiVersion -ne $apiVersion) {
+        $customApiVersion = $overrideApiVersion
+    }
 
     if ($objectValue.GetType() -eq [System.Management.Automation.PSCustomObject]) {
         # System.Management.Automation.PSCustomObject
-        $function = CreatePsFunction -object $objectValue -path $path -method $methods
+        $function = CreatePsFunction -object $objectValue -path $path -method $methods -apiVersion $customApiVersion
         $functionHash = ComputeFunctionHash -function $function
         $functions.Add($functionHash, $function)
     }
@@ -46,7 +53,7 @@ function ExtractMethods {
         $methodsArray = $methods.Split(' ')
         for ($i = 0; $i -lt $methodsArray.Count; $i++) {
             # System.Management.Automation.PSCustomObject
-            $function = CreatePsFunction -object $objectValue[$i] -path $path -method $methodsArray[$i]
+            $function = CreatePsFunction -object $objectValue[$i] -path $path -method $methodsArray[$i] -apiVersion $customApiVersion
             $functionHash = ComputeFunctionHash -function $function
             $functions.Add($functionHash, $function)
         }
@@ -59,7 +66,8 @@ function CreatePsFunction {
     param (
         [Object] $object,
         [String] $path,
-        [string] $method
+        [string] $method,
+        [String] $apiVersion
     )
 
     # List parameters
@@ -97,17 +105,17 @@ function CreatePsFunction {
     }
 
     # Include [bool] $useTargetProject parameter
-    $parametersString = "[bool] $useTargetProjectVariable, " + $parametersString
+    $parametersString = "[nullable[bool]] $useTargetProjectVariable, " + $parametersString
     $parametersString = $parametersString.TrimEnd(', ')
 
     # Adjust description and path
-    $description = $object.description -replace '\n', ''
+    $description = $object.description -replace '\n', ' '
     $path = $path -replace '\$', ''
     $path = $path -replace '{', '$' -replace '}', ''
-    $path = $path -replace '\$organization', ''
-    $path = $path -replace '\$collection', ''
-    $path = $path -replace '\$project', ''
-    $path = $path -replace '/_apis', ''
+    $path = $path.Replace('/$organization/', '/')
+    $path = $path.Replace('/$collection/', '/')
+    $path = $path.Replace('/$project/', '/')
+    $path = $path.Replace('/_apis', '')
     $path = $path.TrimStart('/')
 
     $functionName = $object."x-ms-vss-method"
@@ -117,11 +125,17 @@ function CreatePsFunction {
         $functionName = $functionName + '_Head'
     }
 
+    if (!$apiVersion) {
+        $apiVersion = '$this.apiVersion'
+    } else {
+        $apiVersion = '"' + $apiVersion + '"'
+    }
+
     # Generate function
     $sb = [System.Text.StringBuilder]::new()
     [void]$sb.AppendLine('    # ' + $description)
     [void]$sb.AppendLine('    [PSObject] ' + $functionName + '(' + $parametersString + ') {')
-    [void]$sb.AppendLine('        return $this.Request(' + $useTargetProjectVariable + ', ''' + $method + ''', "' + $path + '", $this.apiVersion, ' + $body + ')')
+    [void]$sb.AppendLine('        return $this.Request(' + $useTargetProjectVariable + ', ''' + $method + ''', "' + $path + '", ' + $apiVersion + ', ' + $body + ')')
     [void]$sb.AppendLine('    }')
 
     return $sb.ToString()
@@ -159,6 +173,7 @@ foreach ($specification in $specifications)
             $jsonSpec = $jsonSpec -replace '""', '"empty"'
 
             $spec = $jsonSpec | ConvertFrom-Json
+            $specApiVersion = $spec.info.version
 
             $sb = [System.Text.StringBuilder]::new()
             [void]$sb.AppendLine("# This file was auto-generated. Do not edit.")
@@ -166,7 +181,7 @@ foreach ($specification in $specifications)
             [void]$sb.AppendLine("using module .\..\..\..\src\AzureDevOpsApiClient.psm1")
             [void]$sb.AppendLine("")
             [void]$sb.AppendLine("class $apiClientName : AzureDevOpsApiClient {")
-            [void]$sb.AppendLine('    [string] $apiVersion = ''' + $spec.info.version + '''')
+            [void]$sb.AppendLine('    [string] $apiVersion = ''' + $specApiVersion + '''')
             [void]$sb.AppendLine("")
             [void]$sb.AppendLine("    # $apiClientName(" + '[string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)')
             [void]$sb.AppendLine('    #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}')
@@ -183,7 +198,7 @@ foreach ($specification in $specifications)
                 if ($pathObject.count -gt 0) {  # skip specs with empty paths
                     if ($pathObject.GetType() -eq [System.Management.Automation.PSCustomObject]) {
                         # System.Management.Automation.PSCustomObject
-                        $functionsString = ExtractMethods -object $pathObject -path $paths
+                        $functionsString = ExtractMethods -object $pathObject -path $paths -apiVersion $specApiVersion
                         [void]$sb.AppendLine($functionsString)
                     }
                     else {
@@ -191,7 +206,7 @@ foreach ($specification in $specifications)
                         for ($i = 0; $i -lt $pathObject.Count; $i++) {
                             # System.Management.Automation.PSCustomObject
                             $pathsArray = $paths.Split(' ')
-                            $functionsString = ExtractMethods -object $pathObject[$i] -path $pathsArray[$i]
+                            $functionsString = ExtractMethods -object $pathObject[$i] -path $pathsArray[$i] -apiVersion $specApiVersion
                             [void]$sb.AppendLine($functionsString)
                         }
                     }

@@ -48,7 +48,7 @@ class AzureDevOpsApiClient {
         $this.Auth = [AuthFlow]::PersonalAccessToken
     }
 
-    [PSObject] ComposeHeaders([bool] $useTargetProject) {
+    [PSObject] ComposeHeaders([nullable[bool]] $useTargetProject) {
         $authHeader = ''
         $personalAccessToken = $this.SourcePersonalAccessToken
 
@@ -72,22 +72,26 @@ class AzureDevOpsApiClient {
         }
     }
 
-    [PSObject] CallRestAPI([bool] $isVSRMRequest, [bool] $useTargetProject, [string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
+    [PSObject] CallRestAPI([bool] $isVSRMRequest, [nullable[bool]] $useTargetProject, [string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
 
         $requestHeaders = $this.ComposeHeaders($useTargetProject)
 
-        if ($useTargetProject) {
-            $serviceHost = $this.TargetServiceHost
-            if ($isVSRMRequest) {
-                $serviceHost = $this.TargetServiceHostVSRM
-            }
-            $uri = "$serviceHost/$($this.TargetOrganization)/$($this.TargetProjectName)/_apis/$endpoint"
+        $serviceHost = $this.SourceServiceHost
+        if ($isVSRMRequest) {
+            $serviceHost = $this.SourceServiceHostVSRM
+        }
+        $uri = "$serviceHost/$($this.SourceOrganization)/$($this.SourceProjectName)/_apis/$endpoint"
+
+        if ($null -eq $useTargetProject) {
+            $uri = "$serviceHost/$($this.SourceOrganization)/_apis/$endpoint"
         } else {
-            $serviceHost = $this.SourceServiceHost
-            if ($isVSRMRequest) {
-                $serviceHost = $this.SourceServiceHostVSRM
+            if ($useTargetProject) {
+                $serviceHost = $this.TargetServiceHost
+                if ($isVSRMRequest) {
+                    $serviceHost = $this.TargetServiceHostVSRM
+                }
+                $uri = "$serviceHost/$($this.TargetOrganization)/$($this.TargetProjectName)/_apis/$endpoint"
             }
-            $uri = "$serviceHost/$($this.SourceOrganization)/$($this.SourceProjectName)/_apis/$endpoint"
         }
 
         if ($apiVersion) {
@@ -110,11 +114,11 @@ class AzureDevOpsApiClient {
         return Invoke-RestMethod -Method $method -Uri $uri -Headers $requestHeaders -Body $bodyJson
     }
 
-    [PSObject] Request([bool] $useTargetProject, [string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
+    [PSObject] Request([nullable[bool]] $useTargetProject, [string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
         return $this.CallRestAPI($false, $useTargetProject, $method, $endpoint, $apiVersion, $body)
     }
 
-    [PSObject] VSRMRequest([bool] $useTargetProject, [string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
+    [PSObject] VSRMRequest([nullable[bool]] $useTargetProject, [string] $method, [string] $endpoint, [string] $apiVersion, [PSObject] $body) {
         return $this.CallRestAPI($true, $useTargetProject, $method, $endpoint, $apiVersion, $body)
     }
 }
