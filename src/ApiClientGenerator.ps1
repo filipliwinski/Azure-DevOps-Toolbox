@@ -115,7 +115,8 @@ function CreatePsFunction {
     $path = $path.Replace('/$organization/', '/')
     $path = $path.Replace('/$collection/', '/')
     $path = $path.Replace('/$project/', '/')
-    $path = $path.Replace('/_apis', '')
+    # Write-Host $path
+    # $path = $path.Replace('/_apis', '')
     $path = $path.TrimStart('/')
 
     $functionName = $object."x-ms-vss-method"

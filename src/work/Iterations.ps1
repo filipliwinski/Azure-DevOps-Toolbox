@@ -11,5 +11,5 @@ function Get-Iterations {
     )
 
     $iterations = $workApiClient.GetTeamIterations($useTargetProject, $teamName)
-    return $iterations
+    return $iterations.value
 }

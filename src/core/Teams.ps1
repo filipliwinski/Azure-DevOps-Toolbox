@@ -13,8 +13,18 @@ function Get-AllTeams {
 function Get-ProjectTeams {
   param (
     [string] $projectId
-)
+  )
 
   $teams = $coreApiClient.GetTeams($null, $projectId)
   return $teams.value
+}
+
+function Get-TeamMembers {
+  param (
+    [string] $projectId,
+    [string] $teamId
+  )
+
+  $teamMembers = $coreApiClient.GetTeamMembersWithExtendedProperties($null, $projectId, $teamId)
+  return $teamMembers.value
 }

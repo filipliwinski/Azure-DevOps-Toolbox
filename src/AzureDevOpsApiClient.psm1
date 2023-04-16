@@ -80,17 +80,17 @@ class AzureDevOpsApiClient {
         if ($isVSRMRequest) {
             $serviceHost = $this.SourceServiceHostVSRM
         }
-        $uri = "$serviceHost/$($this.SourceOrganization)/$($this.SourceProjectName)/_apis/$endpoint"
+        $uri = "$serviceHost/$($this.SourceOrganization)/$($this.SourceProjectName)/$endpoint"
 
         if ($null -eq $useTargetProject) {
-            $uri = "$serviceHost/$($this.SourceOrganization)/_apis/$endpoint"
+            $uri = "$serviceHost/$($this.SourceOrganization)/$endpoint"
         } else {
             if ($useTargetProject) {
                 $serviceHost = $this.TargetServiceHost
                 if ($isVSRMRequest) {
                     $serviceHost = $this.TargetServiceHostVSRM
                 }
-                $uri = "$serviceHost/$($this.TargetOrganization)/$($this.TargetProjectName)/_apis/$endpoint"
+                $uri = "$serviceHost/$($this.TargetOrganization)/$($this.TargetProjectName)/$endpoint"
             }
         }
 
