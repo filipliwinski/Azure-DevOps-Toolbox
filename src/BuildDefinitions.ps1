@@ -119,53 +119,6 @@ function Copy-Definition {
         [switch] $useTargetProject,
         [psobject] $definition
     )
-    
-#     if($buildDefinition.path -contains('Deprecated')){
-#         return $null
-#     }
-#     $repository = $buildApiClient.GetRepository( $projectName, $buildDefinition.repository.name)    # TODO Fix dependency
-#     $newBuildDefinition = @{
-#         triggers                  = @(
-#             @{
-#                 settingsSourceType           = 2
-#                 batchChanges                 = $false
-#                 maxConcurrentBuildsPerBranch = 1
-#                 triggerType                  = 'continuousIntegration'
-#             }
-#         )
-#         jobAuthorizationScope     = 'projectCollection'
-#         jobTimeoutInMinutes       = 60
-#         jobCancelTimeoutInMinutes = 5
-
-#         process                   = $buildDefinition.process
-#         repository                = @{
-#             properties         = @{
-#                 cloneUrl          = $repository.remoteUrl
-#                 fullName          = $repository.name
-#                 defaultBranch     = "refs/heads/master"
-#                 isFork            = "False"
-#                 safeRepository    = $repository.id
-#                 reportBuildStatus = $true
-#             }
-#             id                 = $repository.id
-#             type               = "TfsGit"
-#             name               = $repository.name
-#             url                = $repository.remoteUrl
-#             defaultBranch      = $repository.defaultBranch
-#             checkoutSubmodules = $false
-#         }
-#         quality                   = 'definition'
-#         name                      = $buildDefinition.name
-#         path                      = $buildDefinition.path
-#         type                      = "build"
-#         queueStatus               = "enabled"
-#         revision                  = 1
-#         queue = @{
-#             name = "Default"
-#         }
-#     }
-#  Write-Output "repository name: $($buildDefinition.name)"
-#  Write-Output "definition $($repository.name)"
 
     New-Definition -useTargetProject:$useTargetProject `
         -name $definition.name `

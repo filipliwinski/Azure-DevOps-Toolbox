@@ -1,4 +1,5 @@
-# using module .\AzureDevOpsServicesAPIClient.psm1
+# Copyright (c) Filip Liwiński
+# Licensed under the MIT License. See the LICENSE file in the project root for license information.
 
 . .\git\Repositories.ps1
 . .\BuildDefinitions.ps1
@@ -11,7 +12,7 @@ $definitionsToExcludeFilePath = '.\local_config\Migration\definitionsToExclude.t
 #         [PSObject] $source,
 #         [PSObject] $destination
 #     )
-    
+
 #     $sourceApiClient = [AzureDevOpsServicesAPIClient]::new($source.organizationName, $source.serviceHost, $source.patToken)
 #     $destinationApiClient = [AzureDevOpsServicesAPIClient]::new($destination.organizationName, $destination.serviceHost, $destination.patToken)
 
@@ -93,7 +94,7 @@ function Move-PolicyConfigurations {
 
     # foreach ($sourcePolicyType in $sourcePolicyTypes) {
     #     $targetPolicyType = $targetPolicyTypes | Where-Object {$_.displayName -eq $sourcePolicyType.displayName}
-    #     $policyTypes.add($sourcePolicyType.id, @{ 
+    #     $policyTypes.add($sourcePolicyType.id, @{
     #         id = $targetPolicyType.id
     #         displayName = $targetPolicyType.displayName
     #     })
@@ -225,29 +226,23 @@ function Move-Definitions {
 
         $definition = Get-Definition -useTargetProject:$false -id $definition.id
 
-        # TODO: Remove this temporary check
-        if ($definition.repository.name -eq 'web-view-client-api')
-        {
-            $definition.repository.name = 'view-client-api'
-        }
-
         # Verify if the target repository is not excluded from migration.
         if ($repositoriesToExclude.Contains($definition.repository.name)) {
             Write-Host "Definition $($definition.name) excluded - the linked repository $($definition.repository.name) is excluded."
             continue
         }
-            
+
         # Update the target repository for the definition
         $repository = Get-RepositoryByName -useTargetProject:$true -name $definition.repository.name
 
         $definition.repository.id = $repository.id
 
         $definitionsToMove += $definition
-        
+
     }
 
     Write-Progress -Activity "Getting definitions..." -Completed
-    
+
     Copy-Definitions -useTargetProject:$true -definitions $definitionsToMove
 
     $stopwatch.Stop()

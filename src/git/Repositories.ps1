@@ -87,7 +87,7 @@ function New-Repository {
     }
 
     $response = $gitApiClient.CreateRepository($useTargetProject, $repository)
-    
+
     return $response
 }
 
@@ -132,7 +132,7 @@ function Copy-Repositories {
         [switch] $showGitOutput,
         [psobject] $repositories
     )
-    
+
     $i = 0
 
     foreach ($repository in $repositories) {
@@ -161,12 +161,6 @@ function Copy-Repository {
         $newRepositoryName = $repository.name + "_copy"
     }
 
-    # TODO: Remove this temporary check
-    if ($newRepositoryName -eq 'web-view-client-api')
-    {
-        $newRepositoryName = 'view-client-api'
-    }
-
     try {
         $newRepository = New-Repository -useTargetProject:$useTargetProject -name $newRepositoryName
 
@@ -178,7 +172,7 @@ function Copy-Repository {
         else {
             git clone --bare $repository.remoteUrl $tempLocation --quiet
         }
-        
+
         Push-Location $tempLocation
 
         if ($showGitOutput) {
@@ -199,7 +193,7 @@ function Copy-Repository {
     catch {
         Write-Host "The repository $($repository.name) already exists."
     }
-    
+
     return $null
 }
 
