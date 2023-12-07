@@ -4,6 +4,7 @@
 . .\git\Repositories.ps1
 . .\BuildDefinitions.ps1
 
+$repositoriesToIncludeFilePath = '.\local_config\Migration\repositoriesToInclude.txt'
 $repositoriesToExcludeFilePath = '.\local_config\Migration\repositoriesToExclude.txt'
 $definitionsToExcludeFilePath = '.\local_config\Migration\definitionsToExclude.txt'
 
@@ -21,6 +22,16 @@ $requiredReviewersPolicyId = 'fd2167ab-b0be-447a-8ec8-39368250530e'             
 $reservedNamesRestrictionPolicyId = 'db2b9b4c-180d-4529-9701-01541d19f36b'          # This policy will reject pushes to a repository for names which aren't valid on all supported client OSes.
 $statusPolicyId = 'cbdc66da-9728-4af8-aada-9a5a32e4a226'                            # This policy will require a successfull status to be posted before updating protected refs.
 $workItemLinkingPolicyId = '40e92b44-2fe1-4dd6-b3d8-74a9c21d0c6e'                   # This policy encourages developers to link commits to work items.
+
+function Get-RepositoriesToInclude {
+    if (-Not (Test-Path $repositoriesToIncludeFilePath)) {
+        throw "Required configuration file not found: $repositoriesToIncludeFilePath"
+    }
+
+    $repositoriesToInclude = (Get-Content -Path $repositoriesToIncludeFilePath) ?? @()
+
+    return $repositoriesToInclude
+}
 
 function Get-RepositoriesToExclude {
     if (-Not (Test-Path $repositoriesToExcludeFilePath)) {
@@ -46,28 +57,73 @@ function Move-Repositories {
     param (
         [switch] $showGitOutput
     )
-
-    $stopwatch =  [system.diagnostics.stopwatch]::StartNew()
     
+    $repositoriesToInclude = Get-RepositoriesToInclude
     $repositoriesToExclude = Get-RepositoriesToExclude
 
     $repositories = Get-Repositories -useTargetProject:$false
 
+    # Verify the existance of repositories to include
+    $missingRepositoriesToInclude = $repositoriesToInclude | Where-Object { $_ -notin $repositories.name }
+
+    if ($missingRepositoriesToInclude.count -ne 0) {
+        Write-Error "The repositoriesToInclude list contains items that do not exist:"
+        $missingRepositoriesToInclude
+        exit 1
+    }
+
+    # Verify the existance of repositories to exclude
+    $missingRepositoriesToExclude = $repositoriesToExclude | Where-Object { $_ -notin $repositories.name }
+
+    if ($missingRepositoriesToExclude.count -ne 0) {
+        Write-Error "The repositoriesToExclude list contains items that do not exist:"
+        $missingRepositoriesToExclude
+        exit 1
+    }
+
+    # Include repositories from the config file
+    $existingRepositoriesToInclude = @()
+
+    if ($repositoriesToInclude.count -eq 0) {
+        $existingRepositoriesToInclude = $repositories
+    }
+    else {
+        $existingRepositoriesToInclude = $repositories | Where-Object { $repositoriesToInclude -contains $_.name }
+    }
+
+    # Exclude repositories from the config file
     $repositoriesToMove = @()
 
-    foreach ($repository in $repositories) {
-        if (-not ($repositoriesToExclude.Contains($repository.name))) {
-            $repositoriesToMove += $repository
-        }
-        else {
-            Write-Host "Repository $($repository.name) excluded."
+    if ($repositoriesToExclude.count -eq 0)
+    {
+        $repositoriesToMove = $existingRepositoriesToInclude
+    }
+    else {
+        foreach ($repository in $existingRepositoriesToInclude) {
+            if ($repositoriesToExclude.Contains($repository.name)) {
+                Write-Host "Repository $($repository.name) excluded."
+            }
+            else {
+                $repositoriesToMove += $repository
+            }
         }
     }
 
-    Copy-Repositories -useTargetProject:$true -showGitOutput:$showGitOutput -repositories $repositoriesToMove
+    if ($repositoriesToMove.count -eq 0) {
+        Write-Host "No repositories to copy."
+    }
+    else {
+        Write-Host "Repositories to copy ($($repositoriesToMove.count) in total):"
+        $repositoriesToMove | ForEach-Object { Write-Host $_.name }
 
-    $stopwatch.Stop()
-    Write-Host "$($repositoriesToMove.count) repositories migrated in $($stopwatch.Elapsed)"
+        $stopwatch =  [system.diagnostics.stopwatch]::StartNew()
+
+        Copy-Repositories -useTargetProject:$true -showGitOutput:$showGitOutput -repositories $repositoriesToMove
+
+        $stopwatch.Stop()
+
+        Write-Host "$($repositoriesToMove.count) repositories migrated in $($stopwatch.Elapsed)"
+    }
 }
 
 function Move-PolicyConfigurations {
