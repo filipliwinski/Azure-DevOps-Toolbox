@@ -191,7 +191,9 @@ function Copy-Repository {
         return $newRepository
     }
     catch {
-        Write-Host "The repository $($repository.name) already exists."
+        Write-Host "An error occured."
+        Write-Host $_.Exception.Message
+        Write-Host $_.ErrorDetails.Message
     }
 
     return $null
