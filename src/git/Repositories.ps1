@@ -114,7 +114,7 @@ function Export-Repositories {
         [string] $outputPath = ''
     )
 
-    $repositories = $gitApiClient.GetRepositories($useTargetProject)
+    $repositories = Get-Repositories -useTargetProject:$useTargetProject
 
     if ($repositories.count -gt 0) {
         New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
