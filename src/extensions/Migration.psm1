@@ -1,8 +1,8 @@
 # Copyright (c) Filip Liwiński
 # Licensed under the MIT License. See the LICENSE file in the project root for license information.
 
-. .\git\Repositories.ps1
-. .\BuildDefinitions.ps1
+. .\..\git\Repositories.ps1
+. .\..\BuildDefinitions.ps1
 
 $repositoriesToIncludeFilePath = '.\local_config\Migration\repositoriesToInclude.txt'
 $repositoriesToExcludeFilePath = '.\local_config\Migration\repositoriesToExclude.txt'
@@ -57,7 +57,7 @@ function Move-Repositories {
     param (
         [switch] $showGitOutput
     )
-    
+
     $repositoriesToInclude = Get-RepositoriesToInclude
     $repositoriesToExclude = Get-RepositoriesToExclude
 
@@ -271,3 +271,5 @@ function Move-Definitions {
     $stopwatch.Stop()
     write-host "$($definitionsToMove.count) definitions migrated in $($stopwatch.Elapsed)"
 }
+
+Export-ModuleMember -Function Move-*
