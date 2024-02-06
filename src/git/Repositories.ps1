@@ -5,19 +5,32 @@ $gitApiClient = [GitOnpremApiClient]::new($tfsServiceHost, $organization, $proje
                                     $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
 
 <#
-        .SYNOPSIS
+    .SYNOPSIS
         Gets all repositories for the specified project.
 
-        .DESCRIPTION
-        Gets all repositories for the specified project.
+    .DESCRIPTION
+        Retrieves all project GIT repositories.
 
-        .OUTPUTS
-        System.Array. Returns an array with repositories.
+        Returns an array with GitRepository objects.
 
-        .LINK
+    .PARAMETER useTargetProject
+        Indicates whether to use the target project when retrieving the repositories.
+        If specified, the target project repositories are returned.
+
+    .OUTPUTS
+        System.Array. Returns an array with GitRepository objects.
+
+    .EXAMPLE
+        PS> Get-Repositories
+        Retrives repositories from the current project.
+
+    .EXAMPLE
+        PS> Get-Repositories -useTargetProject
+        Retrives repositories from the target project.
+
+    .LINK
         Online version: https://github.com/filipliwinski/Azure-DevOps-Toolbox/wiki/Repositories#get-repositories
-
-    #>
+#>
 function Get-Repositories {
     param (
         [switch] $useTargetProject
@@ -28,6 +41,34 @@ function Get-Repositories {
     return $repositories.value
 }
 
+<#
+    .SYNOPSIS
+        Gets the repository with the specified id.
+
+    .DESCRIPTION
+        Gets the GIT repository with the specified id.
+
+    .PARAMETER useTargetProject
+        Indicates whether to use the target project when retrieving the repository.
+        If specified, the function retrieves the repository from the target project.
+
+    .PARAMETER id
+        The id of the repository to retrive.
+
+    .OUTPUTS
+        Returns a GitRepository object.
+
+    .EXAMPLE
+        PS> Get-Repository -id '2e2b05c3-1778-4cba-b6ec-c6bf8bd3ba50'
+        Gets the repository with the specified id from the current project.
+
+    .EXAMPLE
+        PS> Get-Repository -useTargetProject -id '2e2b05c3-1778-4cba-b6ec-c6bf8bd3ba50'
+        Gets the repository with the specified id from the target project.
+
+    .LINK
+        Online version: https://github.com/filipliwinski/Azure-DevOps-Toolbox/wiki/Repositories#get-repository
+#>
 function Get-Repository {
     param (
         [switch] $useTargetProject,
@@ -40,22 +81,33 @@ function Get-Repository {
 }
 
 <#
-        .SYNOPSIS
-        Gets a repository with the specified name.
+    .SYNOPSIS
+        Gets the repository with the specified name.
 
-        .DESCRIPTION
-        Gets a repository with the specified name.
+    .DESCRIPTION
+        Gets the GIT repository with the specified name.
 
-        .PARAMETER repositoryName
-        Specifies the repository name.
+    .PARAMETER useTargetProject
+        Indicates whether to use the target project when retrieving the repository.
+        If specified, the function retrieves the repository from the target project.
 
-        .OUTPUTS
-        System.Object. Returns an object with the repository details.
+    .PARAMETER name
+        The name of the repository to retrive.
 
-        .LINK
+    .OUTPUTS
+        Returns a GitRepository object.
+
+    .EXAMPLE
+        PS> Get-Repository -name 'Repository A'
+        Gets the repository with the specified name from the current project.
+
+    .EXAMPLE
+        PS> Get-Repository -useTargetProject -name 'Repository A'
+        Gets the repository with the specified name from the target project.
+
+    .LINK
         Online version: https://github.com/filipliwinski/Azure-DevOps-Toolbox/wiki/Repositories#get-repositorybyname
-
-    #>
+#>
 function Get-RepositoryByName {
     param (
         [switch] $useTargetProject,
@@ -67,6 +119,31 @@ function Get-RepositoryByName {
     return $repository
 }
 
+<#
+    .SYNOPSIS
+        Removes the repository with the specified id.
+
+    .DESCRIPTION
+        Removes the repository with the specified id.
+
+    .PARAMETER useTargetProject
+        Indicates whether to use the target project when removing the repository.
+        If specified, the target project is used.
+
+    .PARAMETER id
+        The id of the repository to remove.
+
+    .EXAMPLE
+        PS> Remove-Repository -id '2e2b05c3-1778-4cba-b6ec-c6bf8bd3ba50'
+        Removes the repository with the specified id from the current project.
+
+    .EXAMPLE
+        PS> Remove-Repository -useTargetProject -id '2e2b05c3-1778-4cba-b6ec-c6bf8bd3ba50'
+        Removes the repository with the specified id from the target project.
+
+    .LINK
+        Online version: https://github.com/filipliwinski/Azure-DevOps-Toolbox/wiki/Repositories#remove-repository
+#>
 function Remove-Repository {
     param (
         [switch] $useTargetProject,
@@ -76,6 +153,34 @@ function Remove-Repository {
     $gitApiClient.DeleteRepository($useTargetProject, $id)
 }
 
+<#
+    .SYNOPSIS
+        Creates a new GIT repository with the specified name.
+
+    .DESCRIPTION
+        Creates a new GIT repository with the specified name.
+
+    .PARAMETER useTargetProject
+        Indicates whether to use the target project when creating the repository.
+        If specified, the target project is used.
+
+    .PARAMETER useTargetProject
+        Name of the new repository.
+
+    .OUTPUTS
+        Returns a GitRepository object of the created repository.
+
+    .EXAMPLE
+        PS> New-Repository -name 'Repository A'
+        Creates a repository in the current project.
+
+    .EXAMPLE
+        PS> New-Repository -useTargetProject -name 'Repository A'
+        Creates a repository in the the target project.
+
+    .LINK
+        Online version: https://github.com/filipliwinski/Azure-DevOps-Toolbox/wiki/Repositories#new-repository
+#>
 function New-Repository {
     param (
         [switch] $useTargetProject,
@@ -98,15 +203,27 @@ function New-Repository {
         .DESCRIPTION
         Exports repositories data as JSON to a file.
 
+        .PARAMETER useTargetProject
+        Indicates whether to use the target project when exporting the repository.
+        If specified, the target project is used.
+
         .PARAMETER outputPath
         Specifies the location of the output file.
 
-        .OUTPUTS
-        None.
+        .EXAMPLE
+        PS> Export-Repositories
+        Export repositories in the current project.
+
+        .EXAMPLE
+        PS> Export-Repositories -outputPath 'C:\repositories'
+        Export repositories in the current project to the specified location.
+
+        .EXAMPLE
+        PS> Export-Repositories -useTargetProject
+        Export repositories in the target project.
 
         .LINK
         Online version: https://github.com/filipliwinski/Azure-DevOps-Toolbox/wiki/Repositories#export-repositories
-
     #>
 function Export-Repositories {
     param (
@@ -126,6 +243,38 @@ function Export-Repositories {
     }
 }
 
+<#
+        .SYNOPSIS
+        Copies all the provided repositories from the current project.
+
+        .DESCRIPTION
+        Copies all the provided repositories from the current project.
+
+        .PARAMETER useTargetProject
+        Indicates whether to use the target project when copying the repositories.
+        If specified, the target project is used for creating copies.
+
+        .PARAMETER showGitOutput
+        Indicates whether to show GIT output in the terminal when cloning repositories.
+
+        .PARAMETER repositories
+        A list of repositories to copy.
+
+        .EXAMPLE
+        PS> Copy-Repositories -repositories $repositories
+        Copies the repositories in the current project (appending _copy to the name of the repository).
+
+        .EXAMPLE
+        PS> Copy-Repositories -useTargetProject -repositories $repositories
+        Copies the repositories from the current project to the target project.
+
+        .EXAMPLE
+        PS> Copy-Repositories -showGitOutput -repositories $repositories
+        Copies the repositories from the current project to the target project and shows GIT output.
+
+        .LINK
+        Online version: https://github.com/filipliwinski/Azure-DevOps-Toolbox/wiki/Repositories#copy-repositories
+    #>
 function Copy-Repositories {
     param (
         [switch] $useTargetProject,
@@ -147,6 +296,38 @@ function Copy-Repositories {
     Write-Progress -Activity "Copying repositories..." -Completed
 }
 
+<#
+        .SYNOPSIS
+        Copies the provided repository from the current project.
+
+        .DESCRIPTION
+        Copies the provided repository from the current project.
+
+        .PARAMETER useTargetProject
+        Indicates whether to use the target project when copying the repository.
+        If specified, the target project is used for creating a copy.
+
+        .PARAMETER showGitOutput
+        Indicates whether to show GIT output in the terminal when cloning repository.
+
+        .PARAMETER repositories
+        A repository to copy.
+
+        .EXAMPLE
+        PS> Copy-Repository -repository $repository
+        Copies the repository in the current project (appending _copy to the name of the repository).
+
+        .EXAMPLE
+        PS> Copy-Repository -useTargetProject -repository $repository
+        Copies the repository from the current project to the target project.
+
+        .EXAMPLE
+        PS> Copy-Repository -showGitOutput -repository $repository
+        Copies the repository from the current project to the target project and shows GIT output.
+
+        .LINK
+        Online version: https://github.com/filipliwinski/Azure-DevOps-Toolbox/wiki/Repositories#copy-repository
+    #>
 function Copy-Repository {
     param (
         [switch] $useTargetProject,
