@@ -155,35 +155,35 @@ function Move-PolicyConfigurations {
             throw "Scope contains multiple items."
         }
 
-        $newSettings = $policy.settings
+        $settings = $policy.settings
 
         # Match source and target repository
-        $sourceRepository = $sourceRepositories | Where-Object { $_.id -eq $newSettings.scope[0].repositoryId }
+        $sourceRepository = $sourceRepositories | Where-Object { $_.id -eq $settings.scope[0].repositoryId }
         if ($null -eq $sourceRepository) {
-            Write-Host "Repository with id $($newSettings.scope[0].repositoryId) does not exist."
+            Write-Host "Repository with id $($settings.scope[0].repositoryId) does not exist."
             continue
         }
 
         # Check for excluded repositories
         if ($repositoriesToExclude.contains($sourceRepository.name)) {
-            Write-Host "Repository $($sourceRepository.name) excluded (policy $($policy.type.id) for $($newSettings.scope[0].refName))."
+            Write-Host "Repository $($sourceRepository.name) excluded (policy $($policy.type.id) for $($settings.scope[0].refName))."
             continue
         }
 
-        Write-Host "Repository $($sourceRepository.name) (policy $($policy.type.id) for $($newSettings.scope[0].refName))"
+        Write-Host "Repository $($sourceRepository.name) (policy $($policy.type.id) for $($settings.scope[0].refName))"
 
         $progress = [math]::floor($i / $policies.count * 100)
         Write-Progress -Activity "Moving policies..." -Status "$progress% complete ($($sourceRepository.name))" -PercentComplete $progress
 
         $targetRepository = $targetRepositories | Where-Object { $_.name -eq $sourceRepository.name }
 
-        $newSettings.scope[0].repositoryId = $targetRepository.id
+        $settings.scope[0].repositoryId = $targetRepository.id
 
         # Match build definitions
         if ($policy.type.id -eq $buildPolicyId) {
-            $sourceDefinition = $sourceDefinitions | Where-Object { $_.id -eq $newSettings.BuildDefinitionId }
+            $sourceDefinition = $sourceDefinitions | Where-Object { $_.id -eq $settings.BuildDefinitionId }
             if ($null -eq $sourceDefinition) {
-                Write-Host "Definition with id $($newSettings.BuildDefinitionId) does not exist."
+                Write-Host "Definition with id $($settings.BuildDefinitionId) does not exist."
                 continue
             }
 
@@ -195,19 +195,10 @@ function Move-PolicyConfigurations {
 
             $targetDefinition = $targetDefinitions | Where-Object { $_.name -eq $sourceDefinition.name }
 
-            $newSettings.BuildDefinitionId = $targetDefinition.id
+            $settings.BuildDefinitionId = $targetDefinition.id
         }
 
-        $newPolicy = @{
-            isEnabled = $policy.isEnabled
-            isBlocking = $policy.isBlocking
-            type = @{
-                id = $policy.type.id
-            }
-            settings = $newSettings
-        }
-
-        New-PolicyConfiguration -useTargetProject:$true -policyConfiguration $newPolicy -configurationId $null
+        New-PolicyConfiguration -useTargetProject:$true -isEnabled $policy.isEnabled -isBlocking $policy.isBlocking -typeId $policy.type.id -settings $settings
         $policiesMigratedCount++
     }
 

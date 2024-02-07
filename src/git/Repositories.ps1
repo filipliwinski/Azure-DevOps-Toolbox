@@ -14,8 +14,8 @@ $gitApiClient = [GitOnpremApiClient]::new($tfsServiceHost, $organization, $proje
         Returns an array with GitRepository objects.
 
     .PARAMETER useTargetProject
-        Indicates whether to use the target project when retrieving the repositories.
-        If specified, the target project repositories are returned.
+        Indicates whether to use the target project.
+        If specified, the target project is used.
 
     .OUTPUTS
         System.Array. Returns an array with GitRepository objects.
@@ -49,8 +49,8 @@ function Get-Repositories {
         Gets the GIT repository with the specified id.
 
     .PARAMETER useTargetProject
-        Indicates whether to use the target project when retrieving the repository.
-        If specified, the function retrieves the repository from the target project.
+        Indicates whether to use the target project.
+        If specified, the target project is used.
 
     .PARAMETER id
         The id of the repository to retrive.
@@ -88,8 +88,8 @@ function Get-Repository {
         Gets the GIT repository with the specified name.
 
     .PARAMETER useTargetProject
-        Indicates whether to use the target project when retrieving the repository.
-        If specified, the function retrieves the repository from the target project.
+        Indicates whether to use the target project.
+        If specified, the target project is used.
 
     .PARAMETER name
         The name of the repository to retrive.
@@ -127,7 +127,7 @@ function Get-RepositoryByName {
         Removes the repository with the specified id.
 
     .PARAMETER useTargetProject
-        Indicates whether to use the target project when removing the repository.
+        Indicates whether to use the target project.
         If specified, the target project is used.
 
     .PARAMETER id
@@ -161,10 +161,10 @@ function Remove-Repository {
         Creates a new GIT repository with the specified name.
 
     .PARAMETER useTargetProject
-        Indicates whether to use the target project when creating the repository.
+        Indicates whether to use the target project.
         If specified, the target project is used.
 
-    .PARAMETER useTargetProject
+    .PARAMETER name
         Name of the new repository.
 
     .OUTPUTS
@@ -204,7 +204,7 @@ function New-Repository {
         Exports repositories data as JSON to a file.
 
         .PARAMETER useTargetProject
-        Indicates whether to use the target project when exporting the repository.
+        Indicates whether to use the target project.
         If specified, the target project is used.
 
         .PARAMETER outputPath
@@ -251,8 +251,8 @@ function Export-Repositories {
         Copies all the provided repositories from the current project.
 
         .PARAMETER useTargetProject
-        Indicates whether to use the target project when copying the repositories.
-        If specified, the target project is used for creating copies.
+        Indicates whether to use the target project.
+        If specified, the target project is used.
 
         .PARAMETER showGitOutput
         Indicates whether to show GIT output in the terminal when cloning repositories.
@@ -304,8 +304,8 @@ function Copy-Repositories {
         Copies the provided repository from the current project.
 
         .PARAMETER useTargetProject
-        Indicates whether to use the target project when copying the repository.
-        If specified, the target project is used for creating a copy.
+        Indicates whether to use the target project.
+        If specified, the target project is used.
 
         .PARAMETER showGitOutput
         Indicates whether to show GIT output in the terminal when cloning repository.

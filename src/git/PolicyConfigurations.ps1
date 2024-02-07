@@ -10,14 +10,64 @@ $policyApiClient = [PolicyOnpremApiClient]::new($tfsServiceHost, $organization, 
 # $requiredReviewersDisplayName = 'Required reviewers'
 # $minimumNumberOfReviewersDisplayName = 'Minimum number of reviewers'
 
+<#
+    .SYNOPSIS
+        Create a policy configuration.
+
+    .DESCRIPTION
+        Create a policy configuration.
+
+        Returns the created policy configuration.
+
+    .PARAMETER useTargetProject
+        Indicates whether to use the target project.
+        If specified, the target project is used.
+
+    .PARAMETER isEnabled
+        Indicates whether the policy is enabled.
+
+    .PARAMETER isBlocking
+        Indicates whether the policy is blocking.
+
+    .PARAMETER typeId
+        The policy configuration type id.
+
+    .PARAMETER settings
+        The policy configuration settings.
+
+    .OUTPUTS
+        System.Object. Returns a PolicyConfiguration object with the new policy.
+
+    .EXAMPLE
+        PS> New-PolicyConfiguration -isEnabled $true -isBlocking $true -typeId '0609b952-1397-4640-95ec-e00a01b2c241' -settings $settings
+        Creates a policy configuration with the provided properties in the current project.
+
+    .EXAMPLE
+        PS> New-PolicyConfiguration -useTargetProject
+        Creates a policy configuration with the provided properties in the target project.
+
+    .LINK
+        Underlying API endpoint: https://learn.microsoft.com/en-us/rest/api/azure/devops/policy/configurations/create
+#>
 function New-PolicyConfiguration {
     param (
         [switch] $useTargetProject,
-        [psobject] $policyConfiguration,
-        [int] $configurationId
+        [bool] $isEnabled,
+        [bool] $isBlocking,
+        [string] $typeId,
+        [psobject] $settings
     )
 
-    return $policyApiClient.CreatePolicyConfiguration($useTargetProject, $policyConfiguration, $configurationId)
+    $policyConfiguration = @{
+        isEnabled = $policy.isEnabled
+        isBlocking = $policy.isBlocking
+        type = @{
+            id = $policy.type.id
+        }
+        settings = $settings
+    }
+
+    return $policyApiClient.CreatePolicyConfiguration($useTargetProject, $policyConfiguration, $null)
 }
 
 function Get-PolicyConfigurations {
