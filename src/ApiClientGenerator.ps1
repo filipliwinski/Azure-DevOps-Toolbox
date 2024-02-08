@@ -214,7 +214,7 @@ Write-Progress -Activity "Generating clients..." -Completed
 
 # Generate scripts to include ApiClients modules
 if (!(Test-Path -Path $apiClientsDirectory)) {
-    New-Item $apiClientsDirectory -ItemType Directory
+    New-Item $apiClientsDirectory -ItemType Directory | Out-Null
 }
 
 $apiClientVersions = Get-ChildItem $apiClientsDirectory -directory

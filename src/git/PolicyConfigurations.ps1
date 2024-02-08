@@ -70,6 +70,33 @@ function New-PolicyConfiguration {
     return $policyApiClient.CreatePolicyConfiguration($useTargetProject, $policyConfiguration, $null)
 }
 
+<#
+    .SYNOPSIS
+        Gets a list of policy configurations in a project.
+
+    .DESCRIPTION
+        Gets a list of policy configurations in a project.
+
+        Returns the list of policy configurations.
+
+    .PARAMETER useTargetProject
+        Indicates whether to use the target project.
+        If specified, the target project is used.
+
+    .OUTPUTS
+        System.Array. Returns an array ofs PolicyConfiguration objects.
+
+    .EXAMPLE
+        PS> Get-PolicyConfiguration
+        Gets policy configurationsfrom the current project.
+
+    .EXAMPLE
+        PS> New-PolicyConfiguration -useTargetProject
+        Gets policy configurations from the target project.
+
+    .LINK
+        Underlying API endpoint: https://learn.microsoft.com/en-us/rest/api/azure/devops/policy/configurations/list
+#>
 function Get-PolicyConfigurations {
     param (
         [switch] $useTargetProject
@@ -80,6 +107,28 @@ function Get-PolicyConfigurations {
     return $policies.value
 }
 
+<#
+    .SYNOPSIS
+        Deletes a policy configuration with the provoded identifier.
+
+    .DESCRIPTION
+        Deletes a policy configuration with the provoded identifier.
+
+    .PARAMETER useTargetProject
+        Indicates whether to use the target project.
+        If specified, the target project is used.
+
+    .EXAMPLE
+        PS> Remove-PolicyConfiguration -id 5
+        Deletes the policy configurationsfrom with the provided id in the current project.
+
+    .EXAMPLE
+        PS> Remove-PolicyConfiguration -useTargetProject -id 5
+        Deletes the policy configurationsfrom with the provided id in the current project.
+
+    .LINK
+        Underlying API endpoint: https://learn.microsoft.com/en-us/rest/api/azure/devops/policy/configurations/delete
+#>
 function Remove-PolicyConfiguration {
     param (
         [switch] $useTargetProject,
