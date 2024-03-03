@@ -349,6 +349,13 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
+# Auto-generated files (API Clients)
+auto_generated/
+
+# Custom configuration for migration
+src/local_config
+
+src/ApiClients
 src/demo_local.ps1
 src/[Tt]emp.ps1
 [Tt]emp/

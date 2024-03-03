@@ -4,6 +4,67 @@
 $buildApiClient = [BuildOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken,
                                     $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
 
+#region Definitions
+
+function New-Definition {
+    param (
+        [switch] $useTargetProject,
+        [string] $name,
+        [string] $path,
+        [string] $repositoryId,
+        [string] $repositoryType,
+        [int] $processType,
+        [string] $processYamlFilename,
+        [string] $defaultAgentPoolName
+    )
+
+    $definition = @{
+        name = $name
+        path = $path
+        repository = @{
+            id = $repositoryId
+            type = $repositoryType
+        }
+        process = @{
+            type = $processType
+            yamlFilename = $processYamlFilename
+        }
+        queue = @{
+            name = $defaultAgentPoolName
+        }
+    }
+
+    return $buildApiClient.CreateDefinition($useTargetProject, $definition)
+}
+
+function Get-Definitions {
+    param (
+        [switch] $useTargetProject
+    )
+
+    $definitions = $buildApiClient.GetDefinitions($useTargetProject)
+
+    return $definitions.value
+}
+
+function Get-Definition {
+    param (
+        [switch] $useTargetProject,
+        [int] $id
+    )
+
+    return $buildApiClient.GetDefinition($useTargetProject, $id)
+}
+
+function Remove-Definition {
+    param (
+        [switch] $useTargetProject,
+        [int] $id
+    )
+
+    return $buildApiClient.DeleteDefinition($useTargetProject, $id)
+}
+
 function Export-Definitions {
     param (
         [switch] $useTargetProject,
@@ -15,11 +76,11 @@ function Export-Definitions {
         $outputPath = "."
     }
 
-    $definitions = $buildApiClient.GetDefinitions($useTargetProject)
+    $definitions = Get-Definitions -useTargetProject
 
     if ($expand) {
         for ($i = 0; $i -lt $definitions.Count; $i++) {
-            $definitions[$i] = $buildApiClient.GetDefinition($useTargetProject, $definitions[$i].id)
+            $definitions[$i] = Get-Definition -useTargetProject -id $definitions[$i].id
         }
     }
 
@@ -32,3 +93,53 @@ function Export-Definitions {
         ConvertTo-Json $definition -Depth 100 > "$outputPath\$name.json"
     }
 }
+
+function Copy-Definitions {
+    param (
+        [switch] $useTargetProject,
+        [psobject] $definitions
+    )
+
+    $i = 0
+
+    foreach ($definition in $definitions) {
+        $progress = [math]::floor($i / $definitions.count * 100)
+
+        Write-Progress -Activity "Copying definitions..." -Status "$progress% complete ($($definition.name))" -PercentComplete $progress
+        $i++
+
+        Copy-Definition -useTargetProject:$useTargetProject -definition $definition
+    }
+
+    Write-Progress -Activity "Copying definitions..." -Completed
+}
+
+function Copy-Definition {
+    param (
+        [switch] $useTargetProject,
+        [psobject] $definition
+    )
+
+    New-Definition -useTargetProject:$useTargetProject `
+        -name $definition.name `
+        -path $definition.path `
+        -repositoryId $definition.repository.id `
+        -repositoryType $definition.repository.type `
+        -processType $definition.process.type `
+        -processYamlFilename $definition.process.yamlFilename `
+        -defaultAgentPoolName $definition.queue.name
+}
+
+#endregion Definitions
+#region Folders
+
+function Get-Folders {
+    param (
+        [switch] $useTargetProject,
+        [string] $path = ''
+    )
+
+    return $buildApiClient.GetFolders($useTargetProject, $path).value
+}
+
+#endregion Folders

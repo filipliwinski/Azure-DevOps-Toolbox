@@ -1,7 +1,7 @@
 # Copyright (c) Filip Liwiński
 # Licensed under the MIT License. See the LICENSE file in the project root for license information.
 
-$policyApiClient = [PolicyOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken, 
+$policyApiClient = [PolicyOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken,
                                     $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
 
 # # Branch policies
@@ -10,16 +10,93 @@ $policyApiClient = [PolicyOnpremApiClient]::new($tfsServiceHost, $organization, 
 # $requiredReviewersDisplayName = 'Required reviewers'
 # $minimumNumberOfReviewersDisplayName = 'Minimum number of reviewers'
 
+<#
+    .SYNOPSIS
+        Create a policy configuration.
+
+    .DESCRIPTION
+        Create a policy configuration.
+
+        Returns the created policy configuration.
+
+    .PARAMETER useTargetProject
+        Indicates whether to use the target project.
+        If specified, the target project is used.
+
+    .PARAMETER isEnabled
+        Indicates whether the policy is enabled.
+
+    .PARAMETER isBlocking
+        Indicates whether the policy is blocking.
+
+    .PARAMETER typeId
+        The policy configuration type id.
+
+    .PARAMETER settings
+        The policy configuration settings.
+
+    .OUTPUTS
+        System.Object. Returns a PolicyConfiguration object with the new policy.
+
+    .EXAMPLE
+        PS> New-PolicyConfiguration -isEnabled $true -isBlocking $true -typeId '0609b952-1397-4640-95ec-e00a01b2c241' -settings $settings
+        Creates a policy configuration with the provided properties in the current project.
+
+    .EXAMPLE
+        PS> New-PolicyConfiguration -useTargetProject
+        Creates a policy configuration with the provided properties in the target project.
+
+    .LINK
+        Underlying API endpoint: https://learn.microsoft.com/en-us/rest/api/azure/devops/policy/configurations/create
+#>
 function New-PolicyConfiguration {
     param (
         [switch] $useTargetProject,
-        [psobject] $policyConfiguration,
-        [int] $configurationId
+        [bool] $isEnabled,
+        [bool] $isBlocking,
+        [string] $typeId,
+        [psobject] $settings
     )
 
-    return $policyApiClient.CreatePolicyConfiguration($useTargetProject, $policyConfiguration, $configurationId)
+    $policyConfiguration = @{
+        isEnabled = $policy.isEnabled
+        isBlocking = $policy.isBlocking
+        type = @{
+            id = $policy.type.id
+        }
+        settings = $settings
+    }
+
+    return $policyApiClient.CreatePolicyConfiguration($useTargetProject, $policyConfiguration, $null)
 }
 
+<#
+    .SYNOPSIS
+        Gets a list of policy configurations in a project.
+
+    .DESCRIPTION
+        Gets a list of policy configurations in a project.
+
+        Returns the list of policy configurations.
+
+    .PARAMETER useTargetProject
+        Indicates whether to use the target project.
+        If specified, the target project is used.
+
+    .OUTPUTS
+        System.Array. Returns an array ofs PolicyConfiguration objects.
+
+    .EXAMPLE
+        PS> Get-PolicyConfiguration
+        Gets policy configurationsfrom the current project.
+
+    .EXAMPLE
+        PS> New-PolicyConfiguration -useTargetProject
+        Gets policy configurations from the target project.
+
+    .LINK
+        Underlying API endpoint: https://learn.microsoft.com/en-us/rest/api/azure/devops/policy/configurations/list
+#>
 function Get-PolicyConfigurations {
     param (
         [switch] $useTargetProject
@@ -30,6 +107,28 @@ function Get-PolicyConfigurations {
     return $policies.value
 }
 
+<#
+    .SYNOPSIS
+        Deletes a policy configuration with the provoded identifier.
+
+    .DESCRIPTION
+        Deletes a policy configuration with the provoded identifier.
+
+    .PARAMETER useTargetProject
+        Indicates whether to use the target project.
+        If specified, the target project is used.
+
+    .EXAMPLE
+        PS> Remove-PolicyConfiguration -id 5
+        Deletes the policy configurationsfrom with the provided id in the current project.
+
+    .EXAMPLE
+        PS> Remove-PolicyConfiguration -useTargetProject -id 5
+        Deletes the policy configurationsfrom with the provided id in the current project.
+
+    .LINK
+        Underlying API endpoint: https://learn.microsoft.com/en-us/rest/api/azure/devops/policy/configurations/delete
+#>
 function Remove-PolicyConfiguration {
     param (
         [switch] $useTargetProject,
@@ -69,7 +168,7 @@ function Get-PolicyTypes {
 #     )
 
 #     $rawPolicy = Get-PolicyConfigurationRaw -useTargetProject:$useTargetProject -repositoryName $repositoryId -refName $refName
-    
+
 #     if ("[]" -eq $rawPolicy) {
 #         return $null
 #     }
@@ -107,13 +206,13 @@ function Get-PolicyTypes {
 #     )
 
 #     $refs = $(Get-Refs -useTargetProject:$useTargetProject -repositoryId $repositoryId).value
-    
+
 #     $policies = @()
 #     $i = 1
 
 #     foreach ($ref in $refs) {
 #         $progress = [math]::floor($i / $refs.count * 100)
-        
+
 #         Write-Progress -Activity "Getting policies..." -Status "$progress% complete" -PercentComplete $progress
 #         $i++
 
