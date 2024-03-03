@@ -1,164 +1,176 @@
-# MIT License
+# Copyright (c) Filip Liwiński
+# Licensed under the MIT License. See the LICENSE file in the project root for license information.
 
-# Copyright (c) 2021 Filip Liwiński
+$policyApiClient = [PolicyOnpremApiClient]::new($tfsServiceHost, $organization, $projectName, $patToken, 
+                                    $targetTfsServiceHost, $targetOrganization, $targetProjectName, $targetPatToken)
 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+# # Branch policies
+# $commentRequirementsDisplayName = 'Comment requirements'
+# $requireMergeStrategyDisplayName = 'Require a merge strategy'
+# $requiredReviewersDisplayName = 'Required reviewers'
+# $minimumNumberOfReviewersDisplayName = 'Minimum number of reviewers'
 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
-. ".\git\Repositories.ps1"
-. ".\git\Refs.ps1"
-
-# Branch policies
-$commentRequirementsDisplayName = 'Comment requirements'
-$requireMergeStrategyDisplayName = 'Require a merge strategy'
-$requiredReviewersDisplayName = 'Required reviewers'
-$minimumNumberOfReviewersDisplayName = 'Minimum number of reviewers'
-
-function Get-PolicyConfigurationRaw {
+function New-PolicyConfiguration {
     param (
-        [string] $projectName,
-        [string] $repositoryName,
-        [string] $refName,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [switch] $useTargetProject,
+        [psobject] $policyConfiguration,
+        [int] $configurationId
     )
 
-    $repository = Get-RepositoryByName -projectName $projectName -apiClient $apiClient -repositoryName $repositoryName
-
-    $policy = $apiClient.GetPolicyConfiguration($projectName, $repository.id, $refName)
-
-    return $policy
+    return $policyApiClient.CreatePolicyConfiguration($useTargetProject, $policyConfiguration, $configurationId)
 }
 
-function Get-PolicyConfiguration {
+function Get-PolicyConfigurations {
     param (
-        [string] $projectName,
-        [string] $repositoryName,
-        [string] $refName,
-        [AzureDevOpsServicesAPIClient] $apiClient
+        [switch] $useTargetProject
     )
 
-    $rawPolicy = Get-PolicyConfigurationRaw -projectName $projectName -repositoryName $repositoryName -refName $refName -apiClient $apiClient
-    
-    if ("[]" -eq $rawPolicy) {
-        return $null
-    }
+    $policies = $policyApiClient.GetPolicyConfigurations($useTargetProject)
 
-    $commentRequirements = $rawPolicy | Where-Object { $_.type.displayName -eq $commentRequirementsDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
-    $requireMergeStrategy = $rawPolicy | Where-Object { $_.type.displayName -eq $requireMergeStrategyDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
-    $requiredReviewers = $rawPolicy | Where-Object { $_.type.displayName -eq $requiredReviewersDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
-    $minimumNumberOfReviewers = $rawPolicy | Where-Object { $_.type.displayName -eq $minimumNumberOfReviewersDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
-
-    if ($null -eq $commentRequirements -and
-        $null -eq $requireMergeStrategy -and
-        $null -eq $requiredReviewers -and
-        $null -eq $minimumNumberOfReviewers) {
-        return $null
-    }
-
-    $policy = @{
-        repository = $repositoryName
-        branch     = $refName
-        settings   = @{
-            $commentRequirementsDisplayName      = $commentRequirements
-            $requireMergeStrategyDisplayName     = $requireMergeStrategy
-            $requiredReviewersDisplayName        = $requiredReviewers
-            $minimumNumberOfReviewersDisplayName = $minimumNumberOfReviewers
-        }
-    }
-
-    return $policy
+    return $policies.value
 }
 
-function Get-RefsPolicyConfigurations {
-    param(
-        [string] $projectName,
-        [string] $repositoryName,
-        [AzureDevOpsServicesAPIClient] $apiClient
+function Remove-PolicyConfiguration {
+    param (
+        [switch] $useTargetProject,
+        [int] $id
     )
 
-    $repository = Get-RepositoryByName -projectName $projectName -repositoryName $repositoryName -apiClient $apiClient
+    $policyApiClient.DeletePolicyConfiguration($useTargetProject, $id)
+}
 
-    $refs = $(Get-Refs -projectName $projectName -repositoryId $repository.id -apiClient $apiClient).value
+function Get-PolicyTypes {
+    param (
+        [switch] $useTargetProject
+    )
+
+    $policyTypes = $policyApiClient.GetPolicyTypes($useTargetProject)
+
+    return $policyTypes.value
+}
+
+# function Get-PolicyConfigurationRaw {
+#     param (
+#         [switch] $useTargetProject,
+#         [string] $repositoryId,
+#         [string] $refName
+#     )
+
+#     $policy = $gitApiClient.GetPolicyConfiguration($useTargetProject, $repositoryId, $refName)
+
+#     return $policy
+# }
+
+# function Get-PolicyConfiguration {
+#     param (
+#         [switch] $useTargetProject,
+#         [string] $repositoryId,
+#         [string] $refName
+#     )
+
+#     $rawPolicy = Get-PolicyConfigurationRaw -useTargetProject:$useTargetProject -repositoryName $repositoryId -refName $refName
     
-    $policies = @()
-    $i = 1
+#     if ("[]" -eq $rawPolicy) {
+#         return $null
+#     }
 
-    foreach ($ref in $refs) {
-        $progress = [math]::floor($i / $refs.count * 100)
+#     $commentRequirements = $rawPolicy | Where-Object { $_.type.displayName -eq $commentRequirementsDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
+#     $requireMergeStrategy = $rawPolicy | Where-Object { $_.type.displayName -eq $requireMergeStrategyDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
+#     $requiredReviewers = $rawPolicy | Where-Object { $_.type.displayName -eq $requiredReviewersDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
+#     $minimumNumberOfReviewers = $rawPolicy | Where-Object { $_.type.displayName -eq $minimumNumberOfReviewersDisplayName } | Select-Object -ExpandProperty settings | Select-Object -Property * -ExcludeProperty Scope
+
+#     if ($null -eq $commentRequirements -and
+#         $null -eq $requireMergeStrategy -and
+#         $null -eq $requiredReviewers -and
+#         $null -eq $minimumNumberOfReviewers) {
+#         return $null
+#     }
+
+#     $policy = @{
+#         repositoryId = $repositoryId
+#         branch     = $refName
+#         settings   = @{
+#             $commentRequirementsDisplayName      = $commentRequirements
+#             $requireMergeStrategyDisplayName     = $requireMergeStrategy
+#             $requiredReviewersDisplayName        = $requiredReviewers
+#             $minimumNumberOfReviewersDisplayName = $minimumNumberOfReviewers
+#         }
+#     }
+
+#     return $policy
+# }
+
+# function Get-RefsPolicyConfigurations {
+#     param(
+#         [switch] $useTargetProject,
+#         [string] $repositoryId
+#     )
+
+#     $refs = $(Get-Refs -useTargetProject:$useTargetProject -repositoryId $repositoryId).value
+    
+#     $policies = @()
+#     $i = 1
+
+#     foreach ($ref in $refs) {
+#         $progress = [math]::floor($i / $refs.count * 100)
         
-        Write-Progress -Activity "Getting policies..." -Status "$progress% Complete" -PercentComplete $progress
-        $i++
+#         Write-Progress -Activity "Getting policies..." -Status "$progress% complete" -PercentComplete $progress
+#         $i++
 
-        $policy = Get-PolicyConfiguration -projectName $projectName -repositoryName $repositoryName -refName $ref.name -apiClient $apiClient
+#         $policy = Get-PolicyConfiguration -useTargetProject:$useTargetProject -repositoryId $repositoryId -refName $ref.name
 
-        if ($null -ne $policy) {
-            $policies += $policy
-        }
-    }
+#         if ($null -ne $policy) {
+#             $policies += $policy
+#         }
+#     }
 
-    return $policies
-}
+#     return $policies
+# }
 
-function Export-PolicyConfiguration {
-    param (
-        [string] $projectName,
-        [string] $repositoryName,
-        [string] $refName,
-        [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient
-    )
+# function Export-PolicyConfiguration {
+#     param (
+#         [switch] $useTargetProject,
+#         [string] $repositoryId,
+#         [string] $refName,
+#         [string] $outputPath = ''
+#     )
 
-    if ($null -eq $outputPath -or '' -eq $outputPath) {
-        $outputPath = "."
-    }
+#     if ($null -eq $outputPath -or '' -eq $outputPath) {
+#         $outputPath = "."
+#     }
 
-    $policy = Get-PolicyConfiguration -projectName $projectName -repositoryName $repositoryName -refName $refName -apiClient $apiClient
+#     $policy = Get-PolicyConfiguration -useTargetProject:$useTargetProject -repositoryId $repositoryId -refName $refName
 
-    if ($null -ne $policy) {
-        New-Item -ItemType Directory -Force -Path "$outputPath\$repositoryName" | Out-Null
+#     if ($null -ne $policy) {
+#         New-Item -ItemType Directory -Force -Path "$outputPath\$repositoryId" | Out-Null
 
-        ConvertTo-Json $policy -Depth 100 > "$outputPath\$repositoryName\$refName.json"
-    }
-}
+#         ConvertTo-Json $policy -Depth 100 > "$outputPath\$repositoryId\$refName.json"
+#     }
+# }
 
-function Export-PolicyConfigurationRaw {
-    param (
-        [string] $projectName,
-        [string] $repositoryName,
-        [string] $refName,
-        [string] $outputPath = '',
-        [AzureDevOpsServicesAPIClient] $apiClient
-    )
+# function Export-PolicyConfigurationRaw {
+#     param (
+#         [switch] $useTargetProject,
+#         [string] $repositoryId,
+#         [string] $refName,
+#         [string] $outputPath = ''
+#     )
 
-    if ($null -eq $outputPath -or '' -eq $outputPath) {
-        $outputPath = "."
-    }
+#     if ($null -eq $outputPath -or '' -eq $outputPath) {
+#         $outputPath = "."
+#     }
 
-    $policy = Get-PolicyConfigurationRaw -projectName $projectName -repositoryName $repositoryName -refName $refName -apiClient $apiClient
+#     $policy = Get-PolicyConfigurationRaw -useTargetProject:$useTargetProject -repositoryId $repositoryId -refName $refName
 
-    if ($policy.count -gt 0) {
-        New-Item -ItemType Directory -Force -Path "$outputPath\$repositoryName" | Out-Null
+#     if ($policy.count -gt 0) {
+#         New-Item -ItemType Directory -Force -Path "$outputPath\$repositoryId" | Out-Null
 
-        ConvertTo-Json $policy -Depth 100 > "$outputPath\$repositoryName\$refName.raw.json"
-    }
-    else {
-        return ConvertTo-Json $policy -Depth 100
-    }
-}
+#         ConvertTo-Json $policy -Depth 100 > "$outputPath\$repositoryId\$refName.raw.json"
+#     }
+#     else {
+#         return ConvertTo-Json $policy -Depth 100
+#     }
+# }
 
-function Compare-PolicyConfigurations {}
+# # TODO
+# function Compare-PolicyConfigurations {}
