@@ -1,4 +1,4 @@
-# This file was auto generated. Do not edit.
+# This file was auto-generated. Do not edit.
 
 using module .\..\..\..\src\AzureDevOpsApiClient.psm1
 
@@ -20,17 +20,17 @@ class PolicyApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "policy/configurations", $this.apiVersion, $null)
     }
 
-    # Get a policy configuration by its ID.
-    [PSObject] GetPolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {
-        return $this.Request($useTargetProject, 'get', "policy/configurations/$configurationId", $this.apiVersion, $null)
-    }
-     # Update a policy configuration by its ID.
+    # Update a policy configuration by its ID.
     [PSObject] UpdatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $configurationId) {
         return $this.Request($useTargetProject, 'put', "policy/configurations/$configurationId", $this.apiVersion, $body)
     }
      # Delete a policy configuration by its ID.
     [PSObject] DeletePolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {
         return $this.Request($useTargetProject, 'delete', "policy/configurations/$configurationId", $this.apiVersion, $null)
+    }
+     # Get a policy configuration by its ID.
+    [PSObject] GetPolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {
+        return $this.Request($useTargetProject, 'get', "policy/configurations/$configurationId", $this.apiVersion, $null)
     }
 
     # Retrieve all revisions for a given policy.

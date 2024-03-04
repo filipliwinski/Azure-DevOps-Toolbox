@@ -1,4 +1,4 @@
-# This file was auto generated. Do not edit.
+# This file was auto-generated. Do not edit.
 
 using module "./azure-devops-toolbox/api_clients/azure-devops-server-7.0/BuildOnpremApiClient.psm1"
 using module "./azure-devops-toolbox/api_clients/azure-devops-server-7.0/CoreOnpremApiClient.psm1"

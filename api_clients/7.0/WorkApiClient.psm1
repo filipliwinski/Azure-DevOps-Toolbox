@@ -1,4 +1,4 @@
-# This file was auto generated. Do not edit.
+# This file was auto-generated. Do not edit.
 
 using module .\..\..\..\src\AzureDevOpsApiClient.psm1
 
@@ -35,17 +35,17 @@ class WorkApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "work/plans", $this.apiVersion, $null)
     }
 
-    # Get the information for the specified plan
-    [PSObject] GetPlan([bool] $useTargetProject, [string] $id) {
-        return $this.Request($useTargetProject, 'get', "work/plans/$id", $this.apiVersion, $null)
-    }
-     # Update the information for the specified plan
+    # Update the information for the specified plan
     [PSObject] UpdatePlan([bool] $useTargetProject, [PSObject] $body, [string] $id) {
         return $this.Request($useTargetProject, 'put', "work/plans/$id", $this.apiVersion, $body)
     }
      # Delete the specified plan
     [PSObject] DeletePlan([bool] $useTargetProject, [string] $id) {
         return $this.Request($useTargetProject, 'delete', "work/plans/$id", $this.apiVersion, $null)
+    }
+     # Get the information for the specified plan
+    [PSObject] GetPlan([bool] $useTargetProject, [string] $id) {
+        return $this.Request($useTargetProject, 'get', "work/plans/$id", $this.apiVersion, $null)
     }
 
     # Get Delivery View Data

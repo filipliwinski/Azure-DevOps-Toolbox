@@ -1,4 +1,4 @@
-# This file was auto generated. Do not edit.
+# This file was auto-generated. Do not edit.
 
 using module .\..\..\..\src\AzureDevOpsApiClient.psm1
 
@@ -20,17 +20,17 @@ class PipelinesChecksOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "pipelines/checks/configurations", $this.apiVersion, $null)
     }
 
-    # Get Check configuration by Id
-    [PSObject] GetCheckConfiguration([bool] $useTargetProject, [int] $id) {
-        return $this.Request($useTargetProject, 'get', "pipelines/checks/configurations/$id", $this.apiVersion, $null)
-    }
-     # Update check configuration
+    # Update check configuration
     [PSObject] UpdateCheckConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $id) {
         return $this.Request($useTargetProject, 'patch', "pipelines/checks/configurations/$id", $this.apiVersion, $body)
     }
      # Delete check configuration by id
     [PSObject] DeleteCheckConfiguration([bool] $useTargetProject, [int] $id) {
         return $this.Request($useTargetProject, 'delete', "pipelines/checks/configurations/$id", $this.apiVersion, $null)
+    }
+     # Get Check configuration by Id
+    [PSObject] GetCheckConfiguration([bool] $useTargetProject, [int] $id) {
+        return $this.Request($useTargetProject, 'get', "pipelines/checks/configurations/$id", $this.apiVersion, $null)
     }
 
     # Get check configurations for multiple resources by resource type and id.

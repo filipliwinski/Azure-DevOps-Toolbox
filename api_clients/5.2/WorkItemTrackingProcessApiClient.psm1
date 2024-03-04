@@ -1,4 +1,4 @@
-# This file was auto generated. Do not edit.
+# This file was auto-generated. Do not edit.
 
 using module .\..\..\..\src\AzureDevOpsApiClient.psm1
 
@@ -29,17 +29,17 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "work/processes/$processId/behaviors", $this.apiVersion, $null)
     }
 
-    # Returns a behavior of the process.
-    [PSObject] GetProcessBehavior([bool] $useTargetProject, [string] $processId, [string] $behaviorRefName) {
-        return $this.Request($useTargetProject, 'get', "work/processes/$processId/behaviors/$behaviorRefName", $this.apiVersion, $null)
-    }
-     # Replaces a behavior in the process.
+    # Replaces a behavior in the process.
     [PSObject] UpdateProcessBehavior([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $behaviorRefName) {
         return $this.Request($useTargetProject, 'put', "work/processes/$processId/behaviors/$behaviorRefName", $this.apiVersion, $body)
     }
      # Removes a behavior in the process.
     [PSObject] DeleteProcessBehavior([bool] $useTargetProject, [string] $processId, [string] $behaviorRefName) {
         return $this.Request($useTargetProject, 'delete', "work/processes/$processId/behaviors/$behaviorRefName", $this.apiVersion, $null)
+    }
+     # Returns a behavior of the process.
+    [PSObject] GetProcessBehavior([bool] $useTargetProject, [string] $processId, [string] $behaviorRefName) {
+        return $this.Request($useTargetProject, 'get', "work/processes/$processId/behaviors/$behaviorRefName", $this.apiVersion, $null)
     }
 
     # Creates a work item type in the process.
@@ -51,17 +51,17 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "work/processes/$processId/workitemtypes", $this.apiVersion, $null)
     }
 
-    # Returns a single work item type in a process.
-    [PSObject] GetProcessWorkItemType([bool] $useTargetProject, [string] $processId, [string] $witRefName) {
-        return $this.Request($useTargetProject, 'get', "work/processes/$processId/workitemtypes/$witRefName", $this.apiVersion, $null)
-    }
-     # Updates a work item type of the process.
+    # Updates a work item type of the process.
     [PSObject] UpdateProcessWorkItemType([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName) {
         return $this.Request($useTargetProject, 'patch', "work/processes/$processId/workitemtypes/$witRefName", $this.apiVersion, $body)
     }
      # Removes a work itewm type in the process.
     [PSObject] DeleteProcessWorkItemType([bool] $useTargetProject, [string] $processId, [string] $witRefName) {
         return $this.Request($useTargetProject, 'delete', "work/processes/$processId/workitemtypes/$witRefName", $this.apiVersion, $null)
+    }
+     # Returns a single work item type in a process.
+    [PSObject] GetProcessWorkItemType([bool] $useTargetProject, [string] $processId, [string] $witRefName) {
+        return $this.Request($useTargetProject, 'get', "work/processes/$processId/workitemtypes/$witRefName", $this.apiVersion, $null)
     }
 
     # Adds a field to a work item type.
@@ -73,17 +73,17 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/fields", $this.apiVersion, $null)
     }
 
-    # Removes a field from a work item type. Does not permanently delete the field.
-    [PSObject] RemoveWorkItemTypeField([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $fieldRefName) {
-        return $this.Request($useTargetProject, 'delete', "work/processes/$processId/workItemTypes/$witRefName/fields/$fieldRefName", $this.apiVersion, $null)
-    }
-     # Updates a field in a work item type.
+    # Updates a field in a work item type.
     [PSObject] UpdateWorkItemTypeField([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $fieldRefName) {
         return $this.Request($useTargetProject, 'patch', "work/processes/$processId/workItemTypes/$witRefName/fields/$fieldRefName", $this.apiVersion, $body)
     }
      # Returns a field in a work item type.
     [PSObject] GetWorkItemTypeField([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $fieldRefName) {
         return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/fields/$fieldRefName", $this.apiVersion, $null)
+    }
+     # Removes a field from a work item type. Does not permanently delete the field.
+    [PSObject] RemoveWorkItemTypeField([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $fieldRefName) {
+        return $this.Request($useTargetProject, 'delete', "work/processes/$processId/workItemTypes/$witRefName/fields/$fieldRefName", $this.apiVersion, $null)
     }
 
     # Gets the form layout.
@@ -96,17 +96,17 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "work/processes/$processId/workItemTypes/$witRefName/layout/groups/$groupId/controls", $this.apiVersion, $body)
     }
 
-    # Removes a control from the work item form.
-    [PSObject] RemoveControlFromGroup([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $groupId, [string] $controlId) {
-        return $this.Request($useTargetProject, 'delete', "work/processes/$processId/workItemTypes/$witRefName/layout/groups/$groupId/controls/$controlId", $this.apiVersion, $null)
-    }
-     # Updates a control on the work item form.
+    # Updates a control on the work item form.
     [PSObject] UpdateControl([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $groupId, [string] $controlId) {
         return $this.Request($useTargetProject, 'patch', "work/processes/$processId/workItemTypes/$witRefName/layout/groups/$groupId/controls/$controlId", $this.apiVersion, $body)
     }
      # Moves a control to a specified group.
     [PSObject] MoveControlToGroup([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $groupId, [string] $controlId) {
         return $this.Request($useTargetProject, 'put', "work/processes/$processId/workItemTypes/$witRefName/layout/groups/$groupId/controls/$controlId", $this.apiVersion, $body)
+    }
+     # Removes a control from the work item form.
+    [PSObject] RemoveControlFromGroup([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $groupId, [string] $controlId) {
+        return $this.Request($useTargetProject, 'delete', "work/processes/$processId/workItemTypes/$witRefName/layout/groups/$groupId/controls/$controlId", $this.apiVersion, $null)
     }
 
     # Adds a page to the work item form.
@@ -128,17 +128,17 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "work/processes/$processId/workItemTypes/$witRefName/layout/pages/$pageId/sections/$sectionId/groups", $this.apiVersion, $body)
     }
 
-    # Removes a group from the work item form.
-    [PSObject] RemoveGroup([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $pageId, [string] $sectionId, [string] $groupId) {
-        return $this.Request($useTargetProject, 'delete', "work/processes/$processId/workItemTypes/$witRefName/layout/pages/$pageId/sections/$sectionId/groups/$groupId", $this.apiVersion, $null)
-    }
-     # Updates a group in the work item form.
+    # Updates a group in the work item form.
     [PSObject] UpdateGroup([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $pageId, [string] $sectionId, [string] $groupId) {
         return $this.Request($useTargetProject, 'patch', "work/processes/$processId/workItemTypes/$witRefName/layout/pages/$pageId/sections/$sectionId/groups/$groupId", $this.apiVersion, $body)
     }
      # Moves a group to a different section.
     [PSObject] MoveGroupToSection([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $pageId, [string] $sectionId, [string] $groupId) {
         return $this.Request($useTargetProject, 'put', "work/processes/$processId/workItemTypes/$witRefName/layout/pages/$pageId/sections/$sectionId/groups/$groupId", $this.apiVersion, $body)
+    }
+     # Removes a group from the work item form.
+    [PSObject] RemoveGroup([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $pageId, [string] $sectionId, [string] $groupId) {
+        return $this.Request($useTargetProject, 'delete', "work/processes/$processId/workItemTypes/$witRefName/layout/pages/$pageId/sections/$sectionId/groups/$groupId", $this.apiVersion, $null)
     }
 
     # Gets edited system controls for a work item type in a process. To get all system controls (base + edited) use layout API(s)
@@ -164,17 +164,17 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/rules", $this.apiVersion, $null)
     }
 
-    # Returns a single rule in the work item type of the process.
-    [PSObject] GetProcessWorkItemTypeRule([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $ruleId) {
-        return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/rules/$ruleId", $this.apiVersion, $null)
-    }
-     # Updates a rule in the work item type of the process.
+    # Updates a rule in the work item type of the process.
     [PSObject] UpdateProcessWorkItemTypeRule([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $ruleId) {
         return $this.Request($useTargetProject, 'put', "work/processes/$processId/workItemTypes/$witRefName/rules/$ruleId", $this.apiVersion, $body)
     }
      # Removes a rule from the work item type in the process.
     [PSObject] DeleteProcessWorkItemTypeRule([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $ruleId) {
         return $this.Request($useTargetProject, 'delete', "work/processes/$processId/workItemTypes/$witRefName/rules/$ruleId", $this.apiVersion, $null)
+    }
+     # Returns a single rule in the work item type of the process.
+    [PSObject] GetProcessWorkItemTypeRule([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $ruleId) {
+        return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/rules/$ruleId", $this.apiVersion, $null)
     }
 
     # Creates a state definition in the work item type of the process.
@@ -186,11 +186,7 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/states", $this.apiVersion, $null)
     }
 
-    # Returns a single state definition in a work item type of the process.
-    [PSObject] GetStateDefinition([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $stateId) {
-        return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/states/$stateId", $this.apiVersion, $null)
-    }
-     # Updates a given state definition in the work item type of the process.
+    # Updates a given state definition in the work item type of the process.
     [PSObject] UpdateStateDefinition([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $stateId) {
         return $this.Request($useTargetProject, 'patch', "work/processes/$processId/workItemTypes/$witRefName/states/$stateId", $this.apiVersion, $body)
     }
@@ -202,18 +198,22 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
     [PSObject] DeleteStateDefinition([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $stateId) {
         return $this.Request($useTargetProject, 'delete', "work/processes/$processId/workItemTypes/$witRefName/states/$stateId", $this.apiVersion, $null)
     }
-
-    # Returns a list of all behaviors for the work item type of the process.
-    [PSObject] GetBehaviorsForWorkItemType([bool] $useTargetProject, [string] $processId, [string] $witRefNameForBehaviors) {
-        return $this.Request($useTargetProject, 'get', "work/processes/$processId/workitemtypesbehaviors/$witRefNameForBehaviors/behaviors", $this.apiVersion, $null)
+     # Returns a single state definition in a work item type of the process.
+    [PSObject] GetStateDefinition([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $stateId) {
+        return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/states/$stateId", $this.apiVersion, $null)
     }
-     # Updates a behavior for the work item type of the process.
+
+    # Updates a behavior for the work item type of the process.
     [PSObject] UpdateBehaviorToWorkItemType([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefNameForBehaviors) {
         return $this.Request($useTargetProject, 'patch', "work/processes/$processId/workitemtypesbehaviors/$witRefNameForBehaviors/behaviors", $this.apiVersion, $body)
     }
      # Adds a behavior to the work item type of the process.
     [PSObject] AddBehaviorToWorkItemType([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefNameForBehaviors) {
         return $this.Request($useTargetProject, 'post', "work/processes/$processId/workitemtypesbehaviors/$witRefNameForBehaviors/behaviors", $this.apiVersion, $body)
+    }
+     # Returns a list of all behaviors for the work item type of the process.
+    [PSObject] GetBehaviorsForWorkItemType([bool] $useTargetProject, [string] $processId, [string] $witRefNameForBehaviors) {
+        return $this.Request($useTargetProject, 'get', "work/processes/$processId/workitemtypesbehaviors/$witRefNameForBehaviors/behaviors", $this.apiVersion, $null)
     }
 
     # Returns a behavior for the work item type of the process.
@@ -225,17 +225,17 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'delete', "work/processes/$processId/workitemtypesbehaviors/$witRefNameForBehaviors/behaviors/$behaviorRefName", $this.apiVersion, $null)
     }
 
-    # Edit a process of a specific ID.
-    [PSObject] EditProcess([bool] $useTargetProject, [PSObject] $body, [string] $processTypeId) {
-        return $this.Request($useTargetProject, 'patch', "work/processes/$processTypeId", $this.apiVersion, $body)
-    }
-     # Get a single process of a specified ID.
+    # Get a single process of a specified ID.
     [PSObject] GetProcessByItsId([bool] $useTargetProject, [string] $processTypeId) {
         return $this.Request($useTargetProject, 'get', "work/processes/$processTypeId", $this.apiVersion, $null)
     }
      # Removes a process of a specific ID.
     [PSObject] DeleteProcessById([bool] $useTargetProject, [string] $processTypeId) {
         return $this.Request($useTargetProject, 'delete', "work/processes/$processTypeId", $this.apiVersion, $null)
+    }
+     # Edit a process of a specific ID.
+    [PSObject] EditProcess([bool] $useTargetProject, [PSObject] $body, [string] $processTypeId) {
+        return $this.Request($useTargetProject, 'patch', "work/processes/$processTypeId", $this.apiVersion, $body)
     }
 
     # Creates a picklist.
@@ -247,17 +247,17 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "work/processes/lists", $this.apiVersion, $null)
     }
 
-    # Returns a picklist.
-    [PSObject] GetList([bool] $useTargetProject, [string] $listId) {
-        return $this.Request($useTargetProject, 'get', "work/processes/lists/$listId", $this.apiVersion, $null)
-    }
-     # Updates a list.
+    # Updates a list.
     [PSObject] UpdateList([bool] $useTargetProject, [PSObject] $body, [string] $listId) {
         return $this.Request($useTargetProject, 'put', "work/processes/lists/$listId", $this.apiVersion, $body)
     }
      # Removes a picklist.
     [PSObject] DeleteList([bool] $useTargetProject, [string] $listId) {
         return $this.Request($useTargetProject, 'delete', "work/processes/lists/$listId", $this.apiVersion, $null)
+    }
+     # Returns a picklist.
+    [PSObject] GetList([bool] $useTargetProject, [string] $listId) {
+        return $this.Request($useTargetProject, 'get', "work/processes/lists/$listId", $this.apiVersion, $null)
     }
 
 }

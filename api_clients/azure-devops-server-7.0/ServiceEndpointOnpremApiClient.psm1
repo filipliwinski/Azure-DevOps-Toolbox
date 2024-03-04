@@ -1,4 +1,4 @@
-# This file was auto generated. Do not edit.
+# This file was auto-generated. Do not edit.
 
 using module .\..\..\..\src\AzureDevOpsApiClient.psm1
 
@@ -20,17 +20,17 @@ class ServiceEndpointOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'put', "serviceendpoint/endpoints", $this.apiVersion, $body)
     }
 
-    # Share service endpoint across projects
-    [PSObject] ShareServiceEndpoint([bool] $useTargetProject, [PSObject] $body, [string] $endpointId) {
-        return $this.Request($useTargetProject, 'patch', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $body)
-    }
-     # Update the service endpoint
+    # Update the service endpoint
     [PSObject] UpdateServiceEndpoint([bool] $useTargetProject, [PSObject] $body, [string] $endpointId) {
         return $this.Request($useTargetProject, 'put', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $body)
     }
      # Delete a service endpoint
     [PSObject] DeleteServiceEndpoint([bool] $useTargetProject, [string] $endpointId) {
         return $this.Request($useTargetProject, 'delete', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $null)
+    }
+     # Share service endpoint across projects
+    [PSObject] ShareServiceEndpoint([bool] $useTargetProject, [PSObject] $body, [string] $endpointId) {
+        return $this.Request($useTargetProject, 'patch', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $body)
     }
 
     # Get service endpoint types.

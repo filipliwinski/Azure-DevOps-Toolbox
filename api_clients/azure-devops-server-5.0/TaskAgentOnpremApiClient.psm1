@@ -1,4 +1,4 @@
-# This file was auto generated. Do not edit.
+# This file was auto-generated. Do not edit.
 
 using module .\..\..\..\src\AzureDevOpsApiClient.psm1
 
@@ -48,17 +48,17 @@ class TaskAgentOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "distributedtask/deploymentgroups", $this.apiVersion, $null)
     }
 
-    # Get a deployment group by its ID.
-    [PSObject] GetDeploymentGroup([bool] $useTargetProject, [int] $deploymentGroupId) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/deploymentgroups/$deploymentGroupId", $this.apiVersion, $null)
-    }
-     # Update a deployment group.
+    # Update a deployment group.
     [PSObject] UpdateDeploymentGroup([bool] $useTargetProject, [PSObject] $body, [int] $deploymentGroupId) {
         return $this.Request($useTargetProject, 'patch', "distributedtask/deploymentgroups/$deploymentGroupId", $this.apiVersion, $body)
     }
      # Delete a deployment group.
     [PSObject] DeleteDeploymentGroup([bool] $useTargetProject, [int] $deploymentGroupId) {
         return $this.Request($useTargetProject, 'delete', "distributedtask/deploymentgroups/$deploymentGroupId", $this.apiVersion, $null)
+    }
+     # Get a deployment group by its ID.
+    [PSObject] GetDeploymentGroup([bool] $useTargetProject, [int] $deploymentGroupId) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/deploymentgroups/$deploymentGroupId", $this.apiVersion, $null)
     }
 
     # Get a list of deployment targets in a deployment group.
@@ -84,17 +84,17 @@ class TaskAgentOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "distributedtask/taskgroups", $this.apiVersion, $body)
     }
 
-    # List task groups.
-    [PSObject] GetTaskGroups([bool] $useTargetProject, [string] $taskGroupId) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/taskgroups/$taskGroupId", $this.apiVersion, $null)
-    }
-     # Update a task group.
+    # Update a task group.
     [PSObject] UpdateTaskGroup([bool] $useTargetProject, [PSObject] $body, [string] $taskGroupId) {
         return $this.Request($useTargetProject, 'put', "distributedtask/taskgroups/$taskGroupId", $this.apiVersion, $body)
     }
      # Delete a task group.
     [PSObject] DeleteTaskGroup([bool] $useTargetProject, [string] $taskGroupId) {
         return $this.Request($useTargetProject, 'delete', "distributedtask/taskgroups/$taskGroupId", $this.apiVersion, $null)
+    }
+     # List task groups.
+    [PSObject] GetTaskGroups([bool] $useTargetProject, [string] $taskGroupId) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/taskgroups/$taskGroupId", $this.apiVersion, $null)
     }
 
     # Add a variable group.
@@ -106,17 +106,17 @@ class TaskAgentOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "distributedtask/variablegroups", $this.apiVersion, $null)
     }
 
-    # Get a variable group.
-    [PSObject] GetVariableGroup([bool] $useTargetProject, [int] $groupId) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/variablegroups/$groupId", $this.apiVersion, $null)
-    }
-     # Update a variable group.
+    # Update a variable group.
     [PSObject] UpdateVariableGroup([bool] $useTargetProject, [PSObject] $body, [int] $groupId) {
         return $this.Request($useTargetProject, 'put', "distributedtask/variablegroups/$groupId", $this.apiVersion, $body)
     }
      # Delete a variable group
     [PSObject] DeleteVariableGroup([bool] $useTargetProject, [int] $groupId) {
         return $this.Request($useTargetProject, 'delete', "distributedtask/variablegroups/$groupId", $this.apiVersion, $null)
+    }
+     # Get a variable group.
+    [PSObject] GetVariableGroup([bool] $useTargetProject, [int] $groupId) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/variablegroups/$groupId", $this.apiVersion, $null)
     }
 
 }

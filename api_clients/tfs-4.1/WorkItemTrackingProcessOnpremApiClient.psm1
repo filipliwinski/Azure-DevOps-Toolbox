@@ -1,4 +1,4 @@
-# This file was auto generated. Do not edit.
+# This file was auto-generated. Do not edit.
 
 using module .\..\..\..\src\AzureDevOpsApiClient.psm1
 
@@ -59,17 +59,17 @@ class WorkItemTrackingProcessOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/rules", $this.apiVersion, $null)
     }
 
-    # Returns a single rule in the work item type of the process.
-    [PSObject] GetWorkItemTypeRule([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $ruleId) {
-        return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/rules/$ruleId", $this.apiVersion, $null)
-    }
-     # Updates a rule in the work item type of the process.
+    # Updates a rule in the work item type of the process.
     [PSObject] UpdateWorkItemTypeRule([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $ruleId) {
         return $this.Request($useTargetProject, 'put', "work/processes/$processId/workItemTypes/$witRefName/rules/$ruleId", $this.apiVersion, $body)
     }
      # Removes a rule from the work item type in the process.
     [PSObject] DeleteWorkItemTypeRule([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $ruleId) {
         return $this.Request($useTargetProject, 'delete', "work/processes/$processId/workItemTypes/$witRefName/rules/$ruleId", $this.apiVersion, $null)
+    }
+     # Returns a single rule in the work item type of the process.
+    [PSObject] GetWorkItemTypeRule([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $ruleId) {
+        return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/rules/$ruleId", $this.apiVersion, $null)
     }
 
     # Returns a list of all state definitions in a work item type of the process.
@@ -82,17 +82,17 @@ class WorkItemTrackingProcessOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/states/$stateId", $this.apiVersion, $null)
     }
 
-    # Returns a single process of a specified ID.
-    [PSObject] GetProcessById([bool] $useTargetProject, [string] $processTypeId) {
-        return $this.Request($useTargetProject, 'get', "work/processes/$processTypeId", $this.apiVersion, $null)
-    }
-     # Updates a process of a specific ID.
+    # Updates a process of a specific ID.
     [PSObject] UpdateProcess([bool] $useTargetProject, [PSObject] $body, [string] $processTypeId) {
         return $this.Request($useTargetProject, 'patch', "work/processes/$processTypeId", $this.apiVersion, $body)
     }
      # Removes a process of a specific ID.
     [PSObject] DeleteProcess([bool] $useTargetProject, [string] $processTypeId) {
         return $this.Request($useTargetProject, 'delete', "work/processes/$processTypeId", $this.apiVersion, $null)
+    }
+     # Returns a single process of a specified ID.
+    [PSObject] GetProcessById([bool] $useTargetProject, [string] $processTypeId) {
+        return $this.Request($useTargetProject, 'get', "work/processes/$processTypeId", $this.apiVersion, $null)
     }
 
 }

@@ -1,4 +1,4 @@
-# This file was auto generated. Do not edit.
+# This file was auto-generated. Do not edit.
 
 using module .\..\..\..\src\AzureDevOpsApiClient.psm1
 
@@ -21,17 +21,17 @@ class ReleaseApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'patch', "release/approvals/$approvalId", $this.apiVersion, $body)
     }
 
-    # Get a list of release definitions.
-    [PSObject] GetReleaseDefinitions([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "release/definitions", $this.apiVersion, $null)
-    }
-     # Update a release definition.
+    # Update a release definition.
     [PSObject] UpdateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'put', "release/definitions", $this.apiVersion, $body)
     }
      # Create a release definition
     [PSObject] CreateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "release/definitions", $this.apiVersion, $body)
+    }
+     # Get a list of release definitions.
+    [PSObject] GetReleaseDefinitions([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "release/definitions", $this.apiVersion, $null)
     }
 
     # Delete a release definition.
@@ -58,11 +58,7 @@ class ReleaseApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "release/deployments", $this.apiVersion, $null)
     }
 
-    # Deletes a definition folder for given folder name and path and all it's existing definitions.
-    [PSObject] DeleteFolder([bool] $useTargetProject, [string] $path) {
-        return $this.Request($useTargetProject, 'delete', "release/folders/$path", $this.apiVersion, $null)
-    }
-     # Updates an existing folder at given existing path.
+    # Updates an existing folder at given existing path.
     [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
         return $this.Request($useTargetProject, 'patch', "release/folders/$path", $this.apiVersion, $body)
     }
@@ -73,6 +69,10 @@ class ReleaseApiClient : AzureDevOpsApiClient {
      # This method is no longer supported. Use CreateFolder with folder parameter API.
     [PSObject] CreateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
         return $this.Request($useTargetProject, 'post', "release/folders/$path", $this.apiVersion, $body)
+    }
+     # Deletes a definition folder for given folder name and path and all it's existing definitions.
+    [PSObject] DeleteFolder([bool] $useTargetProject, [string] $path) {
+        return $this.Request($useTargetProject, 'delete', "release/folders/$path", $this.apiVersion, $null)
     }
 
     # Updates the gate for a deployment.
@@ -89,17 +89,17 @@ class ReleaseApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "release/releases", $this.apiVersion, $body)
     }
 
-    # Update a complete release object.
-    [PSObject] UpdateRelease([bool] $useTargetProject, [PSObject] $body, [int] $releaseId) {
-        return $this.Request($useTargetProject, 'put', "release/releases/$releaseId", $this.apiVersion, $body)
-    }
-     # Update few properties of a release.
+    # Update few properties of a release.
     [PSObject] UpdateReleaseResource([bool] $useTargetProject, [PSObject] $body, [int] $releaseId) {
         return $this.Request($useTargetProject, 'patch', "release/releases/$releaseId", $this.apiVersion, $body)
     }
      # Get release for a given revision number.
     [PSObject] GetReleaseRevision([bool] $useTargetProject, [int] $releaseId) {
         return $this.Request($useTargetProject, 'get', "release/releases/$releaseId", $this.apiVersion, $null)
+    }
+     # Update a complete release object.
+    [PSObject] UpdateRelease([bool] $useTargetProject, [PSObject] $body, [int] $releaseId) {
+        return $this.Request($useTargetProject, 'put', "release/releases/$releaseId", $this.apiVersion, $body)
     }
 
     # Get a release environment.

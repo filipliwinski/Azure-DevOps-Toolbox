@@ -1,4 +1,4 @@
-# This file was auto generated. Do not edit.
+# This file was auto-generated. Do not edit.
 
 using module .\..\..\..\src\AzureDevOpsApiClient.psm1
 
@@ -20,17 +20,17 @@ class MavenApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feed/maven/groups/$groupId/artifacts/$artifactId/versions/$version", $this.apiVersion, $null)
     }
 
-    # Get information about a package version in the recycle bin.
-    [PSObject] GetPackageVersionMetadataFromRecycleBin([bool] $useTargetProject, [string] $feed, [string] $groupId, [string] $artifactId, [string] $version) {
-        return $this.Request($useTargetProject, 'get', "packaging/feeds/$feed/maven/RecycleBin/groups/$groupId/artifacts/$artifactId/versions/$version", $this.apiVersion, $null)
-    }
-     # Restore a package version from the recycle bin to its associated feed.
+    # Restore a package version from the recycle bin to its associated feed.
     [PSObject] RestorePackageVersionFromRecycleBin([bool] $useTargetProject, [PSObject] $body, [string] $feed, [string] $groupId, [string] $artifactId, [string] $version) {
         return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feed/maven/RecycleBin/groups/$groupId/artifacts/$artifactId/versions/$version", $this.apiVersion, $body)
     }
      # Permanently delete a package from a feed's recycle bin.
     [PSObject] DeletePackageVersionFromRecycleBin([bool] $useTargetProject, [string] $feed, [string] $groupId, [string] $artifactId, [string] $version) {
         return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feed/maven/RecycleBin/groups/$groupId/artifacts/$artifactId/versions/$version", $this.apiVersion, $null)
+    }
+     # Get information about a package version in the recycle bin.
+    [PSObject] GetPackageVersionMetadataFromRecycleBin([bool] $useTargetProject, [string] $feed, [string] $groupId, [string] $artifactId, [string] $version) {
+        return $this.Request($useTargetProject, 'get', "packaging/feeds/$feed/maven/RecycleBin/groups/$groupId/artifacts/$artifactId/versions/$version", $this.apiVersion, $null)
     }
 
 }

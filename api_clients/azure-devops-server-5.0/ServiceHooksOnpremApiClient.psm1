@@ -1,4 +1,4 @@
-# This file was auto generated. Do not edit.
+# This file was auto-generated. Do not edit.
 
 using module .\..\..\..\src\AzureDevOpsApiClient.psm1
 
@@ -75,17 +75,17 @@ class ServiceHooksOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "hooks/subscriptions", $this.apiVersion, $null)
     }
 
-    # Get a specific service hooks subscription.
-    [PSObject] GetSubscription([bool] $useTargetProject, [string] $subscriptionId) {
-        return $this.Request($useTargetProject, 'get', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $null)
-    }
-     # Update a subscription. <param name="subscriptionId">ID for a subscription that you wish to update.</param>
+    # Update a subscription. <param name="subscriptionId">ID for a subscription that you wish to update.</param>
     [PSObject] ReplaceSubscription([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'put', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $body)
     }
      # Delete a specific service hooks subscription.
     [PSObject] DeleteSubscription([bool] $useTargetProject, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'delete', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $null)
+    }
+     # Get a specific service hooks subscription.
+    [PSObject] GetSubscription([bool] $useTargetProject, [string] $subscriptionId) {
+        return $this.Request($useTargetProject, 'get', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $null)
     }
 
     # empty

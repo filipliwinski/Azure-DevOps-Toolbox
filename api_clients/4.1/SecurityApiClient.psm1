@@ -1,4 +1,4 @@
-# This file was auto generated. Do not edit.
+# This file was auto-generated. Do not edit.
 
 using module .\..\..\..\src\AzureDevOpsApiClient.psm1
 
@@ -20,17 +20,17 @@ class SecurityApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "accesscontrolentries/$securityNamespaceId", $this.apiVersion, $body)
     }
 
-    # Remove access control lists under the specfied security namespace.
-    [PSObject] RemoveAccessControlLists([bool] $useTargetProject, [string] $securityNamespaceId) {
-        return $this.Request($useTargetProject, 'delete', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $null)
-    }
-     # Create one or more access control lists.
+    # Create one or more access control lists.
     [PSObject] SetAccessControlLists([bool] $useTargetProject, [PSObject] $body, [string] $securityNamespaceId) {
         return $this.Request($useTargetProject, 'post', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $body)
     }
      # Return a list of access control lists for the specified security namespace and token.
     [PSObject] QueryAccessControlLists([bool] $useTargetProject, [string] $securityNamespaceId) {
         return $this.Request($useTargetProject, 'get', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $null)
+    }
+     # Remove access control lists under the specfied security namespace.
+    [PSObject] RemoveAccessControlLists([bool] $useTargetProject, [string] $securityNamespaceId) {
+        return $this.Request($useTargetProject, 'delete', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $null)
     }
 
     # Evaluates whether the caller has the specified permissions on the specified set of security tokens.

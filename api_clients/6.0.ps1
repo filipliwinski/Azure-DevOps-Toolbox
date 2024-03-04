@@ -1,4 +1,4 @@
-# This file was auto generated. Do not edit.
+# This file was auto-generated. Do not edit.
 
 using module "./azure-devops-toolbox/api_clients/6.0/AccountsApiClient.psm1"
 using module "./azure-devops-toolbox/api_clients/6.0/AuditApiClient.psm1"
