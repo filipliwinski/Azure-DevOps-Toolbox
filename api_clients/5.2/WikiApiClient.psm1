@@ -11,26 +11,26 @@ class WikiApiClient : AzureDevOpsApiClient {
     WikiApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Creates the wiki resource.
-    [PSObject] CreateWiki([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "wiki/wikis", $this.apiVersion, $body)
-    }
-     # Gets all wikis in a project or collection.
+    # Gets all wikis in a project or collection.
     [PSObject] GetAllWikis([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "wiki/wikis", $this.apiVersion, $null)
     }
+     # Creates the wiki resource.
+    [PSObject] CreateWiki([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "wiki/wikis", $this.apiVersion, $body)
+    }
 
-    # Updates the wiki corresponding to the wiki ID or wiki name provided using the update parameters.
-    [PSObject] UpdateWiki([bool] $useTargetProject, [PSObject] $body, [string] $wikiIdentifier) {
-        return $this.Request($useTargetProject, 'patch', "wiki/wikis/$wikiIdentifier", $this.apiVersion, $body)
+    # Gets the wiki corresponding to the wiki ID or wiki name provided.
+    [PSObject] GetWiki([bool] $useTargetProject, [string] $wikiIdentifier) {
+        return $this.Request($useTargetProject, 'get', "wiki/wikis/$wikiIdentifier", $this.apiVersion, $null)
     }
      # Deletes the wiki corresponding to the wiki ID or wiki name provided.
     [PSObject] DeleteWiki([bool] $useTargetProject, [string] $wikiIdentifier) {
         return $this.Request($useTargetProject, 'delete', "wiki/wikis/$wikiIdentifier", $this.apiVersion, $null)
     }
-     # Gets the wiki corresponding to the wiki ID or wiki name provided.
-    [PSObject] GetWiki([bool] $useTargetProject, [string] $wikiIdentifier) {
-        return $this.Request($useTargetProject, 'get', "wiki/wikis/$wikiIdentifier", $this.apiVersion, $null)
+     # Updates the wiki corresponding to the wiki ID or wiki name provided using the update parameters.
+    [PSObject] UpdateWiki([bool] $useTargetProject, [PSObject] $body, [string] $wikiIdentifier) {
+        return $this.Request($useTargetProject, 'patch', "wiki/wikis/$wikiIdentifier", $this.apiVersion, $body)
     }
 
     # Creates an attachment in the wiki.
@@ -43,30 +43,30 @@ class WikiApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "wiki/wikis/$wikiIdentifier/pagemoves", $this.apiVersion, $body)
     }
 
-    # Gets metadata or content of the wiki page for the provided path. Content negotiation is done based on the `Accept` header sent in the request.
-    [PSObject] GetPage([bool] $useTargetProject, [string] $wikiIdentifier) {
-        return $this.Request($useTargetProject, 'get', "wiki/wikis/$wikiIdentifier/pages", $this.apiVersion, $null)
+    # Deletes a wiki page.
+    [PSObject] DeletePage([bool] $useTargetProject, [string] $wikiIdentifier) {
+        return $this.Request($useTargetProject, 'delete', "wiki/wikis/$wikiIdentifier/pages", $this.apiVersion, $null)
     }
      # Creates or edits a wiki page.
     [PSObject] CreateOrUpdatePage([bool] $useTargetProject, [PSObject] $body, [string] $wikiIdentifier) {
         return $this.Request($useTargetProject, 'put', "wiki/wikis/$wikiIdentifier/pages", $this.apiVersion, $body)
     }
-     # Deletes a wiki page.
-    [PSObject] DeletePage([bool] $useTargetProject, [string] $wikiIdentifier) {
-        return $this.Request($useTargetProject, 'delete', "wiki/wikis/$wikiIdentifier/pages", $this.apiVersion, $null)
+     # Gets metadata or content of the wiki page for the provided path. Content negotiation is done based on the `Accept` header sent in the request.
+    [PSObject] GetPage([bool] $useTargetProject, [string] $wikiIdentifier) {
+        return $this.Request($useTargetProject, 'get', "wiki/wikis/$wikiIdentifier/pages", $this.apiVersion, $null)
     }
 
-    # Edits a wiki page.
-    [PSObject] UpdatePageById([bool] $useTargetProject, [PSObject] $body, [string] $wikiIdentifier, [int] $id) {
-        return $this.Request($useTargetProject, 'patch', "wiki/wikis/$wikiIdentifier/pages/$id", $this.apiVersion, $body)
+    # Gets metadata or content of the wiki page for the provided page id. Content negotiation is done based on the `Accept` header sent in the request.
+    [PSObject] GetPageById([bool] $useTargetProject, [string] $wikiIdentifier, [int] $id) {
+        return $this.Request($useTargetProject, 'get', "wiki/wikis/$wikiIdentifier/pages/$id", $this.apiVersion, $null)
     }
      # Deletes a wiki page.
     [PSObject] DeletePageById([bool] $useTargetProject, [string] $wikiIdentifier, [int] $id) {
         return $this.Request($useTargetProject, 'delete', "wiki/wikis/$wikiIdentifier/pages/$id", $this.apiVersion, $null)
     }
-     # Gets metadata or content of the wiki page for the provided page id. Content negotiation is done based on the `Accept` header sent in the request.
-    [PSObject] GetPageById([bool] $useTargetProject, [string] $wikiIdentifier, [int] $id) {
-        return $this.Request($useTargetProject, 'get', "wiki/wikis/$wikiIdentifier/pages/$id", $this.apiVersion, $null)
+     # Edits a wiki page.
+    [PSObject] UpdatePageById([bool] $useTargetProject, [PSObject] $body, [string] $wikiIdentifier, [int] $id) {
+        return $this.Request($useTargetProject, 'patch', "wiki/wikis/$wikiIdentifier/pages/$id", $this.apiVersion, $body)
     }
 
 }
