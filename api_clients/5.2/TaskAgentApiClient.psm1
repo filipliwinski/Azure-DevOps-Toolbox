@@ -12,21 +12,21 @@ class TaskAgentApiClient : AzureDevOpsApiClient {
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
     # empty
-    [PSObject] GetAgentClouds([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/agentclouds", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] AddAgentCloud([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "distributedtask/agentclouds", $this.apiVersion, $body)
     }
+     # empty
+    [PSObject] GetAgentClouds([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/agentclouds", $this.apiVersion, $null)
+    }
 
     # empty
-    [PSObject] GetAgentCloud([bool] $useTargetProject, [int] $agentCloudId) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/agentclouds/$agentCloudId", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] DeleteAgentCloud([bool] $useTargetProject, [int] $agentCloudId) {
         return $this.Request($useTargetProject, 'delete', "distributedtask/agentclouds/$agentCloudId", $this.apiVersion, $null)
+    }
+     # empty
+    [PSObject] GetAgentCloud([bool] $useTargetProject, [int] $agentCloudId) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/agentclouds/$agentCloudId", $this.apiVersion, $null)
     }
 
     # empty
@@ -39,70 +39,70 @@ class TaskAgentApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "distributedtask/agentcloudtypes", $this.apiVersion, $null)
     }
 
-    # Get a list of agent pools.
-    [PSObject] GetAgentPoolsByIds([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/pools", $this.apiVersion, $null)
-    }
-     # Create an agent pool.
+    # Create an agent pool.
     [PSObject] AddAgentPool([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "distributedtask/pools", $this.apiVersion, $body)
     }
+     # Get a list of agent pools.
+    [PSObject] GetAgentPoolsByIds([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/pools", $this.apiVersion, $null)
+    }
 
-    # Get information about an agent pool.
-    [PSObject] GetAgentPool([bool] $useTargetProject, [int] $poolId) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/pools/$poolId", $this.apiVersion, $null)
+    # Update properties on an agent pool
+    [PSObject] UpdateAgentPool([bool] $useTargetProject, [PSObject] $body, [int] $poolId) {
+        return $this.Request($useTargetProject, 'patch', "distributedtask/pools/$poolId", $this.apiVersion, $body)
     }
      # Delete an agent pool.
     [PSObject] DeleteAgentPool([bool] $useTargetProject, [int] $poolId) {
         return $this.Request($useTargetProject, 'delete', "distributedtask/pools/$poolId", $this.apiVersion, $null)
     }
-     # Update properties on an agent pool
-    [PSObject] UpdateAgentPool([bool] $useTargetProject, [PSObject] $body, [int] $poolId) {
-        return $this.Request($useTargetProject, 'patch', "distributedtask/pools/$poolId", $this.apiVersion, $body)
+     # Get information about an agent pool.
+    [PSObject] GetAgentPool([bool] $useTargetProject, [int] $poolId) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/pools/$poolId", $this.apiVersion, $null)
     }
 
-    # Get a list of agents.
-    [PSObject] GetAgents([bool] $useTargetProject, [int] $poolId) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/pools/$poolId/agents", $this.apiVersion, $null)
-    }
-     # Adds an agent to a pool.  You probably don't want to call this endpoint directly. Instead, [configure an agent](https://docs.microsoft.com/azure/devops/pipelines/agents/agents) using the agent download package.
+    # Adds an agent to a pool.  You probably don't want to call this endpoint directly. Instead, [configure an agent](https://docs.microsoft.com/azure/devops/pipelines/agents/agents) using the agent download package.
     [PSObject] AddAgent([bool] $useTargetProject, [PSObject] $body, [int] $poolId) {
         return $this.Request($useTargetProject, 'post', "distributedtask/pools/$poolId/agents", $this.apiVersion, $body)
     }
-
-    # Get information about an agent.
-    [PSObject] GetAgent([bool] $useTargetProject, [int] $poolId, [int] $agentId) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $null)
+     # Get a list of agents.
+    [PSObject] GetAgents([bool] $useTargetProject, [int] $poolId) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/pools/$poolId/agents", $this.apiVersion, $null)
     }
-     # Update agent details.
+
+    # Update agent details.
     [PSObject] UpdateAgent([bool] $useTargetProject, [PSObject] $body, [int] $poolId, [int] $agentId) {
         return $this.Request($useTargetProject, 'patch', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $body)
-    }
-     # Delete an agent.  You probably don't want to call this endpoint directly. Instead, [use the agent configuration script](https://docs.microsoft.com/azure/devops/pipelines/agents/agents) to remove an agent from your organization.
-    [PSObject] DeleteAgent([bool] $useTargetProject, [int] $poolId, [int] $agentId) {
-        return $this.Request($useTargetProject, 'delete', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $null)
     }
      # Replace an agent.  You probably don't want to call this endpoint directly. Instead, [use the agent configuration script](https://docs.microsoft.com/azure/devops/pipelines/agents/agents) to remove and reconfigure an agent from your organization.
     [PSObject] ReplaceAgent([bool] $useTargetProject, [PSObject] $body, [int] $poolId, [int] $agentId) {
         return $this.Request($useTargetProject, 'put', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $body)
     }
+     # Delete an agent.  You probably don't want to call this endpoint directly. Instead, [use the agent configuration script](https://docs.microsoft.com/azure/devops/pipelines/agents/agents) to remove an agent from your organization.
+    [PSObject] DeleteAgent([bool] $useTargetProject, [int] $poolId, [int] $agentId) {
+        return $this.Request($useTargetProject, 'delete', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $null)
+    }
+     # Get information about an agent.
+    [PSObject] GetAgent([bool] $useTargetProject, [int] $poolId, [int] $agentId) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $null)
+    }
 
     # Add a variable group.
-    [PSObject] ShareVariableGroup([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'patch', "distributedtask/variablegroups", $this.apiVersion, $body)
-    }
-     # Add a variable group.
     [PSObject] AddVariableGroup([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "distributedtask/variablegroups", $this.apiVersion, $body)
     }
-
-    # Update a variable group.
-    [PSObject] UpdateVariableGroup([bool] $useTargetProject, [PSObject] $body, [int] $groupId) {
-        return $this.Request($useTargetProject, 'put', "distributedtask/variablegroups/$groupId", $this.apiVersion, $body)
+     # Add a variable group.
+    [PSObject] ShareVariableGroup([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'patch', "distributedtask/variablegroups", $this.apiVersion, $body)
     }
-     # Delete a variable group
+
+    # Delete a variable group
     [PSObject] DeleteVariableGroup([bool] $useTargetProject, [int] $groupId) {
         return $this.Request($useTargetProject, 'delete', "distributedtask/variablegroups/$groupId", $this.apiVersion, $null)
+    }
+     # Update a variable group.
+    [PSObject] UpdateVariableGroup([bool] $useTargetProject, [PSObject] $body, [int] $groupId) {
+        return $this.Request($useTargetProject, 'put', "distributedtask/variablegroups/$groupId", $this.apiVersion, $body)
     }
 
     # GET the Yaml schema used for Yaml file validation.
@@ -110,62 +110,62 @@ class TaskAgentApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "distributedtask/yamlschema", $this.apiVersion, $null)
     }
 
-    # Get a list of deployment groups by name or IDs.
-    [PSObject] GetDeploymentGroups([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/deploymentgroups", $this.apiVersion, $null)
-    }
-     # Create a deployment group.
+    # Create a deployment group.
     [PSObject] AddDeploymentGroup([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "distributedtask/deploymentgroups", $this.apiVersion, $body)
     }
+     # Get a list of deployment groups by name or IDs.
+    [PSObject] GetDeploymentGroups([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/deploymentgroups", $this.apiVersion, $null)
+    }
 
-    # Get a deployment group by its ID.
-    [PSObject] GetDeploymentGroup([bool] $useTargetProject, [int] $deploymentGroupId) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/deploymentgroups/$deploymentGroupId", $this.apiVersion, $null)
+    # Update a deployment group.
+    [PSObject] UpdateDeploymentGroup([bool] $useTargetProject, [PSObject] $body, [int] $deploymentGroupId) {
+        return $this.Request($useTargetProject, 'patch', "distributedtask/deploymentgroups/$deploymentGroupId", $this.apiVersion, $body)
     }
      # Delete a deployment group.
     [PSObject] DeleteDeploymentGroup([bool] $useTargetProject, [int] $deploymentGroupId) {
         return $this.Request($useTargetProject, 'delete', "distributedtask/deploymentgroups/$deploymentGroupId", $this.apiVersion, $null)
     }
-     # Update a deployment group.
-    [PSObject] UpdateDeploymentGroup([bool] $useTargetProject, [PSObject] $body, [int] $deploymentGroupId) {
-        return $this.Request($useTargetProject, 'patch', "distributedtask/deploymentgroups/$deploymentGroupId", $this.apiVersion, $body)
+     # Get a deployment group by its ID.
+    [PSObject] GetDeploymentGroup([bool] $useTargetProject, [int] $deploymentGroupId) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/deploymentgroups/$deploymentGroupId", $this.apiVersion, $null)
     }
 
-    # Update tags of a list of deployment targets in a deployment group.
-    [PSObject] UpdateDeploymentTargets([bool] $useTargetProject, [PSObject] $body, [int] $deploymentGroupId) {
-        return $this.Request($useTargetProject, 'patch', "distributedtask/deploymentgroups/$deploymentGroupId/targets", $this.apiVersion, $body)
-    }
-     # Get a list of deployment targets in a deployment group.
+    # Get a list of deployment targets in a deployment group.
     [PSObject] GetDeploymentTargets([bool] $useTargetProject, [int] $deploymentGroupId) {
         return $this.Request($useTargetProject, 'get', "distributedtask/deploymentgroups/$deploymentGroupId/targets", $this.apiVersion, $null)
     }
-
-    # Get a deployment target by its ID in a deployment group
-    [PSObject] GetDeploymentTarget([bool] $useTargetProject, [int] $deploymentGroupId, [int] $targetId) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/deploymentgroups/$deploymentGroupId/targets/$targetId", $this.apiVersion, $null)
+     # Update tags of a list of deployment targets in a deployment group.
+    [PSObject] UpdateDeploymentTargets([bool] $useTargetProject, [PSObject] $body, [int] $deploymentGroupId) {
+        return $this.Request($useTargetProject, 'patch', "distributedtask/deploymentgroups/$deploymentGroupId/targets", $this.apiVersion, $body)
     }
-     # Delete a deployment target in a deployment group. This deletes the agent from associated deployment pool too.
+
+    # Delete a deployment target in a deployment group. This deletes the agent from associated deployment pool too.
     [PSObject] DeleteDeploymentTarget([bool] $useTargetProject, [int] $deploymentGroupId, [int] $targetId) {
         return $this.Request($useTargetProject, 'delete', "distributedtask/deploymentgroups/$deploymentGroupId/targets/$targetId", $this.apiVersion, $null)
     }
-
-    # Get a list of agent queues by pool ids
-    [PSObject] GetAgentQueuesForPools([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/queues", $this.apiVersion, $null)
+     # Get a deployment target by its ID in a deployment group
+    [PSObject] GetDeploymentTarget([bool] $useTargetProject, [int] $deploymentGroupId, [int] $targetId) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/deploymentgroups/$deploymentGroupId/targets/$targetId", $this.apiVersion, $null)
     }
-     # Create a new agent queue to connect a project to an agent pool.
+
+    # Create a new agent queue to connect a project to an agent pool.
     [PSObject] AddAgentQueue([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "distributedtask/queues", $this.apiVersion, $body)
     }
-
-    # Get information about an agent queue.
-    [PSObject] GetAgentQueue([bool] $useTargetProject, [int] $queueId) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/queues/$queueId", $this.apiVersion, $null)
+     # Get a list of agent queues by pool ids
+    [PSObject] GetAgentQueuesForPools([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/queues", $this.apiVersion, $null)
     }
-     # Removes an agent queue from a project.
+
+    # Removes an agent queue from a project.
     [PSObject] DeleteAgentQueue([bool] $useTargetProject, [int] $queueId) {
         return $this.Request($useTargetProject, 'delete', "distributedtask/queues/$queueId", $this.apiVersion, $null)
+    }
+     # Get information about an agent queue.
+    [PSObject] GetAgentQueue([bool] $useTargetProject, [int] $queueId) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/queues/$queueId", $this.apiVersion, $null)
     }
 
     # Create a task group.
@@ -173,17 +173,17 @@ class TaskAgentApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "distributedtask/taskgroups", $this.apiVersion, $body)
     }
 
-    # List task groups.
-    [PSObject] GetTaskGroups([bool] $useTargetProject, [string] $taskGroupId) {
-        return $this.Request($useTargetProject, 'get', "distributedtask/taskgroups/$taskGroupId", $this.apiVersion, $null)
+    # Update a task group.
+    [PSObject] UpdateTaskGroup([bool] $useTargetProject, [PSObject] $body, [string] $taskGroupId) {
+        return $this.Request($useTargetProject, 'put', "distributedtask/taskgroups/$taskGroupId", $this.apiVersion, $body)
     }
      # Delete a task group.
     [PSObject] DeleteTaskGroup([bool] $useTargetProject, [string] $taskGroupId) {
         return $this.Request($useTargetProject, 'delete', "distributedtask/taskgroups/$taskGroupId", $this.apiVersion, $null)
     }
-     # Update a task group.
-    [PSObject] UpdateTaskGroup([bool] $useTargetProject, [PSObject] $body, [string] $taskGroupId) {
-        return $this.Request($useTargetProject, 'put', "distributedtask/taskgroups/$taskGroupId", $this.apiVersion, $body)
+     # List task groups.
+    [PSObject] GetTaskGroups([bool] $useTargetProject, [string] $taskGroupId) {
+        return $this.Request($useTargetProject, 'get', "distributedtask/taskgroups/$taskGroupId", $this.apiVersion, $null)
     }
 
     # Get variable groups by ids.

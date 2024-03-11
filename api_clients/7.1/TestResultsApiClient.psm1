@@ -26,26 +26,26 @@ class TestResultsApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "testresults/runs/$runId/results/$resultId/testlog", $this.apiVersion, $null)
     }
 
-    # Create empty file for a result and Get Sas uri for the file
-    [PSObject] TestLogStoreEndpointDetailsForResult([bool] $useTargetProject, [int] $runId, [int] $resultId) {
-        return $this.Request($useTargetProject, 'post', "testresults/runs/$runId/results/$resultId/testlogstoreendpoint", $this.apiVersion, $null)
-    }
-     # Get SAS Uri of a test results attachment
+    # Get SAS Uri of a test results attachment
     [PSObject] GetTestLogStoreEndpointDetailsForResultLog([bool] $useTargetProject, [int] $runId, [int] $resultId) {
         return $this.Request($useTargetProject, 'get', "testresults/runs/$runId/results/$resultId/testlogstoreendpoint", $this.apiVersion, $null)
     }
+     # Create empty file for a result and Get Sas uri for the file
+    [PSObject] TestLogStoreEndpointDetailsForResult([bool] $useTargetProject, [int] $runId, [int] $resultId) {
+        return $this.Request($useTargetProject, 'post', "testresults/runs/$runId/results/$resultId/testlogstoreendpoint", $this.apiVersion, $null)
+    }
 
-    # Deletes the attachment with the specified filename for the specified runId from the LogStore.
-    [PSObject] DeleteTestRunLogStoreAttachment([bool] $useTargetProject, [int] $runId) {
-        return $this.Request($useTargetProject, 'delete', "testresults/runs/$runId/testattachments", $this.apiVersion, $null)
+    # Returns a list of attachments for the specified runId from the LogStore.
+    [PSObject] GetTestRunLogStoreAttachments([bool] $useTargetProject, [int] $runId) {
+        return $this.Request($useTargetProject, 'get', "testresults/runs/$runId/testattachments", $this.apiVersion, $null)
     }
      # Creates an attachment in the LogStore for the specified runId.
     [PSObject] CreateTestRunLogStoreAttachment([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
         return $this.Request($useTargetProject, 'post', "testresults/runs/$runId/testattachments", $this.apiVersion, $body)
     }
-     # Returns a list of attachments for the specified runId from the LogStore.
-    [PSObject] GetTestRunLogStoreAttachments([bool] $useTargetProject, [int] $runId) {
-        return $this.Request($useTargetProject, 'get', "testresults/runs/$runId/testattachments", $this.apiVersion, $null)
+     # Deletes the attachment with the specified filename for the specified runId from the LogStore.
+    [PSObject] DeleteTestRunLogStoreAttachment([bool] $useTargetProject, [int] $runId) {
+        return $this.Request($useTargetProject, 'delete', "testresults/runs/$runId/testattachments", $this.apiVersion, $null)
     }
 
     # Get list of test run attachments reference
@@ -53,22 +53,22 @@ class TestResultsApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "testresults/runs/$runId/testlog", $this.apiVersion, $null)
     }
 
-    # Create empty file for a run and Get Sas uri for the file
-    [PSObject] TestLogStoreEndpointDetailsForRun([bool] $useTargetProject, [int] $runId) {
-        return $this.Request($useTargetProject, 'post', "testresults/runs/$runId/testlogstoreendpoint", $this.apiVersion, $null)
-    }
-     # Get SAS Uri of a test run attachment
+    # Get SAS Uri of a test run attachment
     [PSObject] GetTestLogStoreEndpointDetailsForRunLog([bool] $useTargetProject, [int] $runId) {
         return $this.Request($useTargetProject, 'get', "testresults/runs/$runId/testlogstoreendpoint", $this.apiVersion, $null)
     }
-
-    # Returns the list of test failure types.
-    [PSObject] GetFailureTypes([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "testresults/testfailuretype", $this.apiVersion, $null)
+     # Create empty file for a run and Get Sas uri for the file
+    [PSObject] TestLogStoreEndpointDetailsForRun([bool] $useTargetProject, [int] $runId) {
+        return $this.Request($useTargetProject, 'post', "testresults/runs/$runId/testlogstoreendpoint", $this.apiVersion, $null)
     }
-     # Creates a new test failure type
+
+    # Creates a new test failure type
     [PSObject] CreateFailureType([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "testresults/testfailuretype", $this.apiVersion, $body)
+    }
+     # Returns the list of test failure types.
+    [PSObject] GetFailureTypes([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "testresults/testfailuretype", $this.apiVersion, $null)
     }
 
     # Deletes a test failure type with specified failureTypeId
