@@ -124,7 +124,7 @@ function Get-PolicyConfigurations {
 
     .EXAMPLE
         PS> Remove-PolicyConfiguration -useTargetProject -id 5
-        Deletes the policy configurationsfrom with the provided id in the current project.
+        Deletes the policy configurationsfrom with the provided id in the target project.
 
     .LINK
         Underlying API endpoint: https://learn.microsoft.com/en-us/rest/api/azure/devops/policy/configurations/delete
@@ -138,6 +138,28 @@ function Remove-PolicyConfiguration {
     $policyApiClient.DeletePolicyConfiguration($useTargetProject, $id)
 }
 
+<#
+    .SYNOPSIS
+        Retrieves all available policy types.
+
+    .DESCRIPTION
+        Retrieves all available policy types.
+
+    .PARAMETER useTargetProject
+        Indicates whether to use the target project.
+        If specified, the target project is used.
+
+    .EXAMPLE
+        PS> Get-PolicyTypes
+        Gets all available policy types in the current project.
+
+    .EXAMPLE
+        PS> Get-PolicyTypes -useTargetProject
+        Gets all available policy types in the target project.
+
+    .LINK
+        Underlying API endpoint: https://learn.microsoft.com/en-us/rest/api/azure/devops/policy/types/list
+#>
 function Get-PolicyTypes {
     param (
         [switch] $useTargetProject
