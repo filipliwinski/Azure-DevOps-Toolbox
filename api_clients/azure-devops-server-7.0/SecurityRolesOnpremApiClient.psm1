@@ -15,13 +15,13 @@ class SecurityRolesOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] SetRoleAssignments([bool] $useTargetProject, [PSObject] $body, [string] $scopeId, [string] $resourceId) {
         return $this.Request($useTargetProject, 'put', "securityroles/scopes/$scopeId/roleassignments/resources/$resourceId", $this.apiVersion, $body)
     }
-     # Get role assignments for the resource
-    [PSObject] GetRoleAssignments([bool] $useTargetProject, [string] $scopeId, [string] $resourceId) {
-        return $this.Request($useTargetProject, 'get', "securityroles/scopes/$scopeId/roleassignments/resources/$resourceId", $this.apiVersion, $null)
-    }
      # empty
     [PSObject] RemoveRoleAssignments([bool] $useTargetProject, [PSObject] $body, [string] $scopeId, [string] $resourceId) {
         return $this.Request($useTargetProject, 'patch', "securityroles/scopes/$scopeId/roleassignments/resources/$resourceId", $this.apiVersion, $body)
+    }
+     # Get role assignments for the resource
+    [PSObject] GetRoleAssignments([bool] $useTargetProject, [string] $scopeId, [string] $resourceId) {
+        return $this.Request($useTargetProject, 'get', "securityroles/scopes/$scopeId/roleassignments/resources/$resourceId", $this.apiVersion, $null)
     }
 
     # Set role assignment on a resource

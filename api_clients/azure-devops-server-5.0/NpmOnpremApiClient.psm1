@@ -15,26 +15,26 @@ class NpmOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateScopedPackageAsync([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $packageScope, [string] $unscopedPackageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId/npm/@$packageScope/$unscopedPackageName/versions/$packageVersion", $this.apiVersion, $body)
     }
-     # Get information about a scoped package version (such as @scope/name).
-    [PSObject] GetScopedPackageInfoAsync([bool] $useTargetProject, [string] $feedId, [string] $packageScope, [string] $unscopedPackageName, [string] $packageVersion) {
-        return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId/npm/@$packageScope/$unscopedPackageName/versions/$packageVersion", $this.apiVersion, $null)
-    }
      # Unpublish a scoped package version (such as @scope/name).
     [PSObject] UnpublishScopedPackageAsync([bool] $useTargetProject, [string] $feedId, [string] $packageScope, [string] $unscopedPackageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId/npm/@$packageScope/$unscopedPackageName/versions/$packageVersion", $this.apiVersion, $null)
+    }
+     # Get information about a scoped package version (such as @scope/name).
+    [PSObject] GetScopedPackageInfoAsync([bool] $useTargetProject, [string] $feedId, [string] $packageScope, [string] $unscopedPackageName, [string] $packageVersion) {
+        return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId/npm/@$packageScope/$unscopedPackageName/versions/$packageVersion", $this.apiVersion, $null)
     }
 
     # empty
     [PSObject] UpdatePackageAsync([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $packageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId/npm/$packageName/versions/$packageVersion", $this.apiVersion, $body)
     }
-     # Get information about an unscoped package version.
-    [PSObject] GetPackageInfoAsync([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
-        return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId/npm/$packageName/versions/$packageVersion", $this.apiVersion, $null)
-    }
      # Unpublish an unscoped package version.
     [PSObject] UnpublishPackageAsync([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId/npm/$packageName/versions/$packageVersion", $this.apiVersion, $null)
+    }
+     # Get information about an unscoped package version.
+    [PSObject] GetPackageInfoAsync([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
+        return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId/npm/$packageName/versions/$packageVersion", $this.apiVersion, $null)
     }
 
     # empty
@@ -66,26 +66,26 @@ class NpmOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] RestoreScopedPackageVersionFromRecycleBin([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $packageScope, [string] $unscopedPackageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId/npm/RecycleBin/packages/@$packageScope/$unscopedPackageName/versions/$packageVersion", $this.apiVersion, $body)
     }
-     # Delete a package version with an npm scope from the recycle bin.
-    [PSObject] DeleteScopedPackageVersionFromRecycleBin([bool] $useTargetProject, [string] $feedId, [string] $packageScope, [string] $unscopedPackageName, [string] $packageVersion) {
-        return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId/npm/RecycleBin/packages/@$packageScope/$unscopedPackageName/versions/$packageVersion", $this.apiVersion, $null)
-    }
      # Get information about a scoped package version in the recycle bin.
     [PSObject] GetScopedPackageVersionMetadataFromRecycleBin([bool] $useTargetProject, [string] $feedId, [string] $packageScope, [string] $unscopedPackageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId/npm/RecycleBin/packages/@$packageScope/$unscopedPackageName/versions/$packageVersion", $this.apiVersion, $null)
+    }
+     # Delete a package version with an npm scope from the recycle bin.
+    [PSObject] DeleteScopedPackageVersionFromRecycleBin([bool] $useTargetProject, [string] $feedId, [string] $packageScope, [string] $unscopedPackageName, [string] $packageVersion) {
+        return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId/npm/RecycleBin/packages/@$packageScope/$unscopedPackageName/versions/$packageVersion", $this.apiVersion, $null)
     }
 
     # Restore a package version without an npm scope from the recycle bin to its feed.
     [PSObject] RestorePackageVersionFromRecycleBin([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $packageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId/npm/RecycleBin/packages/$packageName/versions/$packageVersion", $this.apiVersion, $body)
     }
-     # Delete a package version without an npm scope from the recycle bin.
-    [PSObject] DeletePackageVersionFromRecycleBin([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
-        return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId/npm/RecycleBin/packages/$packageName/versions/$packageVersion", $this.apiVersion, $null)
-    }
      # Get information about an unscoped package version in the recycle bin.
     [PSObject] GetPackageVersionMetadataFromRecycleBin([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId/npm/RecycleBin/packages/$packageName/versions/$packageVersion", $this.apiVersion, $null)
+    }
+     # Delete a package version without an npm scope from the recycle bin.
+    [PSObject] DeletePackageVersionFromRecycleBin([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
+        return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId/npm/RecycleBin/packages/$packageName/versions/$packageVersion", $this.apiVersion, $null)
     }
 
 }

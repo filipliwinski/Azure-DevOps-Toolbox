@@ -39,13 +39,13 @@ class TestResultsApiClient : AzureDevOpsApiClient {
     [PSObject] GetTestRunLogStoreAttachments([bool] $useTargetProject, [int] $runId) {
         return $this.Request($useTargetProject, 'get', "testresults/runs/$runId/testattachments", $this.apiVersion, $null)
     }
-     # Creates an attachment in the LogStore for the specified runId.
-    [PSObject] CreateTestRunLogStoreAttachment([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
-        return $this.Request($useTargetProject, 'post', "testresults/runs/$runId/testattachments", $this.apiVersion, $body)
-    }
      # Deletes the attachment with the specified filename for the specified runId from the LogStore.
     [PSObject] DeleteTestRunLogStoreAttachment([bool] $useTargetProject, [int] $runId) {
         return $this.Request($useTargetProject, 'delete', "testresults/runs/$runId/testattachments", $this.apiVersion, $null)
+    }
+     # Creates an attachment in the LogStore for the specified runId.
+    [PSObject] CreateTestRunLogStoreAttachment([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
+        return $this.Request($useTargetProject, 'post', "testresults/runs/$runId/testattachments", $this.apiVersion, $body)
     }
 
     # Get list of test run attachments reference

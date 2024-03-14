@@ -15,13 +15,13 @@ class PyPiApiApiClient : AzureDevOpsApiClient {
     [PSObject] UpdatePackageVersion([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $packageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId/pypi/packages/$packageName/versions/$packageVersion", $this.apiVersion, $body)
     }
-     # Delete a package version, moving it to the recycle bin.
-    [PSObject] DeletePackageVersion([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
-        return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId/pypi/packages/$packageName/versions/$packageVersion", $this.apiVersion, $null)
-    }
      # Get information about a package version.
     [PSObject] GetPackageVersion([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId/pypi/packages/$packageName/versions/$packageVersion", $this.apiVersion, $null)
+    }
+     # Delete a package version, moving it to the recycle bin.
+    [PSObject] DeletePackageVersion([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
+        return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId/pypi/packages/$packageName/versions/$packageVersion", $this.apiVersion, $null)
     }
 
     # Download a python package file directly. This API is intended for manual UI download options, not for programmatic access and scripting.
@@ -33,13 +33,13 @@ class PyPiApiApiClient : AzureDevOpsApiClient {
     [PSObject] RestorePackageVersionFromRecycleBin([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $packageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId/pypi/RecycleBin/packages/$packageName/versions/$packageVersion", $this.apiVersion, $body)
     }
-     # Delete a package version from the feed, moving it to the recycle bin.
-    [PSObject] DeletePackageVersionFromRecycleBin([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
-        return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId/pypi/RecycleBin/packages/$packageName/versions/$packageVersion", $this.apiVersion, $null)
-    }
      # Get information about a package version in the recycle bin.
     [PSObject] GetPackageVersionMetadataFromRecycleBin([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId/pypi/RecycleBin/packages/$packageName/versions/$packageVersion", $this.apiVersion, $null)
+    }
+     # Delete a package version from the feed, moving it to the recycle bin.
+    [PSObject] DeletePackageVersionFromRecycleBin([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
+        return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId/pypi/RecycleBin/packages/$packageName/versions/$packageVersion", $this.apiVersion, $null)
     }
 
 }

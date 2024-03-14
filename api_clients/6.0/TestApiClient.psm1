@@ -39,6 +39,10 @@ class TestApiClient : AzureDevOpsApiClient {
     [PSObject] RemoveTestCasesFromSuiteUrl([bool] $useTargetProject, [int] $planId, [int] $suiteId, [string] $testCaseIds) {
         return $this.Request($useTargetProject, 'delete', "test/Plans/$planId/suites/$suiteId/testcases/$testCaseIds", $this.apiVersion, $null)
     }
+     # Get a specific test case in a test suite with test case id.
+    [PSObject] GetTestCaseById([bool] $useTargetProject, [int] $planId, [int] $suiteId, [int] $testCaseIds) {
+        return $this.Request($useTargetProject, 'get', "test/Plans/$planId/suites/$suiteId/testcases/$testCaseIds", $this.apiVersion, $null)
+    }
      # Add test cases to suite.
     [PSObject] AddTestCasesToSuite([bool] $useTargetProject, [int] $planId, [int] $suiteId, [string] $testCaseIds) {
         return $this.Request($useTargetProject, 'post', "test/Plans/$planId/suites/$suiteId/testcases/$testCaseIds", $this.apiVersion, $null)
@@ -46,10 +50,6 @@ class TestApiClient : AzureDevOpsApiClient {
      # Updates the properties of the test case association in a suite.
     [PSObject] UpdateSuiteTestCases([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId, [string] $testCaseIds) {
         return $this.Request($useTargetProject, 'patch', "test/Plans/$planId/suites/$suiteId/testcases/$testCaseIds", $this.apiVersion, $body)
-    }
-     # Get a specific test case in a test suite with test case id.
-    [PSObject] GetTestCaseById([bool] $useTargetProject, [int] $planId, [int] $suiteId, [int] $testCaseIds) {
-        return $this.Request($useTargetProject, 'get', "test/Plans/$planId/suites/$suiteId/testcases/$testCaseIds", $this.apiVersion, $null)
     }
 
     # Get test points using query.
@@ -84,13 +84,13 @@ class TestApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateTestRun([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
         return $this.Request($useTargetProject, 'patch', "test/runs/$runId", $this.apiVersion, $body)
     }
-     # Delete a test run by its ID.
-    [PSObject] DeleteTestRun([bool] $useTargetProject, [int] $runId) {
-        return $this.Request($useTargetProject, 'delete', "test/runs/$runId", $this.apiVersion, $null)
-    }
      # Get a test run by its ID.
     [PSObject] GetTestRunById([bool] $useTargetProject, [int] $runId) {
         return $this.Request($useTargetProject, 'get', "test/runs/$runId", $this.apiVersion, $null)
+    }
+     # Delete a test run by its ID.
+    [PSObject] DeleteTestRun([bool] $useTargetProject, [int] $runId) {
+        return $this.Request($useTargetProject, 'delete', "test/runs/$runId", $this.apiVersion, $null)
     }
 
     # Get list of test run attachments reference.
@@ -116,13 +116,13 @@ class TestApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateTestResults([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
         return $this.Request($useTargetProject, 'patch', "test/Runs/$runId/results", $this.apiVersion, $body)
     }
-     # Add test results to a test run.
-    [PSObject] AddTestResultsToTestRun([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
-        return $this.Request($useTargetProject, 'post', "test/Runs/$runId/results", $this.apiVersion, $body)
-    }
      # Get test results for a test run.
     [PSObject] GetTestResults([bool] $useTargetProject, [int] $runId) {
         return $this.Request($useTargetProject, 'get', "test/Runs/$runId/results", $this.apiVersion, $null)
+    }
+     # Add test results to a test run.
+    [PSObject] AddTestResultsToTestRun([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
+        return $this.Request($useTargetProject, 'post', "test/Runs/$runId/results", $this.apiVersion, $body)
     }
 
     # Get a test result for a test run.
@@ -178,13 +178,13 @@ class TestApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateTestSession([bool] $useTargetProject, [PSObject] $body, [string] $team) {
         return $this.Request($useTargetProject, 'patch', "$team/test/session", $this.apiVersion, $body)
     }
-     # Create a test session
-    [PSObject] CreateTestSession([bool] $useTargetProject, [PSObject] $body, [string] $team) {
-        return $this.Request($useTargetProject, 'post', "$team/test/session", $this.apiVersion, $body)
-    }
      # Get a list of test sessions
     [PSObject] GetTestSessions([bool] $useTargetProject, [string] $team) {
         return $this.Request($useTargetProject, 'get', "$team/test/session", $this.apiVersion, $null)
+    }
+     # Create a test session
+    [PSObject] CreateTestSession([bool] $useTargetProject, [PSObject] $body, [string] $team) {
+        return $this.Request($useTargetProject, 'post', "$team/test/session", $this.apiVersion, $body)
     }
 
 }

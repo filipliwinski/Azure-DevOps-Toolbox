@@ -20,6 +20,10 @@ class PolicyApiClient : AzureDevOpsApiClient {
     [PSObject] GetPolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {
         return $this.Request($useTargetProject, 'get', "policy/configurations/$configurationId", $this.apiVersion, $null)
     }
+     # Delete a policy configuration by its ID.
+    [PSObject] DeletePolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {
+        return $this.Request($useTargetProject, 'delete', "policy/configurations/$configurationId", $this.apiVersion, $null)
+    }
      # Create a policy configuration of a given policy type.
     [PSObject] CreatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $configurationId) {
         return $this.Request($useTargetProject, 'post', "policy/configurations/$configurationId", $this.apiVersion, $body)
@@ -27,10 +31,6 @@ class PolicyApiClient : AzureDevOpsApiClient {
      # Update a policy configuration by its ID.
     [PSObject] UpdatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $configurationId) {
         return $this.Request($useTargetProject, 'put', "policy/configurations/$configurationId", $this.apiVersion, $body)
-    }
-     # Delete a policy configuration by its ID.
-    [PSObject] DeletePolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {
-        return $this.Request($useTargetProject, 'delete', "policy/configurations/$configurationId", $this.apiVersion, $null)
     }
 
     # Retrieve all revisions for a given policy.

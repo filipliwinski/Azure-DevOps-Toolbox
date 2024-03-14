@@ -34,13 +34,13 @@ class FeedApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateFeed([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
         return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId", $this.apiVersion, $body)
     }
-     # Remove a feed and all its packages.  The action does not result in packages moving to the RecycleBin and is not reversible.
-    [PSObject] DeleteFeed([bool] $useTargetProject, [string] $feedId) {
-        return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId", $this.apiVersion, $null)
-    }
      # Get the settings for a specific feed.
     [PSObject] GetFeed([bool] $useTargetProject, [string] $feedId) {
         return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId", $this.apiVersion, $null)
+    }
+     # Remove a feed and all its packages.  The action does not result in packages moving to the RecycleBin and is not reversible.
+    [PSObject] DeleteFeed([bool] $useTargetProject, [string] $feedId) {
+        return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId", $this.apiVersion, $null)
     }
 
     # Get a batch of package changes made to a feed.  The changes returned are 'most recent change' so if an Add is followed by an Update before you begin enumerating, you'll only see one change in the batch.  While consuming batches using the continuation token, you may see changes to the same package version multiple times if they are happening as you enumerate.
@@ -106,13 +106,13 @@ class FeedApiClient : AzureDevOpsApiClient {
     [PSObject] SetFeedRetentionPolicies([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
         return $this.Request($useTargetProject, 'put', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $body)
     }
-     # Delete the retention policy for a feed.
-    [PSObject] DeleteFeedRetentionPolicies([bool] $useTargetProject, [string] $feedId) {
-        return $this.Request($useTargetProject, 'delete', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $null)
-    }
      # Get the retention policy for a feed.
     [PSObject] GetFeedRetentionPolicies([bool] $useTargetProject, [string] $feedId) {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $null)
+    }
+     # Delete the retention policy for a feed.
+    [PSObject] DeleteFeedRetentionPolicies([bool] $useTargetProject, [string] $feedId) {
+        return $this.Request($useTargetProject, 'delete', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $null)
     }
 
     # Get all views for a feed.
@@ -128,13 +128,13 @@ class FeedApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateFeedView([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $viewId) {
         return $this.Request($useTargetProject, 'patch', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $body)
     }
-     # Delete a feed view.
-    [PSObject] DeleteFeedView([bool] $useTargetProject, [string] $feedId, [string] $viewId) {
-        return $this.Request($useTargetProject, 'delete', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $null)
-    }
      # Get a view by Id.
     [PSObject] GetFeedView([bool] $useTargetProject, [string] $feedId, [string] $viewId) {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $null)
+    }
+     # Delete a feed view.
+    [PSObject] DeleteFeedView([bool] $useTargetProject, [string] $feedId, [string] $viewId) {
+        return $this.Request($useTargetProject, 'delete', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $null)
     }
 
     # Set service-wide permissions that govern feed creation.
