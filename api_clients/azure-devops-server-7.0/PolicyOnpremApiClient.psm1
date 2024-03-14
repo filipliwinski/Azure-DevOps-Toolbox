@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class PolicyOnpremApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '7.0'
@@ -16,17 +16,17 @@ class PolicyOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "policy/configurations", $this.apiVersion, $null)
     }
 
-    # Update a policy configuration by its ID.
-    [PSObject] UpdatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $configurationId) {
-        return $this.Request($useTargetProject, 'put', "policy/configurations/$configurationId", $this.apiVersion, $body)
-    }
-     # Get a policy configuration by its ID.
+    # Get a policy configuration by its ID.
     [PSObject] GetPolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {
         return $this.Request($useTargetProject, 'get', "policy/configurations/$configurationId", $this.apiVersion, $null)
     }
      # Create a policy configuration of a given policy type.
     [PSObject] CreatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $configurationId) {
         return $this.Request($useTargetProject, 'post', "policy/configurations/$configurationId", $this.apiVersion, $body)
+    }
+     # Update a policy configuration by its ID.
+    [PSObject] UpdatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $configurationId) {
+        return $this.Request($useTargetProject, 'put', "policy/configurations/$configurationId", $this.apiVersion, $body)
     }
      # Delete a policy configuration by its ID.
     [PSObject] DeletePolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {
@@ -48,13 +48,13 @@ class PolicyOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "policy/evaluations", $this.apiVersion, $null)
     }
 
-    # Gets the present evaluation state of a policy.Each policy which applies to a pull request will have an evaluation state which is specific to that policy runningin the context of that pull request. Each evaluation is uniquely identified via a Guid. You can find all the policyevaluations for a specific pull request using the List operation of this controller.
-    [PSObject] GetPolicyEvaluation([bool] $useTargetProject, [string] $evaluationId) {
-        return $this.Request($useTargetProject, 'get', "policy/evaluations/$evaluationId", $this.apiVersion, $null)
-    }
-     # Requeue the policy evaluation.Some policies define a "requeue" action which performs some policy-specific operation.You can trigger this operation by updating an existing policy evaluation and setting thePolicyEvaluationRecord.Status field to Queued.Although any policy evaluation can be requeued, at present only build policies perform any actionin response. Requeueing a build policy will queue a new build to run (cancelling any existing build whichis running).
+    # Requeue the policy evaluation.Some policies define a "requeue" action which performs some policy-specific operation.You can trigger this operation by updating an existing policy evaluation and setting thePolicyEvaluationRecord.Status field to Queued.Although any policy evaluation can be requeued, at present only build policies perform any actionin response. Requeueing a build policy will queue a new build to run (cancelling any existing build whichis running).
     [PSObject] RequeuePolicyEvaluation([bool] $useTargetProject, [string] $evaluationId) {
         return $this.Request($useTargetProject, 'patch', "policy/evaluations/$evaluationId", $this.apiVersion, $null)
+    }
+     # Gets the present evaluation state of a policy.Each policy which applies to a pull request will have an evaluation state which is specific to that policy runningin the context of that pull request. Each evaluation is uniquely identified via a Guid. You can find all the policyevaluations for a specific pull request using the List operation of this controller.
+    [PSObject] GetPolicyEvaluation([bool] $useTargetProject, [string] $evaluationId) {
+        return $this.Request($useTargetProject, 'get', "policy/evaluations/$evaluationId", $this.apiVersion, $null)
     }
 
     # Retrieve all available policy types.

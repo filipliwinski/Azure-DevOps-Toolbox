@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class ServiceEndpointApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '7.0'
@@ -11,13 +11,13 @@ class ServiceEndpointApiClient : AzureDevOpsApiClient {
     ServiceEndpointApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Creates a new service endpoint
-    [PSObject] CreateServiceEndpoint([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "serviceendpoint/endpoints", $this.apiVersion, $body)
-    }
-     # Update the service endpoints.
+    # Update the service endpoints.
     [PSObject] UpdateServiceEndpoints([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'put', "serviceendpoint/endpoints", $this.apiVersion, $body)
+    }
+     # Creates a new service endpoint
+    [PSObject] CreateServiceEndpoint([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "serviceendpoint/endpoints", $this.apiVersion, $body)
     }
 
     # Update the service endpoint
@@ -48,13 +48,13 @@ class ServiceEndpointApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "serviceendpoint/endpointproxy", $this.apiVersion, $body)
     }
 
-    # Get the service endpoints by name.
-    [PSObject] GetServiceEndpointsByNames([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "serviceendpoint/endpoints", $this.apiVersion, $null)
-    }
-     # Gets the service endpoints and patch new authorization parameters
+    # Gets the service endpoints and patch new authorization parameters
     [PSObject] GetServiceEndpointsWithRefreshedAuthentication([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "serviceendpoint/endpoints", $this.apiVersion, $body)
+    }
+     # Get the service endpoints by name.
+    [PSObject] GetServiceEndpointsByNames([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "serviceendpoint/endpoints", $this.apiVersion, $null)
     }
 
     # Get the service endpoint details.

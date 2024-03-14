@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class PolicyApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '4.1'
@@ -11,13 +11,13 @@ class PolicyApiClient : AzureDevOpsApiClient {
     PolicyApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Create a policy configuration of a given policy type.
-    [PSObject] CreatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "policy/configurations", $this.apiVersion, $body)
-    }
-     # Get a list of policy configurations in a project.The optional `scope` parameter can be used to retrieve a subset of policies from one or more branchesin one or more repos.  The format of a `scope` is `{repoId}:{branch}` where either the `repoId` or`branch` may contain a wildcard.  For example, `*:refs/heads/master` could be used to return all policyconfigurations on all branches named "master" in all repos in the project.Similarly, `{repoId}:refs/heads/releases/*` could be used to return all policy configurations on allbranches that begin with "releases/" in a specific repo with the ID `repoID`.  Omitting `scope` entirelyreturns all policy configurations in the project.  Omitting `branch` from the scope returns all branches.The optional `policyType` parameter can be used to filter the set of policies returned from this method.
+    # Get a list of policy configurations in a project.The optional `scope` parameter can be used to retrieve a subset of policies from one or more branchesin one or more repos.  The format of a `scope` is `{repoId}:{branch}` where either the `repoId` or`branch` may contain a wildcard.  For example, `*:refs/heads/master` could be used to return all policyconfigurations on all branches named "master" in all repos in the project.Similarly, `{repoId}:refs/heads/releases/*` could be used to return all policy configurations on allbranches that begin with "releases/" in a specific repo with the ID `repoID`.  Omitting `scope` entirelyreturns all policy configurations in the project.  Omitting `branch` from the scope returns all branches.The optional `policyType` parameter can be used to filter the set of policies returned from this method.
     [PSObject] GetPolicyConfigurations([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "policy/configurations", $this.apiVersion, $null)
+    }
+     # Create a policy configuration of a given policy type.
+    [PSObject] CreatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "policy/configurations", $this.apiVersion, $body)
     }
 
     # Update a policy configuration by its ID.
@@ -48,13 +48,13 @@ class PolicyApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "policy/evaluations", $this.apiVersion, $null)
     }
 
-    # Gets the present evaluation state of a policy.Each policy which applies to a pull request will have an evaluation state which is specific to that policy runningin the context of that pull request. Each evaluation is uniquely identified via a Guid. You can find all the policyevaluations for a specific pull request using the List operation of this controller.
-    [PSObject] GetPolicyEvaluation([bool] $useTargetProject, [string] $evaluationId) {
-        return $this.Request($useTargetProject, 'get', "policy/evaluations/$evaluationId", $this.apiVersion, $null)
-    }
-     # Requeue the policy evaluation.Some policies define a "requeue" action which performs some policy-specific operation.You can trigger this operation by updating an existing policy evaluation and setting thePolicyEvaluationRecord.Status field to Queued.Although any policy evaluation can be requeued, at present only build policies perform any actionin response. Requeueing a build policy will queue a new build to run (cancelling any existing build whichis running).
+    # Requeue the policy evaluation.Some policies define a "requeue" action which performs some policy-specific operation.You can trigger this operation by updating an existing policy evaluation and setting thePolicyEvaluationRecord.Status field to Queued.Although any policy evaluation can be requeued, at present only build policies perform any actionin response. Requeueing a build policy will queue a new build to run (cancelling any existing build whichis running).
     [PSObject] RequeuePolicyEvaluation([bool] $useTargetProject, [string] $evaluationId) {
         return $this.Request($useTargetProject, 'patch', "policy/evaluations/$evaluationId", $this.apiVersion, $null)
+    }
+     # Gets the present evaluation state of a policy.Each policy which applies to a pull request will have an evaluation state which is specific to that policy runningin the context of that pull request. Each evaluation is uniquely identified via a Guid. You can find all the policyevaluations for a specific pull request using the List operation of this controller.
+    [PSObject] GetPolicyEvaluation([bool] $useTargetProject, [string] $evaluationId) {
+        return $this.Request($useTargetProject, 'get', "policy/evaluations/$evaluationId", $this.apiVersion, $null)
     }
 
     # Retrieve all available policy types.

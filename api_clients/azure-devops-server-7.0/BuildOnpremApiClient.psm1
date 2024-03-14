@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class BuildOnpremApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '7.0'
@@ -37,12 +37,12 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
     }
 
     # empty
-    [PSObject] AuthorizeProjectResources([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'patch', "build/authorizedresources", $this.apiVersion, $body)
-    }
-     # empty
     [PSObject] GetProjectResources([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "build/authorizedresources", $this.apiVersion, $null)
+    }
+     # empty
+    [PSObject] AuthorizeProjectResources([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'patch', "build/authorizedresources", $this.apiVersion, $body)
     }
 
     # Updates multiple builds.
@@ -76,13 +76,13 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "build/builds/$buildId/$timelineId/$recordId/attachments/$type/$name", $this.apiVersion, $null)
     }
 
-    # Associates an artifact with a build.
-    [PSObject] CreateArtifact([bool] $useTargetProject, [PSObject] $body, [int] $buildId) {
-        return $this.Request($useTargetProject, 'post', "build/builds/$buildId/artifacts", $this.apiVersion, $body)
-    }
-     # Gets all artifacts for a build.
+    # Gets all artifacts for a build.
     [PSObject] GetArtifacts([bool] $useTargetProject, [int] $buildId) {
         return $this.Request($useTargetProject, 'get', "build/builds/$buildId/artifacts", $this.apiVersion, $null)
+    }
+     # Associates an artifact with a build.
+    [PSObject] CreateArtifact([bool] $useTargetProject, [PSObject] $body, [int] $buildId) {
+        return $this.Request($useTargetProject, 'post', "build/builds/$buildId/artifacts", $this.apiVersion, $body)
     }
 
     # Gets the list of attachments of a specific type that are associated with a build.
@@ -110,13 +110,13 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "build/builds/$buildId/logs/$logId", $this.apiVersion, $null)
     }
 
-    # Gets properties for a build.
-    [PSObject] GetBuildProperties([bool] $useTargetProject, [int] $buildId) {
-        return $this.Request($useTargetProject, 'get', "build/builds/$buildId/properties", $this.apiVersion, $null)
-    }
-     # Updates properties for a build.
+    # Updates properties for a build.
     [PSObject] UpdateBuildProperties([bool] $useTargetProject, [PSObject] $body, [int] $buildId) {
         return $this.Request($useTargetProject, 'patch', "build/builds/$buildId/properties", $this.apiVersion, $body)
+    }
+     # Gets properties for a build.
+    [PSObject] GetBuildProperties([bool] $useTargetProject, [int] $buildId) {
+        return $this.Request($useTargetProject, 'get', "build/builds/$buildId/properties", $this.apiVersion, $null)
     }
 
     # Gets a build report.
@@ -142,13 +142,13 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "build/builds/$buildId/tags", $this.apiVersion, $null)
     }
 
-    # Adds a tag to a build.
-    [PSObject] AddBuildTag([bool] $useTargetProject, [int] $buildId, [string] $tag) {
-        return $this.Request($useTargetProject, 'put', "build/builds/$buildId/tags/$tag", $this.apiVersion, $null)
-    }
-     # Removes a tag from a build. NOTE: This API will not work for tags with special characters. To remove tags with special characters, use the PATCH method instead (in 6.0+)
+    # Removes a tag from a build. NOTE: This API will not work for tags with special characters. To remove tags with special characters, use the PATCH method instead (in 6.0+)
     [PSObject] DeleteBuildTag([bool] $useTargetProject, [int] $buildId, [string] $tag) {
         return $this.Request($useTargetProject, 'delete', "build/builds/$buildId/tags/$tag", $this.apiVersion, $null)
+    }
+     # Adds a tag to a build.
+    [PSObject] AddBuildTag([bool] $useTargetProject, [int] $buildId, [string] $tag) {
+        return $this.Request($useTargetProject, 'put', "build/builds/$buildId/tags/$tag", $this.apiVersion, $null)
     }
 
     # Gets details for a build
@@ -156,13 +156,13 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "build/builds/$buildId/timeline/$timelineId", $this.apiVersion, $null)
     }
 
-    # Gets the work items associated with a build. Only work items in the same project are returned.
-    [PSObject] GetBuildWorkItemsRefs([bool] $useTargetProject, [int] $buildId) {
-        return $this.Request($useTargetProject, 'get', "build/builds/$buildId/workitems", $this.apiVersion, $null)
-    }
-     # Gets the work items associated with a build, filtered to specific commits.
+    # Gets the work items associated with a build, filtered to specific commits.
     [PSObject] GetBuildWorkItemsRefsFromCommits([bool] $useTargetProject, [PSObject] $body, [int] $buildId) {
         return $this.Request($useTargetProject, 'post', "build/builds/$buildId/workitems", $this.apiVersion, $body)
+    }
+     # Gets the work items associated with a build. Only work items in the same project are returned.
+    [PSObject] GetBuildWorkItemsRefs([bool] $useTargetProject, [int] $buildId) {
+        return $this.Request($useTargetProject, 'get', "build/builds/$buildId/workitems", $this.apiVersion, $null)
     }
 
     # Gets the changes made to the repository between two given builds.
@@ -170,26 +170,26 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "build/changes", $this.apiVersion, $null)
     }
 
-    # Creates a new definition.
-    [PSObject] CreateDefinition([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "build/definitions", $this.apiVersion, $body)
-    }
-     # Gets a list of definitions.
+    # Gets a list of definitions.
     [PSObject] GetDefinitions([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "build/definitions", $this.apiVersion, $null)
     }
-
-    # Updates an existing build definition.  In order for this operation to succeed, the value of the "Revision" property of the request body must match the existing build definition's. It is recommended that you obtain the existing build definition by using GET, modify the build definition as necessary, and then submit the modified definition with PUT.
-    [PSObject] UpdateDefinition([bool] $useTargetProject, [PSObject] $body, [int] $definitionId) {
-        return $this.Request($useTargetProject, 'put', "build/definitions/$definitionId", $this.apiVersion, $body)
+     # Creates a new definition.
+    [PSObject] CreateDefinition([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "build/definitions", $this.apiVersion, $body)
     }
-     # Restores a deleted definition
+
+    # Restores a deleted definition
     [PSObject] RestoreDefinition([bool] $useTargetProject, [int] $definitionId) {
         return $this.Request($useTargetProject, 'patch', "build/definitions/$definitionId", $this.apiVersion, $null)
     }
      # Deletes a definition and all associated builds.
     [PSObject] DeleteDefinition([bool] $useTargetProject, [int] $definitionId) {
         return $this.Request($useTargetProject, 'delete', "build/definitions/$definitionId", $this.apiVersion, $null)
+    }
+     # Updates an existing build definition.  In order for this operation to succeed, the value of the "Revision" property of the request body must match the existing build definition's. It is recommended that you obtain the existing build definition by using GET, modify the build definition as necessary, and then submit the modified definition with PUT.
+    [PSObject] UpdateDefinition([bool] $useTargetProject, [PSObject] $body, [int] $definitionId) {
+        return $this.Request($useTargetProject, 'put', "build/definitions/$definitionId", $this.apiVersion, $body)
     }
      # Gets a definition, optionally at a specific revision.
     [PSObject] GetDefinition([bool] $useTargetProject, [int] $definitionId) {
@@ -201,22 +201,22 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "build/definitions/$definitionId/metrics", $this.apiVersion, $null)
     }
 
-    # Gets properties for a definition.
-    [PSObject] GetDefinitionProperties([bool] $useTargetProject, [int] $definitionId) {
-        return $this.Request($useTargetProject, 'get', "build/definitions/$definitionId/properties", $this.apiVersion, $null)
-    }
-     # Updates properties for a definition.
+    # Updates properties for a definition.
     [PSObject] UpdateDefinitionProperties([bool] $useTargetProject, [PSObject] $body, [int] $definitionId) {
         return $this.Request($useTargetProject, 'patch', "build/definitions/$definitionId/properties", $this.apiVersion, $body)
     }
+     # Gets properties for a definition.
+    [PSObject] GetDefinitionProperties([bool] $useTargetProject, [int] $definitionId) {
+        return $this.Request($useTargetProject, 'get', "build/definitions/$definitionId/properties", $this.apiVersion, $null)
+    }
 
     # empty
-    [PSObject] AuthorizeDefinitionResources([bool] $useTargetProject, [PSObject] $body, [int] $definitionId) {
-        return $this.Request($useTargetProject, 'patch', "build/definitions/$definitionId/resources", $this.apiVersion, $body)
-    }
-     # empty
     [PSObject] GetDefinitionResources([bool] $useTargetProject, [int] $definitionId) {
         return $this.Request($useTargetProject, 'get', "build/definitions/$definitionId/resources", $this.apiVersion, $null)
+    }
+     # empty
+    [PSObject] AuthorizeDefinitionResources([bool] $useTargetProject, [PSObject] $body, [int] $definitionId) {
+        return $this.Request($useTargetProject, 'patch', "build/definitions/$definitionId/resources", $this.apiVersion, $body)
     }
 
     # Gets all revisions of a definition.
@@ -237,13 +237,13 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "build/definitions/$DefinitionId/tags", $this.apiVersion, $null)
     }
 
-    # Adds a tag to a definition
-    [PSObject] AddDefinitionTag([bool] $useTargetProject, [int] $definitionId, [string] $tag) {
-        return $this.Request($useTargetProject, 'put', "build/definitions/$DefinitionId/tags/$tag", $this.apiVersion, $null)
-    }
-     # Removes a tag from a definition. NOTE: This API will not work for tags with special characters. To remove tags with special characters, use the PATCH method instead (in 6.0+)
+    # Removes a tag from a definition. NOTE: This API will not work for tags with special characters. To remove tags with special characters, use the PATCH method instead (in 6.0+)
     [PSObject] DeleteDefinitionTag([bool] $useTargetProject, [int] $definitionId, [string] $tag) {
         return $this.Request($useTargetProject, 'delete', "build/definitions/$DefinitionId/tags/$tag", $this.apiVersion, $null)
+    }
+     # Adds a tag to a definition
+    [PSObject] AddDefinitionTag([bool] $useTargetProject, [int] $definitionId, [string] $tag) {
+        return $this.Request($useTargetProject, 'put', "build/definitions/$DefinitionId/tags/$tag", $this.apiVersion, $null)
     }
 
     # Converts a definition to YAML, optionally at a specific revision.
@@ -287,13 +287,13 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "build/folders/$path", $this.apiVersion, $null)
     }
 
-    # Gets pipeline general settings.
-    [PSObject] GetBuildGeneralSettings([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "build/generalsettings", $this.apiVersion, $null)
-    }
-     # Updates pipeline general settings.
+    # Updates pipeline general settings.
     [PSObject] UpdateBuildGeneralSettings([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "build/generalsettings", $this.apiVersion, $body)
+    }
+     # Gets pipeline general settings.
+    [PSObject] GetBuildGeneralSettings([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "build/generalsettings", $this.apiVersion, $null)
     }
 
     # Gets the latest build for a definition, optionally scoped to a specific branch.
@@ -316,13 +316,13 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "build/repos/$repoType/badge", $this.apiVersion, $null)
     }
 
-    # Gets the project's retention settings.
-    [PSObject] GetRetentionSettings([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "build/retention", $this.apiVersion, $null)
-    }
-     # Updates the project's retention settings.
+    # Updates the project's retention settings.
     [PSObject] UpdateRetentionSettings([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "build/retention", $this.apiVersion, $body)
+    }
+     # Gets the project's retention settings.
+    [PSObject] GetRetentionSettings([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "build/retention", $this.apiVersion, $null)
     }
 
     # Returns any leases matching the specified MinimalRetentionLeases
@@ -338,22 +338,22 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'delete', "build/retention/leases", $this.apiVersion, $null)
     }
 
-    # Returns the details of the retention lease given a lease id.
-    [PSObject] GetRetentionLease([bool] $useTargetProject, [int] $leaseId) {
-        return $this.Request($useTargetProject, 'get', "build/retention/leases/$leaseId", $this.apiVersion, $null)
-    }
-     # Updates the duration or pipeline protection status of a retention lease.
+    # Updates the duration or pipeline protection status of a retention lease.
     [PSObject] UpdateRetentionLease([bool] $useTargetProject, [PSObject] $body, [int] $leaseId) {
         return $this.Request($useTargetProject, 'patch', "build/retention/leases/$leaseId", $this.apiVersion, $body)
     }
-
-    # Gets the build settings.
-    [PSObject] GetBuildSettings([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "build/settings", $this.apiVersion, $null)
+     # Returns the details of the retention lease given a lease id.
+    [PSObject] GetRetentionLease([bool] $useTargetProject, [int] $leaseId) {
+        return $this.Request($useTargetProject, 'get', "build/retention/leases/$leaseId", $this.apiVersion, $null)
     }
-     # Updates the build settings.
+
+    # Updates the build settings.
     [PSObject] UpdateBuildSettings([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "build/settings", $this.apiVersion, $body)
+    }
+     # Gets the build settings.
+    [PSObject] GetBuildSettings([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "build/settings", $this.apiVersion, $null)
     }
 
     # <p>Gets the build status for a definition, optionally scoped to a specific branch, stage, job, and configuration.</p> <p>If there are more than one, then it is required to pass in a stageName value when specifying a jobName, and the same rule then applies for both if passing a configuration parameter.</p>
@@ -406,13 +406,13 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "sourceProviders/$providerName/repositories", $this.apiVersion, $null)
     }
 
-    # Recreates the webhooks for the specified triggers in the given source code repository.
-    [PSObject] RestoreWebhooks([bool] $useTargetProject, [PSObject] $body, [string] $providerName) {
-        return $this.Request($useTargetProject, 'post', "sourceProviders/$providerName/webhooks", $this.apiVersion, $body)
-    }
-     # Gets a list of webhooks installed in the given source code repository.
+    # Gets a list of webhooks installed in the given source code repository.
     [PSObject] ListWebhooks([bool] $useTargetProject, [string] $providerName) {
         return $this.Request($useTargetProject, 'get', "sourceProviders/$providerName/webhooks", $this.apiVersion, $null)
+    }
+     # Recreates the webhooks for the specified triggers in the given source code repository.
+    [PSObject] RestoreWebhooks([bool] $useTargetProject, [PSObject] $body, [string] $providerName) {
+        return $this.Request($useTargetProject, 'post', "sourceProviders/$providerName/webhooks", $this.apiVersion, $body)
     }
 
 }

@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class MemberEntitlementManagementApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '7.1-preview'
@@ -11,13 +11,13 @@ class MemberEntitlementManagementApiClient : AzureDevOpsApiClient {
     MemberEntitlementManagementApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Create a group entitlement with license rule, extension rule.
-    [PSObject] AddGroupEntitlement([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "groupentitlements", $this.apiVersion, $body)
-    }
-     # Get the group entitlements for an account.
+    # Get the group entitlements for an account.
     [PSObject] GetGroupEntitlements([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "groupentitlements", $this.apiVersion, $null)
+    }
+     # Create a group entitlement with license rule, extension rule.
+    [PSObject] AddGroupEntitlement([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "groupentitlements", $this.apiVersion, $body)
     }
 
     # Update entitlements (License Rule, Extensions Rule, Project memberships etc.) for a group.
@@ -38,13 +38,13 @@ class MemberEntitlementManagementApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "GroupEntitlements/$groupId/members", $this.apiVersion, $null)
     }
 
-    # Add a member to a Group.
-    [PSObject] AddMemberToGroup([bool] $useTargetProject, [string] $groupId, [string] $memberId) {
-        return $this.Request($useTargetProject, 'put', "GroupEntitlements/$groupId/members/$memberId", $this.apiVersion, $null)
-    }
-     # Remove a member from a Group.
+    # Remove a member from a Group.
     [PSObject] RemoveMemberFromGroup([bool] $useTargetProject, [string] $groupId, [string] $memberId) {
         return $this.Request($useTargetProject, 'delete', "GroupEntitlements/$groupId/members/$memberId", $this.apiVersion, $null)
+    }
+     # Add a member to a Group.
+    [PSObject] AddMemberToGroup([bool] $useTargetProject, [string] $groupId, [string] $memberId) {
+        return $this.Request($useTargetProject, 'put', "GroupEntitlements/$groupId/members/$memberId", $this.apiVersion, $null)
     }
 
     # empty
@@ -52,13 +52,13 @@ class MemberEntitlementManagementApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "memberentitlements", $this.apiVersion, $null)
     }
 
-    # Add a service principal, assign license and extensions and make them a member of a project group in an account.NOTE: If you are working with AAD app registration, you can find service principal of your appin enterprise applications, and make sure to use service principal's object id as originId parameterin the request body
-    [PSObject] AddServicePrincipalEntitlement([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "serviceprincipalentitlements", $this.apiVersion, $body)
-    }
-     # Edit the entitlements (License, Extensions, Projects, Teams etc) for one or more service principals.
+    # Edit the entitlements (License, Extensions, Projects, Teams etc) for one or more service principals.
     [PSObject] UpdateServicePrincipalEntitlements([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "serviceprincipalentitlements", $this.apiVersion, $body)
+    }
+     # Add a service principal, assign license and extensions and make them a member of a project group in an account.NOTE: If you are working with AAD app registration, you can find service principal of your appin enterprise applications, and make sure to use service principal's object id as originId parameterin the request body
+    [PSObject] AddServicePrincipalEntitlement([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "serviceprincipalentitlements", $this.apiVersion, $body)
     }
 
     # Edit the entitlements (License, Extensions, Projects, Teams etc) for a service principal.

@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class PermissionsReportApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '6.1-preview'
@@ -11,13 +11,13 @@ class PermissionsReportApiClient : AzureDevOpsApiClient {
     PermissionsReportApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Request a permissions report to be created asyncronously
-    [PSObject] CreatePermissionsReport([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "permissionsreport", $this.apiVersion, $body)
-    }
-     # Get a list of permissions reports
+    # Get a list of permissions reports
     [PSObject] GetPermissionsReports([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "permissionsreport", $this.apiVersion, $null)
+    }
+     # Request a permissions report to be created asyncronously
+    [PSObject] CreatePermissionsReport([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "permissionsreport", $this.apiVersion, $body)
     }
 
     # Get a specific permissions report

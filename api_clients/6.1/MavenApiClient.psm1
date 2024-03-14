@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class MavenApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '6.1-preview'
@@ -11,13 +11,13 @@ class MavenApiClient : AzureDevOpsApiClient {
     MavenApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Get the upstreaming behavior of a package within the context of a feed
-    [PSObject] GetUpstreamingBehavior([bool] $useTargetProject, [string] $feed, [string] $groupId, [string] $artifactId) {
-        return $this.Request($useTargetProject, 'get', "packaging/feeds/$feed/maven/groups/$groupId/artifacts/$artifactId/upstreaming", $this.apiVersion, $null)
-    }
-     # Set the upstreaming behavior of a package within the context of a feedThe package does not need to necessarily exist in the feed prior to setting the behavior.This assists with packages that are not yet ingested from an upstream, yet the feed owner wantsto apply a specific behavior on the first ingestion.
+    # Set the upstreaming behavior of a package within the context of a feedThe package does not need to necessarily exist in the feed prior to setting the behavior.This assists with packages that are not yet ingested from an upstream, yet the feed owner wantsto apply a specific behavior on the first ingestion.
     [PSObject] SetUpstreamingBehavior([bool] $useTargetProject, [string] $feed, [string] $groupId, [string] $artifactId, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feed/maven/groups/$groupId/artifacts/$artifactId/upstreaming", $this.apiVersion, $body)
+    }
+     # Get the upstreaming behavior of a package within the context of a feed
+    [PSObject] GetUpstreamingBehavior([bool] $useTargetProject, [string] $feed, [string] $groupId, [string] $artifactId) {
+        return $this.Request($useTargetProject, 'get', "packaging/feeds/$feed/maven/groups/$groupId/artifacts/$artifactId/upstreaming", $this.apiVersion, $null)
     }
 
     # Update state for a package version.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.

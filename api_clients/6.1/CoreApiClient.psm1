@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class CoreApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '6.1-preview'
@@ -21,13 +21,13 @@ class CoreApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "process/processes/$processId", $this.apiVersion, $null)
     }
 
-    # Get all projects in the organization that the authenticated user has access to.
-    [PSObject] GetProjects([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "projects", $this.apiVersion, $null)
-    }
-     # Queues a project to be created. Use the [GetOperation](../../operations/operations/get) to periodically check for create project status.
+    # Queues a project to be created. Use the [GetOperation](../../operations/operations/get) to periodically check for create project status.
     [PSObject] QueueCreateProject([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "projects", $this.apiVersion, $body)
+    }
+     # Get all projects in the organization that the authenticated user has access to.
+    [PSObject] GetProjects([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "projects", $this.apiVersion, $null)
     }
 
     # Update an existing project's name, abbreviation, description, or restore a project.
@@ -43,31 +43,31 @@ class CoreApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'delete', "projects/Id", $this.apiVersion, $null)
     }
 
-    # Removes the avatar for the project.
-    [PSObject] RemoveProjectAvatar([bool] $useTargetProject, [string] $projectId) {
-        return $this.Request($useTargetProject, 'delete', "projects/Id/avatar", $this.apiVersion, $null)
-    }
-     # Sets the avatar for the project.
+    # Sets the avatar for the project.
     [PSObject] SetProjectAvatar([bool] $useTargetProject, [PSObject] $body, [string] $projectId) {
         return $this.Request($useTargetProject, 'put', "projects/Id/avatar", $this.apiVersion, $body)
     }
-
-    # Get a collection of team project properties.
-    [PSObject] GetProjectProperties([bool] $useTargetProject, [string] $projectId) {
-        return $this.Request($useTargetProject, 'get', "projects/Id/properties", $this.apiVersion, $null)
+     # Removes the avatar for the project.
+    [PSObject] RemoveProjectAvatar([bool] $useTargetProject, [string] $projectId) {
+        return $this.Request($useTargetProject, 'delete', "projects/Id/avatar", $this.apiVersion, $null)
     }
-     # Create, update, and delete team project properties.
+
+    # Create, update, and delete team project properties.
     [PSObject] SetProjectProperties([bool] $useTargetProject, [string] $projectId, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "projects/Id/properties", $this.apiVersion, $body)
     }
-
-    # Create a team in a team project.Possible failure scenariosInvalid project name/ID (project doesn't exist) 404Invalid team name or description 400Team already exists 400Insufficient privileges 400
-    [PSObject] CreateTeam([bool] $useTargetProject, [PSObject] $body, [string] $projectId) {
-        return $this.Request($useTargetProject, 'post', "projects/Id/teams", $this.apiVersion, $body)
+     # Get a collection of team project properties.
+    [PSObject] GetProjectProperties([bool] $useTargetProject, [string] $projectId) {
+        return $this.Request($useTargetProject, 'get', "projects/Id/properties", $this.apiVersion, $null)
     }
-     # Get a list of teams.
+
+    # Get a list of teams.
     [PSObject] GetTeams([bool] $useTargetProject, [string] $projectId) {
         return $this.Request($useTargetProject, 'get', "projects/Id/teams", $this.apiVersion, $null)
+    }
+     # Create a team in a team project.Possible failure scenariosInvalid project name/ID (project doesn't exist) 404Invalid team name or description 400Team already exists 400Insufficient privileges 400
+    [PSObject] CreateTeam([bool] $useTargetProject, [PSObject] $body, [string] $projectId) {
+        return $this.Request($useTargetProject, 'post', "projects/Id/teams", $this.apiVersion, $body)
     }
 
     # Update a team's name and/or description.

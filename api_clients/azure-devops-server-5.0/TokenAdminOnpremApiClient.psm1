@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class TokenAdminOnpremApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '5.0-preview'

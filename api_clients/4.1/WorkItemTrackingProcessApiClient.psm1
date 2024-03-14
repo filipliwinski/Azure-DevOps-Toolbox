@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '4.1-preview'
@@ -11,13 +11,13 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
     WorkItemTrackingProcessApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Creates a process.
-    [PSObject] CreateProcess([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "work/processes", $this.apiVersion, $body)
-    }
-     # Returns a list of all processes.
+    # Returns a list of all processes.
     [PSObject] GetProcesses([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "work/processes", $this.apiVersion, $null)
+    }
+     # Creates a process.
+    [PSObject] CreateProcess([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "work/processes", $this.apiVersion, $body)
     }
 
     # Returns a list of all behaviors in the process.
@@ -50,13 +50,13 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/fields", $this.apiVersion, $null)
     }
 
-    # Adds a rule to work item type in the process.
-    [PSObject] AddWorkItemTypeRule([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName) {
-        return $this.Request($useTargetProject, 'post', "work/processes/$processId/workItemTypes/$witRefName/rules", $this.apiVersion, $body)
-    }
-     # Returns a list of all rules in the work item type of the process.
+    # Returns a list of all rules in the work item type of the process.
     [PSObject] GetWorkItemTypeRules([bool] $useTargetProject, [string] $processId, [string] $witRefName) {
         return $this.Request($useTargetProject, 'get', "work/processes/$processId/workItemTypes/$witRefName/rules", $this.apiVersion, $null)
+    }
+     # Adds a rule to work item type in the process.
+    [PSObject] AddWorkItemTypeRule([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName) {
+        return $this.Request($useTargetProject, 'post', "work/processes/$processId/workItemTypes/$witRefName/rules", $this.apiVersion, $body)
     }
 
     # Updates a rule in the work item type of the process.

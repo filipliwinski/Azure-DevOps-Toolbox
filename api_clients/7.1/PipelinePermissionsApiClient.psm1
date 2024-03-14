@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class PipelinePermissionsApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '7.1-preview'
@@ -16,13 +16,13 @@ class PipelinePermissionsApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'patch', "pipelines/pipelinepermissions", $this.apiVersion, $body)
     }
 
-    # Given a ResourceType and ResourceId, returns authorized definitions for that resource.
-    [PSObject] GetPipelinePermissionsForResource([bool] $useTargetProject, [string] $resourceType, [string] $resourceId) {
-        return $this.Request($useTargetProject, 'get', "pipelines/pipelinepermissions/$resourceType/$resourceId", $this.apiVersion, $null)
-    }
-     # Authorizes/Unauthorizes a list of definitions for a given resource.
+    # Authorizes/Unauthorizes a list of definitions for a given resource.
     [PSObject] UpdatePipelinePermisionsForResource([bool] $useTargetProject, [PSObject] $body, [string] $resourceType, [string] $resourceId) {
         return $this.Request($useTargetProject, 'patch', "pipelines/pipelinepermissions/$resourceType/$resourceId", $this.apiVersion, $body)
+    }
+     # Given a ResourceType and ResourceId, returns authorized definitions for that resource.
+    [PSObject] GetPipelinePermissionsForResource([bool] $useTargetProject, [string] $resourceType, [string] $resourceId) {
+        return $this.Request($useTargetProject, 'get', "pipelines/pipelinepermissions/$resourceType/$resourceId", $this.apiVersion, $null)
     }
 
 }

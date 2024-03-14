@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class UniversalApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '5.2-preview'

@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class WorkApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '7.1-preview'
@@ -26,13 +26,13 @@ class WorkApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "work/iterations/$iterationId/iterationcapacities", $this.apiVersion, $null)
     }
 
-    # Add a new plan for the team
-    [PSObject] CreatePlan([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "work/plans", $this.apiVersion, $body)
-    }
-     # Get the information for all the plans configured for the given team
+    # Get the information for all the plans configured for the given team
     [PSObject] GetPlans([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "work/plans", $this.apiVersion, $null)
+    }
+     # Add a new plan for the team
+    [PSObject] CreatePlan([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "work/plans", $this.apiVersion, $body)
     }
 
     # Update the information for the specified plan
@@ -83,31 +83,31 @@ class WorkApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "$team/work/boards", $this.apiVersion, $null)
     }
 
-    # Get board user settings for a board id
-    [PSObject] GetBoardUserSettings([bool] $useTargetProject, [string] $board, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/boards/$board/boardusersettings", $this.apiVersion, $null)
-    }
-     # Update board user settings for the board idWe don't want stakeholders to update board settings (currently just autorefresh). The BacklogManagement feature check validates this.
+    # Update board user settings for the board idWe don't want stakeholders to update board settings (currently just autorefresh). The BacklogManagement feature check validates this.
     [PSObject] UpdateBoardUserSettings([bool] $useTargetProject, [PSObject] $body, [string] $board, [string] $team) {
         return $this.Request($useTargetProject, 'patch', "$team/work/boards/$board/boardusersettings", $this.apiVersion, $body)
     }
-
-    # Get board card Rule settings for the board id or board by name
-    [PSObject] GetBoardCardRuleSettings([bool] $useTargetProject, [string] $board, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/boards/$board/cardrulesettings", $this.apiVersion, $null)
+     # Get board user settings for a board id
+    [PSObject] GetBoardUserSettings([bool] $useTargetProject, [string] $board, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/boards/$board/boardusersettings", $this.apiVersion, $null)
     }
-     # Update board card Rule settings for the board id or board by name
+
+    # Update board card Rule settings for the board id or board by name
     [PSObject] UpdateBoardCardRuleSettings([bool] $useTargetProject, [PSObject] $body, [string] $board, [string] $team) {
         return $this.Request($useTargetProject, 'patch', "$team/work/boards/$board/cardrulesettings", $this.apiVersion, $body)
     }
-
-    # Get board card settings for the board id or board by name
-    [PSObject] GetBoardCardSettings([bool] $useTargetProject, [string] $board, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/boards/$board/cardsettings", $this.apiVersion, $null)
+     # Get board card Rule settings for the board id or board by name
+    [PSObject] GetBoardCardRuleSettings([bool] $useTargetProject, [string] $board, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/boards/$board/cardrulesettings", $this.apiVersion, $null)
     }
-     # Update board card settings for the board id or board by name
+
+    # Update board card settings for the board id or board by name
     [PSObject] UpdateBoardCardSettings([bool] $useTargetProject, [PSObject] $body, [string] $board, [string] $team) {
         return $this.Request($useTargetProject, 'put', "$team/work/boards/$board/cardsettings", $this.apiVersion, $body)
+    }
+     # Get board card settings for the board id or board by name
+    [PSObject] GetBoardCardSettings([bool] $useTargetProject, [string] $board, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/boards/$board/cardsettings", $this.apiVersion, $null)
     }
 
     # Get a board chart image.
@@ -120,40 +120,40 @@ class WorkApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "$team/work/boards/$board/charts", $this.apiVersion, $null)
     }
 
-    # Get a board chart
-    [PSObject] GetBoardChart([bool] $useTargetProject, [string] $board, [string] $name, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/boards/$board/charts/$name", $this.apiVersion, $null)
-    }
-     # Update a board chart
+    # Update a board chart
     [PSObject] UpdateBoardChart([bool] $useTargetProject, [PSObject] $body, [string] $board, [string] $name, [string] $team) {
         return $this.Request($useTargetProject, 'patch', "$team/work/boards/$board/charts/$name", $this.apiVersion, $body)
     }
-
-    # Get columns on a board
-    [PSObject] GetBoardColumns([bool] $useTargetProject, [string] $board, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/boards/$board/columns", $this.apiVersion, $null)
+     # Get a board chart
+    [PSObject] GetBoardChart([bool] $useTargetProject, [string] $board, [string] $name, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/boards/$board/charts/$name", $this.apiVersion, $null)
     }
-     # Update columns on a board
+
+    # Update columns on a board
     [PSObject] UpdateBoardColumns([bool] $useTargetProject, [PSObject] $body, [string] $board, [string] $team) {
         return $this.Request($useTargetProject, 'put', "$team/work/boards/$board/columns", $this.apiVersion, $body)
     }
-
-    # Get rows on a board
-    [PSObject] GetBoardRows([bool] $useTargetProject, [string] $board, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/boards/$board/rows", $this.apiVersion, $null)
+     # Get columns on a board
+    [PSObject] GetBoardColumns([bool] $useTargetProject, [string] $board, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/boards/$board/columns", $this.apiVersion, $null)
     }
-     # Update rows on a board
+
+    # Update rows on a board
     [PSObject] UpdateBoardRows([bool] $useTargetProject, [PSObject] $body, [string] $board, [string] $team) {
         return $this.Request($useTargetProject, 'put', "$team/work/boards/$board/rows", $this.apiVersion, $body)
     }
-
-    # Get board
-    [PSObject] GetBoard([bool] $useTargetProject, [string] $id, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/boards/$id", $this.apiVersion, $null)
+     # Get rows on a board
+    [PSObject] GetBoardRows([bool] $useTargetProject, [string] $board, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/boards/$board/rows", $this.apiVersion, $null)
     }
-     # Update board options
+
+    # Update board options
     [PSObject] SetBoardOptions([bool] $useTargetProject, [PSObject] $body, [string] $id, [string] $team) {
         return $this.Request($useTargetProject, 'put', "$team/work/boards/$id", $this.apiVersion, $body)
+    }
+     # Get board
+    [PSObject] GetBoard([bool] $useTargetProject, [string] $id, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/boards/$id", $this.apiVersion, $null)
     }
 
     # Returns the list of parent field filter model for the given list of workitem ids
@@ -187,12 +187,12 @@ class WorkApiClient : AzureDevOpsApiClient {
     }
 
     # empty
-    [PSObject] GetColumns([bool] $useTargetProject, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/taskboardcolumns", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] UpdateColumns([bool] $useTargetProject, [PSObject] $body, [string] $team) {
         return $this.Request($useTargetProject, 'put', "$team/work/taskboardcolumns", $this.apiVersion, $body)
+    }
+     # empty
+    [PSObject] GetColumns([bool] $useTargetProject, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/taskboardcolumns", $this.apiVersion, $null)
     }
 
     # empty
@@ -205,58 +205,58 @@ class WorkApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'patch', "$team/work/taskboardworkitems/$iterationId/$workItemId", $this.apiVersion, $body)
     }
 
-    # Get a team's settings
-    [PSObject] GetTeamSettings([bool] $useTargetProject, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/teamsettings", $this.apiVersion, $null)
-    }
-     # Update a team's settings
+    # Update a team's settings
     [PSObject] UpdateTeamSettings([bool] $useTargetProject, [PSObject] $body, [string] $team) {
         return $this.Request($useTargetProject, 'patch', "$team/work/teamsettings", $this.apiVersion, $body)
     }
-
-    # Get a team's iterations using timeframe filter
-    [PSObject] GetTeamIterations([bool] $useTargetProject, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/teamsettings/iterations", $this.apiVersion, $null)
+     # Get a team's settings
+    [PSObject] GetTeamSettings([bool] $useTargetProject, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/teamsettings", $this.apiVersion, $null)
     }
-     # Add an iteration to the team
+
+    # Add an iteration to the team
     [PSObject] PostTeamIteration([bool] $useTargetProject, [PSObject] $body, [string] $team) {
         return $this.Request($useTargetProject, 'post', "$team/work/teamsettings/iterations", $this.apiVersion, $body)
     }
-
-    # Delete a team's iteration by iterationId
-    [PSObject] DeleteTeamIteration([bool] $useTargetProject, [string] $id, [string] $team) {
-        return $this.Request($useTargetProject, 'delete', "$team/work/teamsettings/iterations/$id", $this.apiVersion, $null)
+     # Get a team's iterations using timeframe filter
+    [PSObject] GetTeamIterations([bool] $useTargetProject, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/teamsettings/iterations", $this.apiVersion, $null)
     }
-     # Get team's iteration by iterationId
+
+    # Get team's iteration by iterationId
     [PSObject] GetTeamIteration([bool] $useTargetProject, [string] $id, [string] $team) {
         return $this.Request($useTargetProject, 'get', "$team/work/teamsettings/iterations/$id", $this.apiVersion, $null)
     }
-
-    # Get a team's capacity including total capacity and days off
-    [PSObject] GetCapacitiesWithIdentityRefAndTotals([bool] $useTargetProject, [string] $iterationId, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/teamsettings/iterations/$iterationId/capacities", $this.apiVersion, $null)
+     # Delete a team's iteration by iterationId
+    [PSObject] DeleteTeamIteration([bool] $useTargetProject, [string] $id, [string] $team) {
+        return $this.Request($useTargetProject, 'delete', "$team/work/teamsettings/iterations/$id", $this.apiVersion, $null)
     }
-     # Replace a team's capacity
+
+    # Replace a team's capacity
     [PSObject] ReplaceCapacitiesWithIdentityRef([bool] $useTargetProject, [PSObject] $body, [string] $iterationId, [string] $team) {
         return $this.Request($useTargetProject, 'put', "$team/work/teamsettings/iterations/$iterationId/capacities", $this.apiVersion, $body)
     }
-
-    # Get a team member's capacity
-    [PSObject] GetCapacityWithIdentityRef([bool] $useTargetProject, [string] $iterationId, [string] $teamMemberId, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/teamsettings/iterations/$iterationId/capacities/$teamMemberId", $this.apiVersion, $null)
+     # Get a team's capacity including total capacity and days off
+    [PSObject] GetCapacitiesWithIdentityRefAndTotals([bool] $useTargetProject, [string] $iterationId, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/teamsettings/iterations/$iterationId/capacities", $this.apiVersion, $null)
     }
-     # Update a team member's capacity
+
+    # Update a team member's capacity
     [PSObject] UpdateCapacityWithIdentityRef([bool] $useTargetProject, [PSObject] $body, [string] $iterationId, [string] $teamMemberId, [string] $team) {
         return $this.Request($useTargetProject, 'patch', "$team/work/teamsettings/iterations/$iterationId/capacities/$teamMemberId", $this.apiVersion, $body)
     }
-
-    # Get team's days off for an iteration
-    [PSObject] GetTeamDaysOff([bool] $useTargetProject, [string] $iterationId, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/teamsettings/iterations/$iterationId/teamdaysoff", $this.apiVersion, $null)
+     # Get a team member's capacity
+    [PSObject] GetCapacityWithIdentityRef([bool] $useTargetProject, [string] $iterationId, [string] $teamMemberId, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/teamsettings/iterations/$iterationId/capacities/$teamMemberId", $this.apiVersion, $null)
     }
-     # Set a team's days off for an iteration
+
+    # Set a team's days off for an iteration
     [PSObject] UpdateTeamDaysOff([bool] $useTargetProject, [PSObject] $body, [string] $iterationId, [string] $team) {
         return $this.Request($useTargetProject, 'patch', "$team/work/teamsettings/iterations/$iterationId/teamdaysoff", $this.apiVersion, $body)
+    }
+     # Get team's days off for an iteration
+    [PSObject] GetTeamDaysOff([bool] $useTargetProject, [string] $iterationId, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/teamsettings/iterations/$iterationId/teamdaysoff", $this.apiVersion, $null)
     }
 
     # Get work items for iteration
@@ -264,13 +264,13 @@ class WorkApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "$team/work/teamsettings/iterations/$iterationId/workitems", $this.apiVersion, $null)
     }
 
-    # Get a collection of team field values
-    [PSObject] GetTeamFieldValues([bool] $useTargetProject, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/work/teamsettings/teamfieldvalues", $this.apiVersion, $null)
-    }
-     # Update team field values
+    # Update team field values
     [PSObject] UpdateTeamFieldValues([bool] $useTargetProject, [PSObject] $body, [string] $team) {
         return $this.Request($useTargetProject, 'patch', "$team/work/teamsettings/teamfieldvalues", $this.apiVersion, $body)
+    }
+     # Get a collection of team field values
+    [PSObject] GetTeamFieldValues([bool] $useTargetProject, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/work/teamsettings/teamfieldvalues", $this.apiVersion, $null)
     }
 
     # Reorder Product Backlog/Boards Work Items

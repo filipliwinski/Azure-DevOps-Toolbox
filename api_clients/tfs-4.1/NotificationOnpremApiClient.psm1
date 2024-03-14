@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class NotificationOnpremApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '4.1-preview'
@@ -32,12 +32,12 @@ class NotificationOnpremApiClient : AzureDevOpsApiClient {
     }
 
     # empty
-    [PSObject] GetSubscriber([bool] $useTargetProject, [string] $subscriberId) {
-        return $this.Request($useTargetProject, 'get', "notification/subscribers/$subscriberId", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] UpdateSubscriber([bool] $useTargetProject, [PSObject] $body, [string] $subscriberId) {
         return $this.Request($useTargetProject, 'patch', "notification/subscribers/$subscriberId", $this.apiVersion, $body)
+    }
+     # empty
+    [PSObject] GetSubscriber([bool] $useTargetProject, [string] $subscriberId) {
+        return $this.Request($useTargetProject, 'get', "notification/subscribers/$subscriberId", $this.apiVersion, $null)
     }
 
     # Query for subscriptions. A subscription is returned if it matches one or more of the specified conditions.
@@ -45,13 +45,13 @@ class NotificationOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "notification/subscriptionquery", $this.apiVersion, $body)
     }
 
-    # Create a new subscription.
-    [PSObject] CreateSubscription([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "notification/subscriptions", $this.apiVersion, $body)
-    }
-     # empty
+    # empty
     [PSObject] ListSubscriptions([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "notification/subscriptions", $this.apiVersion, $null)
+    }
+     # Create a new subscription.
+    [PSObject] CreateSubscription([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "notification/subscriptions", $this.apiVersion, $body)
     }
 
     # Update an existing subscription. Depending on the type of subscription and permissions, the caller can update the description, filter settings, channel (delivery) settings and more.
@@ -68,12 +68,12 @@ class NotificationOnpremApiClient : AzureDevOpsApiClient {
     }
 
     # empty
-    [PSObject] GetSubscriptionDiagnostics([bool] $useTargetProject, [string] $subscriptionId) {
-        return $this.Request($useTargetProject, 'get', "notification/subscriptions/$subscriptionId/diagnostics", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] UpdateSubscriptionDiagnostics([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'put', "notification/subscriptions/$subscriptionId/diagnostics", $this.apiVersion, $body)
+    }
+     # empty
+    [PSObject] GetSubscriptionDiagnostics([bool] $useTargetProject, [string] $subscriptionId) {
+        return $this.Request($useTargetProject, 'get', "notification/subscriptions/$subscriptionId/diagnostics", $this.apiVersion, $null)
     }
 
     # Update the specified user's settings for the specified subscription. This API is typically used to opt in or out of a shared subscription. User settings can only be applied to shared subscriptions, like team subscriptions or default subscriptions.

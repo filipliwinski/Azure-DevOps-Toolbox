@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class ReleaseOnpremApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '5.0'
@@ -34,13 +34,13 @@ class ReleaseOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "release/definitions", $this.apiVersion, $null)
     }
 
-    # Delete a release definition.
-    [PSObject] DeleteReleaseDefinition([bool] $useTargetProject, [int] $definitionId) {
-        return $this.Request($useTargetProject, 'delete', "release/definitions/$definitionId", $this.apiVersion, $null)
-    }
-     # Get a release definition.
+    # Get a release definition.
     [PSObject] GetReleaseDefinition([bool] $useTargetProject, [int] $definitionId) {
         return $this.Request($useTargetProject, 'get', "release/definitions/$definitionId", $this.apiVersion, $null)
+    }
+     # Delete a release definition.
+    [PSObject] DeleteReleaseDefinition([bool] $useTargetProject, [int] $definitionId) {
+        return $this.Request($useTargetProject, 'delete', "release/definitions/$definitionId", $this.apiVersion, $null)
     }
 
     # Get revision history for a release definition
@@ -63,13 +63,13 @@ class ReleaseOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'patch', "release/gates/$gateStepId", $this.apiVersion, $body)
     }
 
-    # Get a list of releases
-    [PSObject] GetReleases([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "release/releases", $this.apiVersion, $null)
-    }
-     # Create a release.
+    # Create a release.
     [PSObject] CreateRelease([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "release/releases", $this.apiVersion, $body)
+    }
+     # Get a list of releases
+    [PSObject] GetReleases([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "release/releases", $this.apiVersion, $null)
     }
 
     # Update few properties of a release.
@@ -125,13 +125,13 @@ class ReleaseOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "Release/releases/$releaseId/manualinterventions", $this.apiVersion, $null)
     }
 
-    # Get manual intervention for a given release and manual intervention id.
-    [PSObject] GetManualIntervention([bool] $useTargetProject, [int] $releaseId, [int] $manualInterventionId) {
-        return $this.Request($useTargetProject, 'get', "Release/releases/$releaseId/manualinterventions/$manualInterventionId", $this.apiVersion, $null)
-    }
-     # Update manual intervention.
+    # Update manual intervention.
     [PSObject] UpdateManualIntervention([bool] $useTargetProject, [PSObject] $body, [int] $releaseId, [int] $manualInterventionId) {
         return $this.Request($useTargetProject, 'patch', "Release/releases/$releaseId/manualinterventions/$manualInterventionId", $this.apiVersion, $body)
+    }
+     # Get manual intervention for a given release and manual intervention id.
+    [PSObject] GetManualIntervention([bool] $useTargetProject, [int] $releaseId, [int] $manualInterventionId) {
+        return $this.Request($useTargetProject, 'get', "Release/releases/$releaseId/manualinterventions/$manualInterventionId", $this.apiVersion, $null)
     }
 
 }

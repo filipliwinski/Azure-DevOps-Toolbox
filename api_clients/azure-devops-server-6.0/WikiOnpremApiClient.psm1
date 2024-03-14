@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class WikiOnpremApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '6.0'
@@ -11,13 +11,13 @@ class WikiOnpremApiClient : AzureDevOpsApiClient {
     WikiOnpremApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Creates the wiki resource.
-    [PSObject] CreateWiki([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "wiki/wikis", $this.apiVersion, $body)
-    }
-     # Gets all wikis in a project or collection.
+    # Gets all wikis in a project or collection.
     [PSObject] GetAllWikis([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "wiki/wikis", $this.apiVersion, $null)
+    }
+     # Creates the wiki resource.
+    [PSObject] CreateWiki([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "wiki/wikis", $this.apiVersion, $body)
     }
 
     # Updates the wiki corresponding to the wiki ID or wiki name provided using the update parameters.

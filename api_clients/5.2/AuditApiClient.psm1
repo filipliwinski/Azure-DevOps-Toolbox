@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class AuditApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '5.2-preview'
@@ -39,13 +39,13 @@ class AuditApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "audit/streams", $this.apiVersion, $null)
     }
 
-    # Delete Audit Stream
-    [PSObject] DeleteStream([bool] $useTargetProject, [int] $streamId) {
-        return $this.Request($useTargetProject, 'delete', "audit/streams/$streamId", $this.apiVersion, $null)
-    }
-     # Return Audit Stream with id of streamId if one exists otherwise throw
+    # Return Audit Stream with id of streamId if one exists otherwise throw
     [PSObject] QueryStreamById([bool] $useTargetProject, [int] $streamId) {
         return $this.Request($useTargetProject, 'get', "audit/streams/$streamId", $this.apiVersion, $null)
+    }
+     # Delete Audit Stream
+    [PSObject] DeleteStream([bool] $useTargetProject, [int] $streamId) {
+        return $this.Request($useTargetProject, 'delete', "audit/streams/$streamId", $this.apiVersion, $null)
     }
 
 }

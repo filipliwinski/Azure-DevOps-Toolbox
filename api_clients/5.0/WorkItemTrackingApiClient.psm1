@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class WorkItemTrackingApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '5.0'
@@ -51,13 +51,13 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "wit/attachments", $this.apiVersion, $body)
     }
 
-    # Downloads an attachment.
-    [PSObject] GetAttachment([bool] $useTargetProject, [string] $id) {
-        return $this.Request($useTargetProject, 'get', "wit/attachments/$id", $this.apiVersion, $null)
-    }
-     # Uploads an attachment chunk.Before performing [**Upload a Chunk**](#upload_a_chunk), make sure to have an attachment id returned in **Start a Chunked Upload** example on **Create** section. Specify the byte range of the chunk using Content-Length. For example: "Content - Length": "bytes 0 - 39999 / 50000" for the first 40000 bytes of a 50000 byte file.
+    # Uploads an attachment chunk.Before performing [**Upload a Chunk**](#upload_a_chunk), make sure to have an attachment id returned in **Start a Chunked Upload** example on **Create** section. Specify the byte range of the chunk using Content-Length. For example: "Content - Length": "bytes 0 - 39999 / 50000" for the first 40000 bytes of a 50000 byte file.
     [PSObject] UploadAttachment([bool] $useTargetProject, [PSObject] $body, [string] $id) {
         return $this.Request($useTargetProject, 'put', "wit/attachments/$id", $this.apiVersion, $body)
+    }
+     # Downloads an attachment.
+    [PSObject] GetAttachment([bool] $useTargetProject, [string] $id) {
+        return $this.Request($useTargetProject, 'get', "wit/attachments/$id", $this.apiVersion, $null)
     }
 
     # Gets root classification nodes under the project.
@@ -65,11 +65,7 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/classificationnodes", $this.apiVersion, $null)
     }
 
-    # Update an existing classification node.
-    [PSObject] UpdateClassificationNode([bool] $useTargetProject, [PSObject] $body, [string] $structureGroup, [string] $path) {
-        return $this.Request($useTargetProject, 'patch', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $body)
-    }
-     # Gets the classification node for a given node path.
+    # Gets the classification node for a given node path.
     [PSObject] GetClassificationNode([bool] $useTargetProject, [string] $structureGroup, [string] $path) {
         return $this.Request($useTargetProject, 'get', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $null)
     }
@@ -77,27 +73,31 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
     [PSObject] CreateOrUpdateClassificationNode([bool] $useTargetProject, [PSObject] $body, [string] $structureGroup, [string] $path) {
         return $this.Request($useTargetProject, 'post', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $body)
     }
+     # Update an existing classification node.
+    [PSObject] UpdateClassificationNode([bool] $useTargetProject, [PSObject] $body, [string] $structureGroup, [string] $path) {
+        return $this.Request($useTargetProject, 'patch', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $body)
+    }
      # Delete an existing classification node.
     [PSObject] DeleteClassificationNode([bool] $useTargetProject, [string] $structureGroup, [string] $path) {
         return $this.Request($useTargetProject, 'delete', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $null)
     }
 
-    # Create a new field.
-    [PSObject] CreateField([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "wit/fields", $this.apiVersion, $body)
-    }
-     # Returns information for all fields.
+    # Returns information for all fields.
     [PSObject] GetFields([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "wit/fields", $this.apiVersion, $null)
     }
-
-    # Deletes the field.
-    [PSObject] DeleteField([bool] $useTargetProject, [string] $fieldNameOrRefName) {
-        return $this.Request($useTargetProject, 'delete', "wit/fields/$fieldNameOrRefName", $this.apiVersion, $null)
+     # Create a new field.
+    [PSObject] CreateField([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "wit/fields", $this.apiVersion, $body)
     }
-     # Gets information on a specific field.
+
+    # Gets information on a specific field.
     [PSObject] GetField([bool] $useTargetProject, [string] $fieldNameOrRefName) {
         return $this.Request($useTargetProject, 'get', "wit/fields/$fieldNameOrRefName", $this.apiVersion, $null)
+    }
+     # Deletes the field.
+    [PSObject] DeleteField([bool] $useTargetProject, [string] $fieldNameOrRefName) {
+        return $this.Request($useTargetProject, 'delete', "wit/fields/$fieldNameOrRefName", $this.apiVersion, $null)
     }
 
     # Gets the root queries and their children
@@ -105,17 +105,17 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/queries", $this.apiVersion, $null)
     }
 
-    # Update a query or a folder. This allows you to update, rename and move queries and folders.
-    [PSObject] UpdateQuery([bool] $useTargetProject, [PSObject] $body, [string] $query) {
-        return $this.Request($useTargetProject, 'patch', "wit/queries/$query", $this.apiVersion, $body)
-    }
-     # Retrieves an individual query and its children
+    # Retrieves an individual query and its children
     [PSObject] GetQuery([bool] $useTargetProject, [string] $query) {
         return $this.Request($useTargetProject, 'get', "wit/queries/$query", $this.apiVersion, $null)
     }
      # Creates a query, or moves a query.Learn more about Work Item Query Language (WIQL) syntax [here](https://docs.microsoft.com/en-us/vsts/collaborate/wiql-syntax?toc=/vsts/work/track/toc.json&bc=/vsts/work/track/breadcrumb/toc.json&view=vsts).
     [PSObject] CreateQuery([bool] $useTargetProject, [PSObject] $body, [string] $query) {
         return $this.Request($useTargetProject, 'post', "wit/queries/$query", $this.apiVersion, $body)
+    }
+     # Update a query or a folder. This allows you to update, rename and move queries and folders.
+    [PSObject] UpdateQuery([bool] $useTargetProject, [PSObject] $body, [string] $query) {
+        return $this.Request($useTargetProject, 'patch', "wit/queries/$query", $this.apiVersion, $body)
     }
      # Delete a query or a folder. This deletes any permission change on the deleted query or folder and any of its descendants if it is a folder. It is important to note that the deleted permission changes cannot be recovered upon undeleting the query or folder.
     [PSObject] DeleteQuery([bool] $useTargetProject, [string] $query) {
@@ -150,13 +150,13 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/reporting/workitemlinks", $this.apiVersion, $null)
     }
 
-    # Get a batch of work item revisions with the option of including deleted items
-    [PSObject] ReadReportingRevisionsGet([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "wit/reporting/workitemrevisions", $this.apiVersion, $null)
-    }
-     # Get a batch of work item revisions. This request may be used if your list of fields is large enough that it may run the URL over the length limit.
+    # Get a batch of work item revisions. This request may be used if your list of fields is large enough that it may run the URL over the length limit.
     [PSObject] ReadReportingRevisionsPost([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "wit/reporting/workitemrevisions", $this.apiVersion, $body)
+    }
+     # Get a batch of work item revisions with the option of including deleted items
+    [PSObject] ReadReportingRevisionsGet([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "wit/reporting/workitemrevisions", $this.apiVersion, $null)
     }
 
     # Returns a list of work items (Maximum 200)
@@ -164,13 +164,13 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/workitems", $this.apiVersion, $null)
     }
 
-    # Creates a single work item.
-    [PSObject] CreateWorkItem([bool] $useTargetProject, [PSObject] $body, [string] $type) {
-        return $this.Request($useTargetProject, 'post', "wit/workitems/$type", $this.apiVersion, $body)
-    }
-     # Returns a single work item from a template.
+    # Returns a single work item from a template.
     [PSObject] GetWorkItemTemplate([bool] $useTargetProject, [string] $type) {
         return $this.Request($useTargetProject, 'get', "wit/workitems/$type", $this.apiVersion, $null)
+    }
+     # Creates a single work item.
+    [PSObject] CreateWorkItem([bool] $useTargetProject, [PSObject] $body, [string] $type) {
+        return $this.Request($useTargetProject, 'post', "wit/workitems/$type", $this.apiVersion, $body)
     }
 
     # Updates a single work item.
@@ -256,13 +256,13 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/workitemtypes/$type/states", $this.apiVersion, $null)
     }
 
-    # Creates a template
-    [PSObject] CreateTemplate([bool] $useTargetProject, [PSObject] $body, [string] $team) {
-        return $this.Request($useTargetProject, 'post', "$team/wit/templates", $this.apiVersion, $body)
-    }
-     # Gets template
+    # Gets template
     [PSObject] GetTemplates([bool] $useTargetProject, [string] $team) {
         return $this.Request($useTargetProject, 'get', "$team/wit/templates", $this.apiVersion, $null)
+    }
+     # Creates a template
+    [PSObject] CreateTemplate([bool] $useTargetProject, [PSObject] $body, [string] $team) {
+        return $this.Request($useTargetProject, 'post', "$team/wit/templates", $this.apiVersion, $body)
     }
 
     # Replace template contents
@@ -284,12 +284,12 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
     }
 
     # Gets the results of the query given the query ID.
-    [PSObject] QueryById_Head([bool] $useTargetProject, [string] $id, [string] $team) {
-        return $this.Request($useTargetProject, 'head', "$team/wit/wiql/$id", $this.apiVersion, $null)
-    }
-     # Gets the results of the query given the query ID.
     [PSObject] QueryById([bool] $useTargetProject, [string] $id, [string] $team) {
         return $this.Request($useTargetProject, 'get', "$team/wit/wiql/$id", $this.apiVersion, $null)
+    }
+     # Gets the results of the query given the query ID.
+    [PSObject] QueryById_Head([bool] $useTargetProject, [string] $id, [string] $team) {
+        return $this.Request($useTargetProject, 'head', "$team/wit/wiql/$id", $this.apiVersion, $null)
     }
 
 }

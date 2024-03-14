@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class FeedOnpremApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '5.0-preview'
@@ -11,13 +11,13 @@ class FeedOnpremApiClient : AzureDevOpsApiClient {
     FeedOnpremApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Create a feed, a container for various package types.
-    [PSObject] CreateFeed([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "packaging/feeds", $this.apiVersion, $body)
-    }
-     # Get all feeds in an account where you have the provided role access.
+    # Get all feeds in an account where you have the provided role access.
     [PSObject] GetFeeds([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "packaging/feeds", $this.apiVersion, $null)
+    }
+     # Create a feed, a container for various package types.
+    [PSObject] CreateFeed([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "packaging/feeds", $this.apiVersion, $body)
     }
 
     # Change the attributes of a feed.
@@ -58,13 +58,13 @@ class FeedOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/Packages/$packageId/Versions/$packageVersionId/provenance", $this.apiVersion, $null)
     }
 
-    # Get the permissions for a feed.
-    [PSObject] GetFeedPermissions([bool] $useTargetProject, [string] $feedId) {
-        return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/permissions", $this.apiVersion, $null)
-    }
-     # Update the permissions on a feed.
+    # Update the permissions on a feed.
     [PSObject] SetFeedPermissions([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
         return $this.Request($useTargetProject, 'patch', "packaging/Feeds/$feedId/permissions", $this.apiVersion, $body)
+    }
+     # Get the permissions for a feed.
+    [PSObject] GetFeedPermissions([bool] $useTargetProject, [string] $feedId) {
+        return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/permissions", $this.apiVersion, $null)
     }
 
     # Query for packages within the recycle bin.
@@ -100,13 +100,13 @@ class FeedOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $null)
     }
 
-    # Create a new view on the referenced feed.
-    [PSObject] CreateFeedView([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
-        return $this.Request($useTargetProject, 'post', "packaging/Feeds/$feedId/views", $this.apiVersion, $body)
-    }
-     # Get all views for a feed.
+    # Get all views for a feed.
     [PSObject] GetFeedViews([bool] $useTargetProject, [string] $feedId) {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/views", $this.apiVersion, $null)
+    }
+     # Create a new view on the referenced feed.
+    [PSObject] CreateFeedView([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
+        return $this.Request($useTargetProject, 'post', "packaging/Feeds/$feedId/views", $this.apiVersion, $body)
     }
 
     # Update a view.
@@ -122,13 +122,13 @@ class FeedOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $null)
     }
 
-    # Get all service-wide feed creation permissions.
-    [PSObject] GetGlobalPermissions([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "packaging/globalpermissions", $this.apiVersion, $null)
-    }
-     # Set service-wide permissions that govern feed creation.
+    # Set service-wide permissions that govern feed creation.
     [PSObject] SetGlobalPermissions([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "packaging/globalpermissions", $this.apiVersion, $body)
+    }
+     # Get all service-wide feed creation permissions.
+    [PSObject] GetGlobalPermissions([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "packaging/globalpermissions", $this.apiVersion, $null)
     }
 
     # Generate a SVG badge for the latest version of a package.  The generated SVG is typically used as the image in an HTML link which takes users to the feed containing the package to accelerate discovery and consumption.

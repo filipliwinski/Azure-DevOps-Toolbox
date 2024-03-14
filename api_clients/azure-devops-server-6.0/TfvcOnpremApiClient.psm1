@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class TfvcOnpremApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '6.0'
@@ -51,13 +51,13 @@ class TfvcOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "tfvc/branches", $this.apiVersion, $null)
     }
 
-    # Create a new changeset.Accepts TfvcChangeset as JSON body
-    [PSObject] CreateChangeset([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "tfvc/changesets", $this.apiVersion, $body)
-    }
-     # Retrieve Tfvc ChangesetsNote: This is a new version of the GetChangesets API that doesn't expose the unneeded queryParamspresent in the 1.0 version of the API.
+    # Retrieve Tfvc ChangesetsNote: This is a new version of the GetChangesets API that doesn't expose the unneeded queryParamspresent in the 1.0 version of the API.
     [PSObject] GetChangesets([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "tfvc/changesets", $this.apiVersion, $null)
+    }
+     # Create a new changeset.Accepts TfvcChangeset as JSON body
+    [PSObject] CreateChangeset([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "tfvc/changesets", $this.apiVersion, $body)
     }
 
     # Retrieve a Tfvc Changeset

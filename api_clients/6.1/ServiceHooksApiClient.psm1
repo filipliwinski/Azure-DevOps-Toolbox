@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class ServiceHooksApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '6.1-preview'
@@ -66,13 +66,13 @@ class ServiceHooksApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "hooks/publishersquery", $this.apiVersion, $body)
     }
 
-    # Create a subscription.
-    [PSObject] CreateSubscription([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "hooks/subscriptions", $this.apiVersion, $body)
-    }
-     # Get a list of subscriptions.
+    # Get a list of subscriptions.
     [PSObject] ListSubscriptions([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "hooks/subscriptions", $this.apiVersion, $null)
+    }
+     # Create a subscription.
+    [PSObject] CreateSubscription([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "hooks/subscriptions", $this.apiVersion, $body)
     }
 
     # Update a subscription. <param name="subscriptionId">ID for a subscription that you wish to update.</param>
@@ -89,12 +89,12 @@ class ServiceHooksApiClient : AzureDevOpsApiClient {
     }
 
     # empty
-    [PSObject] GetSubscriptionDiagnostics([bool] $useTargetProject, [string] $subscriptionId) {
-        return $this.Request($useTargetProject, 'get', "hooks/subscriptions/$subscriptionId/diagnostics", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] UpdateSubscriptionDiagnostics([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'put', "hooks/subscriptions/$subscriptionId/diagnostics", $this.apiVersion, $body)
+    }
+     # empty
+    [PSObject] GetSubscriptionDiagnostics([bool] $useTargetProject, [string] $subscriptionId) {
+        return $this.Request($useTargetProject, 'get', "hooks/subscriptions/$subscriptionId/diagnostics", $this.apiVersion, $null)
     }
 
     # Get a list of notifications for a specific subscription. A notification includes details about the event, the request to and the response from the consumer service.

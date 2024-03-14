@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class SecurityRolesApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '6.1-preview'
@@ -24,13 +24,13 @@ class SecurityRolesApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'patch', "securityroles/scopes/$scopeId/roleassignments/resources/$resourceId", $this.apiVersion, $body)
     }
 
-    # Remove the role assignment on a resource
-    [PSObject] RemoveRoleAssignment([bool] $useTargetProject, [string] $scopeId, [string] $resourceId, [string] $identityId) {
-        return $this.Request($useTargetProject, 'delete', "securityroles/scopes/$scopeId/roleassignments/resources/$resourceId/$identityId", $this.apiVersion, $null)
-    }
-     # Set role assignment on a resource
+    # Set role assignment on a resource
     [PSObject] SetRoleAssignment([bool] $useTargetProject, [PSObject] $body, [string] $scopeId, [string] $resourceId, [string] $identityId) {
         return $this.Request($useTargetProject, 'put', "securityroles/scopes/$scopeId/roleassignments/resources/$resourceId/$identityId", $this.apiVersion, $body)
+    }
+     # Remove the role assignment on a resource
+    [PSObject] RemoveRoleAssignment([bool] $useTargetProject, [string] $scopeId, [string] $resourceId, [string] $identityId) {
+        return $this.Request($useTargetProject, 'delete', "securityroles/scopes/$scopeId/roleassignments/resources/$resourceId/$identityId", $this.apiVersion, $null)
     }
 
     # empty

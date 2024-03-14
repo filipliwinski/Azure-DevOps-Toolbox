@@ -1,6 +1,6 @@
 # This file was auto-generated. Do not edit.
 
-using module .\..\..\..\src\AzureDevOpsApiClient.psm1
+using module .\..\AzureDevOpsApiClient.psm1
 
 class FeedApiClient : AzureDevOpsApiClient {
     [string] $apiVersion = '6.0-preview'
@@ -11,13 +11,13 @@ class FeedApiClient : AzureDevOpsApiClient {
     FeedApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Get all service-wide feed creation and administration permissions.
-    [PSObject] GetGlobalPermissions([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "packaging/globalpermissions", $this.apiVersion, $null)
-    }
-     # Set service-wide permissions that govern feed creation and administration.
+    # Set service-wide permissions that govern feed creation and administration.
     [PSObject] SetGlobalPermissions([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "packaging/globalpermissions", $this.apiVersion, $body)
+    }
+     # Get all service-wide feed creation and administration permissions.
+    [PSObject] GetGlobalPermissions([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "packaging/globalpermissions", $this.apiVersion, $null)
     }
 
     # Query to determine which feeds have changed since the last call, tracked through the provided continuationToken. Only changes to a feed itself are returned and impact the continuationToken, not additions or alterations to packages within the feeds.If the project parameter is present, gets all feed changes in the given project.If omitted, gets all feed changes in the organization.
@@ -36,21 +36,21 @@ class FeedApiClient : AzureDevOpsApiClient {
     }
 
     # empty
-    [PSObject] PermanentDeleteFeed([bool] $useTargetProject, [string] $feedId) {
-        return $this.Request($useTargetProject, 'delete', "packaging/feedrecyclebin/$feedId", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] RestoreDeletedFeed([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
         return $this.Request($useTargetProject, 'patch', "packaging/feedrecyclebin/$feedId", $this.apiVersion, $body)
     }
-
-    # Create a feed, a container for various package types.Feeds can be created in a project if the project parameter is included in the request url.If the project parameter is omitted, the feed will not be associated with a project and will be created at the organization level.
-    [PSObject] CreateFeed([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "packaging/feeds", $this.apiVersion, $body)
+     # empty
+    [PSObject] PermanentDeleteFeed([bool] $useTargetProject, [string] $feedId) {
+        return $this.Request($useTargetProject, 'delete', "packaging/feedrecyclebin/$feedId", $this.apiVersion, $null)
     }
-     # Get all feeds in an account where you have the provided role access.If the project parameter is present, gets all feeds in the given project.If omitted, gets all feeds in the organization.
+
+    # Get all feeds in an account where you have the provided role access.If the project parameter is present, gets all feeds in the given project.If omitted, gets all feeds in the organization.
     [PSObject] GetFeeds([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "packaging/feeds", $this.apiVersion, $null)
+    }
+     # Create a feed, a container for various package types.Feeds can be created in a project if the project parameter is included in the request url.If the project parameter is omitted, the feed will not be associated with a project and will be created at the organization level.
+    [PSObject] CreateFeed([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "packaging/feeds", $this.apiVersion, $body)
     }
 
     # Change the attributes of a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
@@ -106,13 +106,13 @@ class FeedApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/Packages/$packageId/Versions/$packageVersionId/provenance", $this.apiVersion, $null)
     }
 
-    # Get the permissions for a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
-    [PSObject] GetFeedPermissions([bool] $useTargetProject, [string] $feedId) {
-        return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/permissions", $this.apiVersion, $null)
-    }
-     # Update the permissions on a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
+    # Update the permissions on a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
     [PSObject] SetFeedPermissions([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
         return $this.Request($useTargetProject, 'patch', "packaging/Feeds/$feedId/permissions", $this.apiVersion, $body)
+    }
+     # Get the permissions for a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
+    [PSObject] GetFeedPermissions([bool] $useTargetProject, [string] $feedId) {
+        return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/permissions", $this.apiVersion, $null)
     }
 
     # Query for packages within the recycle bin.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
@@ -148,13 +148,13 @@ class FeedApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $null)
     }
 
-    # Create a new view on the referenced feed.The project parameter must be supplied if the feed was created in a project.
-    [PSObject] CreateFeedView([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
-        return $this.Request($useTargetProject, 'post', "packaging/Feeds/$feedId/views", $this.apiVersion, $body)
-    }
-     # Get all views for a feed.The project parameter must be supplied if the feed was created in a project.
+    # Get all views for a feed.The project parameter must be supplied if the feed was created in a project.
     [PSObject] GetFeedViews([bool] $useTargetProject, [string] $feedId) {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/views", $this.apiVersion, $null)
+    }
+     # Create a new view on the referenced feed.The project parameter must be supplied if the feed was created in a project.
+    [PSObject] CreateFeedView([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
+        return $this.Request($useTargetProject, 'post', "packaging/Feeds/$feedId/views", $this.apiVersion, $body)
     }
 
     # Update a view.The project parameter must be supplied if the feed was created in a project.
