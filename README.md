@@ -16,17 +16,19 @@ The API specification can be found [here](https://github.com/MicrosoftDocs/vsts-
 
 1. Clone the repository to your machine.
 2. Open a PowerShell terminal window in the location of the cloned repository.
-3. In the terminal window go into the `src\` folder:
+3. In the terminal window go into the `src` folder:
 
     `cd src`
 
-4. Generate ApiClient modules by running the ApiClientGenerator script:
+4. Specify the target API version - just include one of the `.ps1` files from the `api_clients` folder in line 5 of the `demo.ps1` file.
 
-    `.\ApiClientGenerator.ps1`
+5. Configure the `demo.ps1` script with your organization name, project name and PAT token (if you use Azure DevOps Server, also the $tfsServiceHost variable).
 
-5. Wait until the API Clients are generated. Once they are ready, configure the `demo.ps1` script with your target API version - just include one of the `.ps1` files from the `auto_grnerated/ApiClients` folder in line 5 of `demo.ps1`.
-6. Configure the `demo.ps1` script with your organization name, project name and PAT token.
-7. Now you can include other `.ps1` scripts from the `src/` folder and start managing your Azure DevOps project like a pro. Just be aware that there is no prompt before deleting things (and no Undo button or `dryRun` flag). Be careful when using `Remove-` commands! Run the demo script to see Azure DevOps Toolbox in action:
+6. Now you can include other `.ps1` scripts and `.psm1` modules from the `src` folder in the `demo.ps1` file and start managing your Azure DevOps project like a pro.
+
+> Please be aware that there is no prompt before deleting things (and no Undo button or `dryRun` flag). Be careful when using `Remove-` commands!
+
+Run the demo script to see Azure DevOps Toolbox in action:
 
     `.\demo.ps1`
 
