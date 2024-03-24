@@ -15,17 +15,17 @@ class TokensApiClient : AzureDevOpsApiClient {
     [PSObject] Revoke([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'delete', "tokens/pats", $this.apiVersion, $null)
     }
-     # Updates an existing personal access token (PAT) with the new parameters. To update a token, it must be valid (has not been revoked).
-    [PSObject] UpdatePat([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'put', "tokens/pats", $this.apiVersion, $body)
+     # Gets a single personal access token (PAT).
+    [PSObject] GetPat([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "tokens/pats", $this.apiVersion, $null)
     }
      # Creates a new personal access token (PAT) for the requesting user.
     [PSObject] CreatePat([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "tokens/pats", $this.apiVersion, $body)
     }
-     # Gets a single personal access token (PAT).
-    [PSObject] GetPat([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "tokens/pats", $this.apiVersion, $null)
+     # Updates an existing personal access token (PAT) with the new parameters. To update a token, it must be valid (has not been revoked).
+    [PSObject] UpdatePat([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'put', "tokens/pats", $this.apiVersion, $body)
     }
 
 }

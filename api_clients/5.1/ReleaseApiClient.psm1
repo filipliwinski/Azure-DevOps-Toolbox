@@ -25,13 +25,13 @@ class ReleaseApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'put', "release/definitions", $this.apiVersion, $body)
     }
-     # Create a release definition
-    [PSObject] CreateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "release/definitions", $this.apiVersion, $body)
-    }
      # Get a list of release definitions.
     [PSObject] GetReleaseDefinitions([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "release/definitions", $this.apiVersion, $null)
+    }
+     # Create a release definition
+    [PSObject] CreateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "release/definitions", $this.apiVersion, $body)
     }
 
     # Get a release definition.
@@ -62,17 +62,17 @@ class ReleaseApiClient : AzureDevOpsApiClient {
     [PSObject] GetFolders([bool] $useTargetProject, [string] $path) {
         return $this.Request($useTargetProject, 'get', "release/folders/$path", $this.apiVersion, $null)
     }
-     # Updates an existing folder at given existing path.
-    [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
-        return $this.Request($useTargetProject, 'patch', "release/folders/$path", $this.apiVersion, $body)
+     # Deletes a definition folder for given folder name and path and all it's existing definitions.
+    [PSObject] DeleteFolder([bool] $useTargetProject, [string] $path) {
+        return $this.Request($useTargetProject, 'delete', "release/folders/$path", $this.apiVersion, $null)
     }
      # This method is no longer supported. Use CreateFolder with folder parameter API.
     [PSObject] CreateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
         return $this.Request($useTargetProject, 'post', "release/folders/$path", $this.apiVersion, $body)
     }
-     # Deletes a definition folder for given folder name and path and all it's existing definitions.
-    [PSObject] DeleteFolder([bool] $useTargetProject, [string] $path) {
-        return $this.Request($useTargetProject, 'delete', "release/folders/$path", $this.apiVersion, $null)
+     # Updates an existing folder at given existing path.
+    [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
+        return $this.Request($useTargetProject, 'patch', "release/folders/$path", $this.apiVersion, $body)
     }
 
     # Updates the gate for a deployment.
@@ -93,13 +93,13 @@ class ReleaseApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateReleaseResource([bool] $useTargetProject, [PSObject] $body, [int] $releaseId) {
         return $this.Request($useTargetProject, 'patch', "release/releases/$releaseId", $this.apiVersion, $body)
     }
-     # Get release for a given revision number.
-    [PSObject] GetReleaseRevision([bool] $useTargetProject, [int] $releaseId) {
-        return $this.Request($useTargetProject, 'get', "release/releases/$releaseId", $this.apiVersion, $null)
-    }
      # Update a complete release object.
     [PSObject] UpdateRelease([bool] $useTargetProject, [PSObject] $body, [int] $releaseId) {
         return $this.Request($useTargetProject, 'put', "release/releases/$releaseId", $this.apiVersion, $body)
+    }
+     # Get release for a given revision number.
+    [PSObject] GetReleaseRevision([bool] $useTargetProject, [int] $releaseId) {
+        return $this.Request($useTargetProject, 'get', "release/releases/$releaseId", $this.apiVersion, $null)
     }
 
     # Update the status of a release environment

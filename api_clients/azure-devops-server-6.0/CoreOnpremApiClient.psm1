@@ -34,13 +34,13 @@ class CoreOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateProject([bool] $useTargetProject, [PSObject] $body, [string] $projectId) {
         return $this.Request($useTargetProject, 'patch', "projects/Id", $this.apiVersion, $body)
     }
-     # Get project with the specified id or name, optionally including capabilities.
-    [PSObject] GetProject([bool] $useTargetProject, [string] $projectId) {
-        return $this.Request($useTargetProject, 'get', "projects/Id", $this.apiVersion, $null)
-    }
      # Queues a project to be deleted. Use the [GetOperation](../../operations/operations/get) to periodically check for delete project status.
     [PSObject] QueueDeleteProject([bool] $useTargetProject, [string] $projectId) {
         return $this.Request($useTargetProject, 'delete', "projects/Id", $this.apiVersion, $null)
+    }
+     # Get project with the specified id or name, optionally including capabilities.
+    [PSObject] GetProject([bool] $useTargetProject, [string] $projectId) {
+        return $this.Request($useTargetProject, 'get', "projects/Id", $this.apiVersion, $null)
     }
 
     # Sets the avatar for the project.
@@ -74,13 +74,13 @@ class CoreOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateTeam([bool] $useTargetProject, [PSObject] $body, [string] $projectId, [string] $teamId) {
         return $this.Request($useTargetProject, 'patch', "projects/Id/teams/$teamId", $this.apiVersion, $body)
     }
-     # Delete a team.
-    [PSObject] DeleteTeam([bool] $useTargetProject, [string] $projectId, [string] $teamId) {
-        return $this.Request($useTargetProject, 'delete', "projects/Id/teams/$teamId", $this.apiVersion, $null)
-    }
      # Get a specific team.
     [PSObject] GetTeam([bool] $useTargetProject, [string] $projectId, [string] $teamId) {
         return $this.Request($useTargetProject, 'get', "projects/Id/teams/$teamId", $this.apiVersion, $null)
+    }
+     # Delete a team.
+    [PSObject] DeleteTeam([bool] $useTargetProject, [string] $projectId, [string] $teamId) {
+        return $this.Request($useTargetProject, 'delete', "projects/Id/teams/$teamId", $this.apiVersion, $null)
     }
 
     # Get a list of members for a specific team.

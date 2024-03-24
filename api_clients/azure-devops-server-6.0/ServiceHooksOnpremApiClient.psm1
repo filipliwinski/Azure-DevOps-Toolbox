@@ -79,13 +79,13 @@ class ServiceHooksOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] ReplaceSubscription([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'put', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $body)
     }
-     # Delete a specific service hooks subscription.
-    [PSObject] DeleteSubscription([bool] $useTargetProject, [string] $subscriptionId) {
-        return $this.Request($useTargetProject, 'delete', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $null)
-    }
      # Get a specific service hooks subscription.
     [PSObject] GetSubscription([bool] $useTargetProject, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'get', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $null)
+    }
+     # Delete a specific service hooks subscription.
+    [PSObject] DeleteSubscription([bool] $useTargetProject, [string] $subscriptionId) {
+        return $this.Request($useTargetProject, 'delete', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $null)
     }
 
     # empty

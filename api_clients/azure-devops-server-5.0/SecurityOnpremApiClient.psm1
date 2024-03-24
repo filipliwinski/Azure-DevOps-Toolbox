@@ -24,13 +24,13 @@ class SecurityOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] SetAccessControlLists([bool] $useTargetProject, [PSObject] $body, [string] $securityNamespaceId) {
         return $this.Request($useTargetProject, 'post', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $body)
     }
-     # Return a list of access control lists for the specified security namespace and token. All ACLs in the security namespace will be retrieved if no optional parameters are provided.
-    [PSObject] QueryAccessControlLists([bool] $useTargetProject, [string] $securityNamespaceId) {
-        return $this.Request($useTargetProject, 'get', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $null)
-    }
      # Remove access control lists under the specfied security namespace.
     [PSObject] RemoveAccessControlLists([bool] $useTargetProject, [string] $securityNamespaceId) {
         return $this.Request($useTargetProject, 'delete', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $null)
+    }
+     # Return a list of access control lists for the specified security namespace and token. All ACLs in the security namespace will be retrieved if no optional parameters are provided.
+    [PSObject] QueryAccessControlLists([bool] $useTargetProject, [string] $securityNamespaceId) {
+        return $this.Request($useTargetProject, 'get', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $null)
     }
 
     # Removes the specified permissions on a security token for a user or group.
