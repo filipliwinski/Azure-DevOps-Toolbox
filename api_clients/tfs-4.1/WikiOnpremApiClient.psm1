@@ -24,13 +24,13 @@ class WikiOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateWiki([bool] $useTargetProject, [PSObject] $body, [string] $wikiIdentifier) {
         return $this.Request($useTargetProject, 'patch', "wiki/wikis/$wikiIdentifier", $this.apiVersion, $body)
     }
-     # Gets the wiki corresponding to the wiki name or Id provided.
-    [PSObject] GetWiki([bool] $useTargetProject, [string] $wikiIdentifier) {
-        return $this.Request($useTargetProject, 'get', "wiki/wikis/$wikiIdentifier", $this.apiVersion, $null)
-    }
      # Deletes the wiki corresponding to the wiki name or Id provided.
     [PSObject] DeleteWiki([bool] $useTargetProject, [string] $wikiIdentifier) {
         return $this.Request($useTargetProject, 'delete', "wiki/wikis/$wikiIdentifier", $this.apiVersion, $null)
+    }
+     # Gets the wiki corresponding to the wiki name or Id provided.
+    [PSObject] GetWiki([bool] $useTargetProject, [string] $wikiIdentifier) {
+        return $this.Request($useTargetProject, 'get', "wiki/wikis/$wikiIdentifier", $this.apiVersion, $null)
     }
 
     # Creates an attachment in the wiki.
@@ -47,13 +47,13 @@ class WikiOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] GetPage([bool] $useTargetProject, [string] $wikiIdentifier) {
         return $this.Request($useTargetProject, 'get', "wiki/wikis/$wikiIdentifier/pages", $this.apiVersion, $null)
     }
-     # Deletes a wiki page.
-    [PSObject] DeletePage([bool] $useTargetProject, [string] $wikiIdentifier) {
-        return $this.Request($useTargetProject, 'delete', "wiki/wikis/$wikiIdentifier/pages", $this.apiVersion, $null)
-    }
      # Creates or edits a wiki page.
     [PSObject] CreateOrUpdatePage([bool] $useTargetProject, [PSObject] $body, [string] $wikiIdentifier) {
         return $this.Request($useTargetProject, 'put', "wiki/wikis/$wikiIdentifier/pages", $this.apiVersion, $body)
+    }
+     # Deletes a wiki page.
+    [PSObject] DeletePage([bool] $useTargetProject, [string] $wikiIdentifier) {
+        return $this.Request($useTargetProject, 'delete', "wiki/wikis/$wikiIdentifier/pages", $this.apiVersion, $null)
     }
 
 }

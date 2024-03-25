@@ -43,13 +43,13 @@ class FeedApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateFeed([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
         return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId", $this.apiVersion, $body)
     }
-     # Get the settings for a specific feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
-    [PSObject] GetFeed([bool] $useTargetProject, [string] $feedId) {
-        return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId", $this.apiVersion, $null)
-    }
      # Remove a feed and all its packages. The action does not result in packages moving to the RecycleBin and is not reversible.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
     [PSObject] DeleteFeed([bool] $useTargetProject, [string] $feedId) {
         return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId", $this.apiVersion, $null)
+    }
+     # Get the settings for a specific feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
+    [PSObject] GetFeed([bool] $useTargetProject, [string] $feedId) {
+        return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId", $this.apiVersion, $null)
     }
 
     # Get a batch of package changes made to a feed.  The changes returned are 'most recent change' so if an Add is followed by an Update before you begin enumerating, you'll only see one change in the batch.  While consuming batches using the continuation token, you may see changes to the same package version multiple times if they are happening as you enumerate.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
@@ -125,13 +125,13 @@ class FeedApiClient : AzureDevOpsApiClient {
     [PSObject] SetFeedRetentionPolicies([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
         return $this.Request($useTargetProject, 'put', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $body)
     }
-     # Get the retention policy for a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
-    [PSObject] GetFeedRetentionPolicies([bool] $useTargetProject, [string] $feedId) {
-        return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $null)
-    }
      # Delete the retention policy for a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
     [PSObject] DeleteFeedRetentionPolicies([bool] $useTargetProject, [string] $feedId) {
         return $this.Request($useTargetProject, 'delete', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $null)
+    }
+     # Get the retention policy for a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
+    [PSObject] GetFeedRetentionPolicies([bool] $useTargetProject, [string] $feedId) {
+        return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $null)
     }
 
     # Get all views for a feed.The project parameter must be supplied if the feed was created in a project.
@@ -147,13 +147,13 @@ class FeedApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateFeedView([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $viewId) {
         return $this.Request($useTargetProject, 'patch', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $body)
     }
-     # Get a view by Id.The project parameter must be supplied if the feed was created in a project.
-    [PSObject] GetFeedView([bool] $useTargetProject, [string] $feedId, [string] $viewId) {
-        return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $null)
-    }
      # Delete a feed view.The project parameter must be supplied if the feed was created in a project.
     [PSObject] DeleteFeedView([bool] $useTargetProject, [string] $feedId, [string] $viewId) {
         return $this.Request($useTargetProject, 'delete', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $null)
+    }
+     # Get a view by Id.The project parameter must be supplied if the feed was created in a project.
+    [PSObject] GetFeedView([bool] $useTargetProject, [string] $feedId, [string] $viewId) {
+        return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $null)
     }
 
     # Generate a SVG badge for the latest version of a package.  The generated SVG is typically used as the image in an HTML link which takes users to the feed containing the package to accelerate discovery and consumption.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
