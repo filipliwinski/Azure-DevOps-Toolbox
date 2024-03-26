@@ -85,7 +85,11 @@ class TestOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "test/Plans/$planId/Suites/$sourceSuiteId/cloneoperation", $this.apiVersion, $body)
     }
 
-    # Get test suite by suite id.
+    # Update a test suite.
+    [PSObject] UpdateTestSuite([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
+        return $this.Request($useTargetProject, 'patch', "test/Plans/$planId/suites/$suiteId", $this.apiVersion, $body)
+    }
+     # Get test suite by suite id.
     [PSObject] GetTestSuiteById([bool] $useTargetProject, [int] $planId, [int] $suiteId) {
         return $this.Request($useTargetProject, 'get', "test/Plans/$planId/suites/$suiteId", $this.apiVersion, $null)
     }
@@ -96,10 +100,6 @@ class TestOnpremApiClient : AzureDevOpsApiClient {
      # Create a test suite.
     [PSObject] CreateTestSuite([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
         return $this.Request($useTargetProject, 'post', "test/Plans/$planId/suites/$suiteId", $this.apiVersion, $body)
-    }
-     # Update a test suite.
-    [PSObject] UpdateTestSuite([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
-        return $this.Request($useTargetProject, 'patch', "test/Plans/$planId/suites/$suiteId", $this.apiVersion, $body)
     }
 
     # Get a list of test points.
@@ -121,7 +121,11 @@ class TestOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "test/Plans/$planId/suites/$suiteId/testcases", $this.apiVersion, $null)
     }
 
-    # The test points associated with the test cases are removed from the test suite. The test case work item is not deleted from the system. See test cases resource to delete a test case permanently.
+    # Updates the properties of the test case association in a suite.
+    [PSObject] UpdateSuiteTestCases([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId, [string] $testCaseIds) {
+        return $this.Request($useTargetProject, 'patch', "test/Plans/$planId/suites/$suiteId/testcases/$testCaseIds", $this.apiVersion, $body)
+    }
+     # The test points associated with the test cases are removed from the test suite. The test case work item is not deleted from the system. See test cases resource to delete a test case permanently.
     [PSObject] RemoveTestCasesFromSuiteUrl([bool] $useTargetProject, [int] $planId, [int] $suiteId, [string] $testCaseIds) {
         return $this.Request($useTargetProject, 'delete', "test/Plans/$planId/suites/$suiteId/testcases/$testCaseIds", $this.apiVersion, $null)
     }
@@ -132,10 +136,6 @@ class TestOnpremApiClient : AzureDevOpsApiClient {
      # Add test cases to suite.
     [PSObject] AddTestCasesToSuite([bool] $useTargetProject, [int] $planId, [int] $suiteId, [string] $testCaseIds) {
         return $this.Request($useTargetProject, 'post', "test/Plans/$planId/suites/$suiteId/testcases/$testCaseIds", $this.apiVersion, $null)
-    }
-     # Updates the properties of the test case association in a suite.
-    [PSObject] UpdateSuiteTestCases([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId, [string] $testCaseIds) {
-        return $this.Request($useTargetProject, 'patch', "test/Plans/$planId/suites/$suiteId/testcases/$testCaseIds", $this.apiVersion, $body)
     }
 
     # Get test points using query.

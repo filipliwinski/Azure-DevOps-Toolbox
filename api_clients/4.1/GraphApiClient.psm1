@@ -43,7 +43,11 @@ class GraphApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "graph/memberships/$subjectDescriptor", $this.apiVersion, $null)
     }
 
-    # Get a membership relationship between a container and subject.
+    # Deletes a membership between a container and subject.
+    [PSObject] RemoveMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
+        return $this.Request($useTargetProject, 'delete', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
+    }
+     # Get a membership relationship between a container and subject.
     [PSObject] GetMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
         return $this.Request($useTargetProject, 'get', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
     }
@@ -54,10 +58,6 @@ class GraphApiClient : AzureDevOpsApiClient {
      # Create a new membership between a container and subject.
     [PSObject] AddMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
         return $this.Request($useTargetProject, 'put', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
-    }
-     # Deletes a membership between a container and subject.
-    [PSObject] RemoveMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
-        return $this.Request($useTargetProject, 'delete', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
     }
 
     # Check whether a subject is active or inactive.

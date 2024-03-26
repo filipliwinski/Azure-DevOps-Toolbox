@@ -16,7 +16,11 @@ class TestPlanOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "testplan/suites", $this.apiVersion, $null)
     }
 
-    # Get a list of test configurations.
+    # Update a test configuration by its ID.
+    [PSObject] UpdateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'patch', "testplan/configurations", $this.apiVersion, $body)
+    }
+     # Get a list of test configurations.
     [PSObject] GetTestConfigurations([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "testplan/configurations", $this.apiVersion, $null)
     }
@@ -27,10 +31,6 @@ class TestPlanOnpremApiClient : AzureDevOpsApiClient {
      # Create a test configuration.
     [PSObject] CreateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "testplan/configurations", $this.apiVersion, $body)
-    }
-     # Update a test configuration by its ID.
-    [PSObject] UpdateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'patch', "testplan/configurations", $this.apiVersion, $body)
     }
 
     # Get a test configuration
@@ -82,7 +82,11 @@ class TestPlanOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'delete', "testplan/Plans/$planId/suites/$suiteId", $this.apiVersion, $null)
     }
 
-    # Removes test cases from a suite based on the list of test case Ids provided. This API can be used to remove a larger number of test cases.
+    # Update the configurations for test cases
+    [PSObject] UpdateSuiteTestCases([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
+        return $this.Request($useTargetProject, 'patch', "testplan/Plans/$planId/Suites/$suiteId/TestCase", $this.apiVersion, $body)
+    }
+     # Removes test cases from a suite based on the list of test case Ids provided. This API can be used to remove a larger number of test cases.
     [PSObject] RemoveTestCasesListFromSuite([bool] $useTargetProject, [int] $planId, [int] $suiteId) {
         return $this.Request($useTargetProject, 'delete', "testplan/Plans/$planId/Suites/$suiteId/TestCase", $this.apiVersion, $null)
     }
@@ -93,10 +97,6 @@ class TestPlanOnpremApiClient : AzureDevOpsApiClient {
      # Add test cases to a suite with specified configurations
     [PSObject] AddTestCasesToSuite([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
         return $this.Request($useTargetProject, 'post', "testplan/Plans/$planId/Suites/$suiteId/TestCase", $this.apiVersion, $body)
-    }
-     # Update the configurations for test cases
-    [PSObject] UpdateSuiteTestCases([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
-        return $this.Request($useTargetProject, 'patch', "testplan/Plans/$planId/Suites/$suiteId/TestCase", $this.apiVersion, $body)
     }
 
     # Get a particular Test Case from a Suite.

@@ -58,7 +58,11 @@ class ReleaseOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "release/deployments", $this.apiVersion, $null)
     }
 
-    # Gets folders.
+    # Updates an existing folder at given existing path.
+    [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
+        return $this.Request($useTargetProject, 'patch', "release/folders/$path", $this.apiVersion, $body)
+    }
+     # Gets folders.
     [PSObject] GetFolders([bool] $useTargetProject, [string] $path) {
         return $this.Request($useTargetProject, 'get', "release/folders/$path", $this.apiVersion, $null)
     }
@@ -69,10 +73,6 @@ class ReleaseOnpremApiClient : AzureDevOpsApiClient {
      # This method is no longer supported. Use CreateFolder with folder parameter API.
     [PSObject] CreateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
         return $this.Request($useTargetProject, 'post', "release/folders/$path", $this.apiVersion, $body)
-    }
-     # Updates an existing folder at given existing path.
-    [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
-        return $this.Request($useTargetProject, 'patch', "release/folders/$path", $this.apiVersion, $body)
     }
 
     # Updates the gate for a deployment.
