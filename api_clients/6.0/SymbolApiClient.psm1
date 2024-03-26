@@ -26,7 +26,11 @@ class SymbolApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "symbol/client/$clientType", $this.apiVersion, $null)
     }
 
-    # Get a symbol request by request name.
+    # Update a symbol request by request name.
+    [PSObject] UpdateRequestsRequestNameAsync([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'patch', "symbol/requests", $this.apiVersion, $body)
+    }
+     # Get a symbol request by request name.
     [PSObject] GetRequestsRequestNameAsync([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "symbol/requests", $this.apiVersion, $null)
     }
@@ -38,12 +42,12 @@ class SymbolApiClient : AzureDevOpsApiClient {
     [PSObject] CreateRequestsAsync([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "symbol/requests", $this.apiVersion, $body)
     }
-     # Update a symbol request by request name.
-    [PSObject] UpdateRequestsRequestNameAsync([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'patch', "symbol/requests", $this.apiVersion, $body)
-    }
 
-    # Get a symbol request by request identifier.
+    # Update a symbol request by request identifier.
+    [PSObject] UpdateRequestsRequestIdAsync([bool] $useTargetProject, [PSObject] $body, [string] $requestId) {
+        return $this.Request($useTargetProject, 'patch', "symbol/requests/$requestId", $this.apiVersion, $body)
+    }
+     # Get a symbol request by request identifier.
     [PSObject] GetRequestsRequestIdAsync([bool] $useTargetProject, [string] $requestId) {
         return $this.Request($useTargetProject, 'get', "symbol/requests/$requestId", $this.apiVersion, $null)
     }
@@ -54,10 +58,6 @@ class SymbolApiClient : AzureDevOpsApiClient {
      # Create debug entries for a symbol request as specified by its identifier.
     [PSObject] CreateRequestsRequestIdDebugEntriesAsync([bool] $useTargetProject, [PSObject] $body, [string] $requestId) {
         return $this.Request($useTargetProject, 'post', "symbol/requests/$requestId", $this.apiVersion, $body)
-    }
-     # Update a symbol request by request identifier.
-    [PSObject] UpdateRequestsRequestIdAsync([bool] $useTargetProject, [PSObject] $body, [string] $requestId) {
-        return $this.Request($useTargetProject, 'patch', "symbol/requests/$requestId", $this.apiVersion, $body)
     }
 
     # Given a client key, returns the best matched debug entry.

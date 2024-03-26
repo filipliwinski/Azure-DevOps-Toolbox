@@ -160,7 +160,11 @@ class BuildApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "build/definitions", $this.apiVersion, $body)
     }
 
-    # Restores a deleted definition
+    # Updates an existing definition.
+    [PSObject] UpdateDefinition([bool] $useTargetProject, [PSObject] $body, [int] $definitionId) {
+        return $this.Request($useTargetProject, 'put', "build/definitions/$definitionId", $this.apiVersion, $body)
+    }
+     # Restores a deleted definition
     [PSObject] RestoreDefinition([bool] $useTargetProject, [int] $definitionId) {
         return $this.Request($useTargetProject, 'patch', "build/definitions/$definitionId", $this.apiVersion, $null)
     }
@@ -171,10 +175,6 @@ class BuildApiClient : AzureDevOpsApiClient {
      # Deletes a definition and all associated builds.
     [PSObject] DeleteDefinition([bool] $useTargetProject, [int] $definitionId) {
         return $this.Request($useTargetProject, 'delete', "build/definitions/$definitionId", $this.apiVersion, $null)
-    }
-     # Updates an existing definition.
-    [PSObject] UpdateDefinition([bool] $useTargetProject, [PSObject] $body, [int] $definitionId) {
-        return $this.Request($useTargetProject, 'put', "build/definitions/$definitionId", $this.apiVersion, $body)
     }
 
     # Gets build metrics for a definition.

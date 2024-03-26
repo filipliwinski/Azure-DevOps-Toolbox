@@ -309,7 +309,11 @@ class GitApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/pullRequests/$pullRequestId/reviewers", $this.apiVersion, $body)
     }
 
-    # Retrieve information about a particular reviewer on a pull request
+    # Edit a reviewer entry. These fields are patchable: isFlagged
+    [PSObject] UpdatePullRequestReviewer([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId, [string] $reviewerId) {
+        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/reviewers/$reviewerId", $this.apiVersion, $body)
+    }
+     # Retrieve information about a particular reviewer on a pull request
     [PSObject] GetPullRequestReviewer([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [string] $reviewerId) {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/reviewers/$reviewerId", $this.apiVersion, $null)
     }
@@ -320,10 +324,6 @@ class GitApiClient : AzureDevOpsApiClient {
      # Add a reviewer to a pull request or cast a vote.
     [PSObject] CreatePullRequestReviewer([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId, [string] $reviewerId) {
         return $this.Request($useTargetProject, 'put', "git/repositories/$repositoryId/pullRequests/$pullRequestId/reviewers/$reviewerId", $this.apiVersion, $body)
-    }
-     # Edit a reviewer entry. These fields are patchable: isFlagged
-    [PSObject] UpdatePullRequestReviewer([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId, [string] $reviewerId) {
-        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/reviewers/$reviewerId", $this.apiVersion, $body)
     }
 
     # Sends an e-mail notification about a specific pull request to a set of recipients
