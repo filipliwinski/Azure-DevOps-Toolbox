@@ -74,11 +74,7 @@ class TaskAgentOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "distributedtask/pools/$poolId/agents", $this.apiVersion, $body)
     }
 
-    # Update agent details.
-    [PSObject] UpdateAgent([bool] $useTargetProject, [PSObject] $body, [int] $poolId, [int] $agentId) {
-        return $this.Request($useTargetProject, 'patch', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $body)
-    }
-     # Replace an agent.  You probably don't want to call this endpoint directly. Instead, [use the agent configuration script](https://docs.microsoft.com/azure/devops/pipelines/agents/agents) to remove and reconfigure an agent from your collection.
+    # Replace an agent.  You probably don't want to call this endpoint directly. Instead, [use the agent configuration script](https://docs.microsoft.com/azure/devops/pipelines/agents/agents) to remove and reconfigure an agent from your collection.
     [PSObject] ReplaceAgent([bool] $useTargetProject, [PSObject] $body, [int] $poolId, [int] $agentId) {
         return $this.Request($useTargetProject, 'put', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $body)
     }
@@ -89,6 +85,10 @@ class TaskAgentOnpremApiClient : AzureDevOpsApiClient {
      # Delete an agent.  You probably don't want to call this endpoint directly. Instead, [use the agent configuration script](https://docs.microsoft.com/azure/devops/pipelines/agents/agents) to remove an agent from your collection.
     [PSObject] DeleteAgent([bool] $useTargetProject, [int] $poolId, [int] $agentId) {
         return $this.Request($useTargetProject, 'delete', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $null)
+    }
+     # Update agent details.
+    [PSObject] UpdateAgent([bool] $useTargetProject, [PSObject] $body, [int] $poolId, [int] $agentId) {
+        return $this.Request($useTargetProject, 'patch', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $body)
     }
 
     # Add a variable group.

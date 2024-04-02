@@ -16,11 +16,7 @@ class TestPlanOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "testplan/suites", $this.apiVersion, $null)
     }
 
-    # Update a test configuration by its ID.
-    [PSObject] UpdateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'patch', "testplan/configurations", $this.apiVersion, $body)
-    }
-     # Get a list of test configurations.
+    # Get a list of test configurations.
     [PSObject] GetTestConfigurations([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "testplan/configurations", $this.apiVersion, $null)
     }
@@ -31,6 +27,10 @@ class TestPlanOnpremApiClient : AzureDevOpsApiClient {
      # Create a test configuration.
     [PSObject] CreateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "testplan/configurations", $this.apiVersion, $body)
+    }
+     # Update a test configuration by its ID.
+    [PSObject] UpdateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'patch', "testplan/configurations", $this.apiVersion, $body)
     }
 
     # Get a test configuration

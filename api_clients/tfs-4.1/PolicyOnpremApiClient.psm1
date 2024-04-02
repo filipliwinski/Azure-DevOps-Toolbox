@@ -16,11 +16,7 @@ class PolicyOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "policy/configurations", $this.apiVersion, $null)
     }
 
-    # Update a policy configuration by its ID.
-    [PSObject] UpdatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $configurationId) {
-        return $this.Request($useTargetProject, 'put', "policy/configurations/$configurationId", $this.apiVersion, $body)
-    }
-     # Get a policy configuration by its ID.
+    # Get a policy configuration by its ID.
     [PSObject] GetPolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {
         return $this.Request($useTargetProject, 'get', "policy/configurations/$configurationId", $this.apiVersion, $null)
     }
@@ -31,6 +27,10 @@ class PolicyOnpremApiClient : AzureDevOpsApiClient {
      # Create a policy configuration of a given policy type.
     [PSObject] CreatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $configurationId) {
         return $this.Request($useTargetProject, 'post', "policy/configurations/$configurationId", $this.apiVersion, $body)
+    }
+     # Update a policy configuration by its ID.
+    [PSObject] UpdatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $configurationId) {
+        return $this.Request($useTargetProject, 'put', "policy/configurations/$configurationId", $this.apiVersion, $body)
     }
 
     # Retrieve all revisions for a given policy.

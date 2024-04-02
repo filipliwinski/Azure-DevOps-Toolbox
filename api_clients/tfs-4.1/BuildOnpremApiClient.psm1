@@ -170,11 +170,7 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "build/definitions", $this.apiVersion, $body)
     }
 
-    # Updates an existing definition.
-    [PSObject] UpdateDefinition([bool] $useTargetProject, [PSObject] $body, [int] $definitionId) {
-        return $this.Request($useTargetProject, 'put', "build/definitions/$definitionId", $this.apiVersion, $body)
-    }
-     # Resets the counter variable Value back to the Seed.
+    # Resets the counter variable Value back to the Seed.
     [PSObject] ResetCounter([bool] $useTargetProject, [int] $definitionId) {
         return $this.Request($useTargetProject, 'post', "build/definitions/$definitionId", $this.apiVersion, $null)
     }
@@ -185,6 +181,10 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
      # Deletes a definition and all associated builds.
     [PSObject] DeleteDefinition([bool] $useTargetProject, [int] $definitionId) {
         return $this.Request($useTargetProject, 'delete', "build/definitions/$definitionId", $this.apiVersion, $null)
+    }
+     # Updates an existing definition.
+    [PSObject] UpdateDefinition([bool] $useTargetProject, [PSObject] $body, [int] $definitionId) {
+        return $this.Request($useTargetProject, 'put', "build/definitions/$definitionId", $this.apiVersion, $body)
     }
 
     # Gets build metrics for a definition.
@@ -242,11 +242,7 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'delete', "build/definitions/templates/$templateId", $this.apiVersion, $null)
     }
 
-    # Updates an existing folder at given  existing path
-    [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
-        return $this.Request($useTargetProject, 'post', "build/folders/$path", $this.apiVersion, $body)
-    }
-     # Gets a list of build definition folders.
+    # Gets a list of build definition folders.
     [PSObject] GetFolders([bool] $useTargetProject, [string] $path) {
         return $this.Request($useTargetProject, 'get', "build/folders/$path", $this.apiVersion, $null)
     }
@@ -257,6 +253,10 @@ class BuildOnpremApiClient : AzureDevOpsApiClient {
      # Creates a new folder.
     [PSObject] CreateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
         return $this.Request($useTargetProject, 'put', "build/folders/$path", $this.apiVersion, $body)
+    }
+     # Updates an existing folder at given  existing path
+    [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
+        return $this.Request($useTargetProject, 'post', "build/folders/$path", $this.apiVersion, $body)
     }
 
     # Gets build metrics for a project.

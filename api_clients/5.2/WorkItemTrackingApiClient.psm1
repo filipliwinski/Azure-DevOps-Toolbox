@@ -70,11 +70,7 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/classificationnodes", $this.apiVersion, $null)
     }
 
-    # Update an existing classification node.
-    [PSObject] UpdateClassificationNode([bool] $useTargetProject, [PSObject] $body, [string] $structureGroup, [string] $path) {
-        return $this.Request($useTargetProject, 'patch', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $body)
-    }
-     # Gets the classification node for a given node path.
+    # Gets the classification node for a given node path.
     [PSObject] GetClassificationNode([bool] $useTargetProject, [string] $structureGroup, [string] $path) {
         return $this.Request($useTargetProject, 'get', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $null)
     }
@@ -85,6 +81,10 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
      # Create new or update an existing classification node.
     [PSObject] CreateOrUpdateClassificationNode([bool] $useTargetProject, [PSObject] $body, [string] $structureGroup, [string] $path) {
         return $this.Request($useTargetProject, 'post', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $body)
+    }
+     # Update an existing classification node.
+    [PSObject] UpdateClassificationNode([bool] $useTargetProject, [PSObject] $body, [string] $structureGroup, [string] $path) {
+        return $this.Request($useTargetProject, 'patch', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $body)
     }
 
     # Returns information for all fields. The project ID/name parameter is optional.
@@ -110,11 +110,7 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/queries", $this.apiVersion, $null)
     }
 
-    # Update a query or a folder. This allows you to update, rename and move queries and folders.
-    [PSObject] UpdateQuery([bool] $useTargetProject, [PSObject] $body, [string] $query) {
-        return $this.Request($useTargetProject, 'patch', "wit/queries/$query", $this.apiVersion, $body)
-    }
-     # Retrieves an individual query and its children
+    # Retrieves an individual query and its children
     [PSObject] GetQuery([bool] $useTargetProject, [string] $query) {
         return $this.Request($useTargetProject, 'get', "wit/queries/$query", $this.apiVersion, $null)
     }
@@ -125,6 +121,10 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
      # Creates a query, or moves a query.Learn more about Work Item Query Language (WIQL) syntax [here](https://docs.microsoft.com/en-us/vsts/collaborate/wiql-syntax?toc=/vsts/work/track/toc.json&bc=/vsts/work/track/breadcrumb/toc.json&view=vsts).
     [PSObject] CreateQuery([bool] $useTargetProject, [PSObject] $body, [string] $query) {
         return $this.Request($useTargetProject, 'post', "wit/queries/$query", $this.apiVersion, $body)
+    }
+     # Update a query or a folder. This allows you to update, rename and move queries and folders.
+    [PSObject] UpdateQuery([bool] $useTargetProject, [PSObject] $body, [string] $query) {
+        return $this.Request($useTargetProject, 'patch', "wit/queries/$query", $this.apiVersion, $body)
     }
 
     # Gets a list of queries by ids (Maximum 1000)

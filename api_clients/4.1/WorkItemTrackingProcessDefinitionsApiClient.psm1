@@ -128,11 +128,7 @@ class WorkItemTrackingProcessDefinitionsApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "work/processdefinitions/$processId/workItemTypes/$witRefName/states", $this.apiVersion, $body)
     }
 
-    # Updates a given state definition in the work item type of the process.
-    [PSObject] UpdateStateDefinition([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $stateId) {
-        return $this.Request($useTargetProject, 'patch', "work/processdefinitions/$processId/workItemTypes/$witRefName/states/$stateId", $this.apiVersion, $body)
-    }
-     # Hides a state definition in the work item type of the process.
+    # Hides a state definition in the work item type of the process.
     [PSObject] HideStateDefinition([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $stateId) {
         return $this.Request($useTargetProject, 'put', "work/processdefinitions/$processId/workItemTypes/$witRefName/states/$stateId", $this.apiVersion, $body)
     }
@@ -143,6 +139,10 @@ class WorkItemTrackingProcessDefinitionsApiClient : AzureDevOpsApiClient {
      # Removes a state definition in the work item type of the process.
     [PSObject] DeleteStateDefinition([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $stateId) {
         return $this.Request($useTargetProject, 'delete', "work/processdefinitions/$processId/workItemTypes/$witRefName/states/$stateId", $this.apiVersion, $null)
+    }
+     # Updates a given state definition in the work item type of the process.
+    [PSObject] UpdateStateDefinition([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $stateId) {
+        return $this.Request($useTargetProject, 'patch', "work/processdefinitions/$processId/workItemTypes/$witRefName/states/$stateId", $this.apiVersion, $body)
     }
 
     # Updates a behavior for the work item type of the process.

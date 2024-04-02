@@ -186,11 +186,7 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "work/processes/$processId/workItemTypes/$witRefName/states", $this.apiVersion, $body)
     }
 
-    # Updates a given state definition in the work item type of the process.
-    [PSObject] UpdateStateDefinition([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $stateId) {
-        return $this.Request($useTargetProject, 'patch', "work/processes/$processId/workItemTypes/$witRefName/states/$stateId", $this.apiVersion, $body)
-    }
-     # Hides a state definition in the work item type of the process.Only states with customizationType:System can be hidden.
+    # Hides a state definition in the work item type of the process.Only states with customizationType:System can be hidden.
     [PSObject] HideStateDefinition([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $stateId) {
         return $this.Request($useTargetProject, 'put', "work/processes/$processId/workItemTypes/$witRefName/states/$stateId", $this.apiVersion, $body)
     }
@@ -201,6 +197,10 @@ class WorkItemTrackingProcessApiClient : AzureDevOpsApiClient {
      # Removes a state definition in the work item type of the process.
     [PSObject] DeleteStateDefinition([bool] $useTargetProject, [string] $processId, [string] $witRefName, [string] $stateId) {
         return $this.Request($useTargetProject, 'delete', "work/processes/$processId/workItemTypes/$witRefName/states/$stateId", $this.apiVersion, $null)
+    }
+     # Updates a given state definition in the work item type of the process.
+    [PSObject] UpdateStateDefinition([bool] $useTargetProject, [PSObject] $body, [string] $processId, [string] $witRefName, [string] $stateId) {
+        return $this.Request($useTargetProject, 'patch', "work/processes/$processId/workItemTypes/$witRefName/states/$stateId", $this.apiVersion, $body)
     }
 
     # Updates a behavior for the work item type of the process.
