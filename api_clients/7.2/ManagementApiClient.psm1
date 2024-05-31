@@ -11,13 +11,13 @@ class ManagementApiClient : AzureDevOpsApiClient {
     ManagementApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Update the status of Advanced Security for the organization
-    [PSObject] UpdateOrgEnablementStatus([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'patch', "management/enablement", $this.apiVersion, $body)
-    }
-     # Get the current status of Advanced Security for the organization
+    # Get the current status of Advanced Security for the organization
     [PSObject] GetOrgEnablementStatus([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "management/enablement", $this.apiVersion, $null)
+    }
+     # Update the status of Advanced Security for the organization
+    [PSObject] UpdateOrgEnablementStatus([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'patch', "management/enablement", $this.apiVersion, $body)
     }
 
     # Get commiters used when calculating billing information.
@@ -30,13 +30,13 @@ class ManagementApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "management/meterUsageEstimate", $this.apiVersion, $null)
     }
 
-    # Update the status of Advanced Security for the project
-    [PSObject] UpdateProjectEnablementStatus([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'patch', "management/enablement", $this.apiVersion, $body)
-    }
-     # Get the current status of Advanced Security for a project
+    # Get the current status of Advanced Security for a project
     [PSObject] GetProjectEnablementStatus([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "management/enablement", $this.apiVersion, $null)
+    }
+     # Update the status of Advanced Security for the project
+    [PSObject] UpdateProjectEnablementStatus([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'patch', "management/enablement", $this.apiVersion, $body)
     }
 
     # Estimate the number of committers that would be added to the customer's usage if Advanced Security was enabled for this project.
@@ -44,13 +44,13 @@ class ManagementApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "management/meterUsageEstimate", $this.apiVersion, $null)
     }
 
-    # Update the enablement of Advanced Security for a repository
-    [PSObject] UpdateRepoAdvSecEnablementStatus([bool] $useTargetProject, [PSObject] $body, [string] $repository) {
-        return $this.Request($useTargetProject, 'patch', "management/repositories/$repository/enablement", $this.apiVersion, $body)
-    }
-     # Determine if Advanced Security is enabled for a repository
+    # Determine if Advanced Security is enabled for a repository
     [PSObject] GetRepoEnablementStatus([bool] $useTargetProject, [string] $repository) {
         return $this.Request($useTargetProject, 'get', "management/repositories/$repository/enablement", $this.apiVersion, $null)
+    }
+     # Update the enablement of Advanced Security for a repository
+    [PSObject] UpdateRepoAdvSecEnablementStatus([bool] $useTargetProject, [PSObject] $body, [string] $repository) {
+        return $this.Request($useTargetProject, 'patch', "management/repositories/$repository/enablement", $this.apiVersion, $body)
     }
 
     # Estimate the committers that would be added to the customer's usage if Advanced Security was enabled for this repository.

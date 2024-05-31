@@ -27,21 +27,21 @@ class NotificationApiClient : AzureDevOpsApiClient {
     }
 
     # empty
-    [PSObject] UpdateSettings([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'patch', "notification/settings", $this.apiVersion, $body)
-    }
-     # empty
     [PSObject] GetSettings([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "notification/settings", $this.apiVersion, $null)
     }
-
-    # Update delivery preferences of a notifications subscriber.
-    [PSObject] UpdateSubscriber([bool] $useTargetProject, [PSObject] $body, [string] $subscriberId) {
-        return $this.Request($useTargetProject, 'patch', "notification/subscribers/$subscriberId", $this.apiVersion, $body)
+     # empty
+    [PSObject] UpdateSettings([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'patch', "notification/settings", $this.apiVersion, $body)
     }
-     # Get delivery preferences of a notifications subscriber.
+
+    # Get delivery preferences of a notifications subscriber.
     [PSObject] GetSubscriber([bool] $useTargetProject, [string] $subscriberId) {
         return $this.Request($useTargetProject, 'get', "notification/subscribers/$subscriberId", $this.apiVersion, $null)
+    }
+     # Update delivery preferences of a notifications subscriber.
+    [PSObject] UpdateSubscriber([bool] $useTargetProject, [PSObject] $body, [string] $subscriberId) {
+        return $this.Request($useTargetProject, 'patch', "notification/subscribers/$subscriberId", $this.apiVersion, $body)
     }
 
     # Query for subscriptions. A subscription is returned if it matches one or more of the specified conditions.
@@ -49,20 +49,16 @@ class NotificationApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "notification/subscriptionquery", $this.apiVersion, $body)
     }
 
-    # Get a list of notification subscriptions, either by subscription IDs or by all subscriptions for a given user or group.
-    [PSObject] ListSubscriptions([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "notification/subscriptions", $this.apiVersion, $null)
-    }
-     # Create a new subscription.
+    # Create a new subscription.
     [PSObject] CreateSubscription([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "notification/subscriptions", $this.apiVersion, $body)
     }
-
-    # Update an existing subscription. Depending on the type of subscription and permissions, the caller can update the description, filter settings, channel (delivery) settings and more.
-    [PSObject] UpdateSubscription([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {
-        return $this.Request($useTargetProject, 'patch', "notification/subscriptions/$subscriptionId", $this.apiVersion, $body)
+     # Get a list of notification subscriptions, either by subscription IDs or by all subscriptions for a given user or group.
+    [PSObject] ListSubscriptions([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "notification/subscriptions", $this.apiVersion, $null)
     }
-     # Get a notification subscription by its ID.
+
+    # Get a notification subscription by its ID.
     [PSObject] GetSubscription([bool] $useTargetProject, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'get', "notification/subscriptions/$subscriptionId", $this.apiVersion, $null)
     }
@@ -70,14 +66,18 @@ class NotificationApiClient : AzureDevOpsApiClient {
     [PSObject] DeleteSubscription([bool] $useTargetProject, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'delete', "notification/subscriptions/$subscriptionId", $this.apiVersion, $null)
     }
-
-    # Update the diagnostics settings for a subscription.
-    [PSObject] UpdateSubscriptionDiagnostics([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {
-        return $this.Request($useTargetProject, 'put', "notification/subscriptions/$subscriptionId/diagnostics", $this.apiVersion, $body)
+     # Update an existing subscription. Depending on the type of subscription and permissions, the caller can update the description, filter settings, channel (delivery) settings and more.
+    [PSObject] UpdateSubscription([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {
+        return $this.Request($useTargetProject, 'patch', "notification/subscriptions/$subscriptionId", $this.apiVersion, $body)
     }
-     # Get the diagnostics settings for a subscription.
+
+    # Get the diagnostics settings for a subscription.
     [PSObject] GetSubscriptionDiagnostics([bool] $useTargetProject, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'get', "notification/subscriptions/$subscriptionId/diagnostics", $this.apiVersion, $null)
+    }
+     # Update the diagnostics settings for a subscription.
+    [PSObject] UpdateSubscriptionDiagnostics([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {
+        return $this.Request($useTargetProject, 'put', "notification/subscriptions/$subscriptionId/diagnostics", $this.apiVersion, $body)
     }
 
     # Update the specified user's settings for the specified subscription. This API is typically used to opt in or out of a shared subscription. User settings can only be applied to shared subscriptions, like team subscriptions or default subscriptions.
