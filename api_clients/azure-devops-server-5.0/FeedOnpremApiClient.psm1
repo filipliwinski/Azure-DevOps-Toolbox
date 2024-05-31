@@ -11,26 +11,26 @@ class FeedOnpremApiClient : AzureDevOpsApiClient {
     FeedOnpremApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Get all feeds in an account where you have the provided role access.
-    [PSObject] GetFeeds([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "packaging/feeds", $this.apiVersion, $null)
-    }
-     # Create a feed, a container for various package types.
+    # Create a feed, a container for various package types.
     [PSObject] CreateFeed([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "packaging/feeds", $this.apiVersion, $body)
     }
-
-    # Change the attributes of a feed.
-    [PSObject] UpdateFeed([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
-        return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId", $this.apiVersion, $body)
+     # Get all feeds in an account where you have the provided role access.
+    [PSObject] GetFeeds([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "packaging/feeds", $this.apiVersion, $null)
     }
-     # Get the settings for a specific feed.
+
+    # Get the settings for a specific feed.
     [PSObject] GetFeed([bool] $useTargetProject, [string] $feedId) {
         return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId", $this.apiVersion, $null)
     }
      # Remove a feed and all its packages.  The action does not result in packages moving to the RecycleBin and is not reversible.
     [PSObject] DeleteFeed([bool] $useTargetProject, [string] $feedId) {
         return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId", $this.apiVersion, $null)
+    }
+     # Change the attributes of a feed.
+    [PSObject] UpdateFeed([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
+        return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId", $this.apiVersion, $body)
     }
 
     # Get details about all of the packages in the feed.  Use the various filters to include or exclude information from the result set.
@@ -58,13 +58,13 @@ class FeedOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/Packages/$packageId/Versions/$packageVersionId/provenance", $this.apiVersion, $null)
     }
 
-    # Update the permissions on a feed.
-    [PSObject] SetFeedPermissions([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
-        return $this.Request($useTargetProject, 'patch', "packaging/Feeds/$feedId/permissions", $this.apiVersion, $body)
-    }
-     # Get the permissions for a feed.
+    # Get the permissions for a feed.
     [PSObject] GetFeedPermissions([bool] $useTargetProject, [string] $feedId) {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/permissions", $this.apiVersion, $null)
+    }
+     # Update the permissions on a feed.
+    [PSObject] SetFeedPermissions([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
+        return $this.Request($useTargetProject, 'patch', "packaging/Feeds/$feedId/permissions", $this.apiVersion, $body)
     }
 
     # Query for packages within the recycle bin.
@@ -87,11 +87,7 @@ class FeedOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/RecycleBin/Packages/$packageId/Versions/$packageVersionId", $this.apiVersion, $null)
     }
 
-    # Set the retention policy for a feed.
-    [PSObject] SetFeedRetentionPolicies([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
-        return $this.Request($useTargetProject, 'put', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $body)
-    }
-     # Get the retention policy for a feed.
+    # Get the retention policy for a feed.
     [PSObject] GetFeedRetentionPolicies([bool] $useTargetProject, [string] $feedId) {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $null)
     }
@@ -99,21 +95,21 @@ class FeedOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] DeleteFeedRetentionPolicies([bool] $useTargetProject, [string] $feedId) {
         return $this.Request($useTargetProject, 'delete', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $null)
     }
-
-    # Get all views for a feed.
-    [PSObject] GetFeedViews([bool] $useTargetProject, [string] $feedId) {
-        return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/views", $this.apiVersion, $null)
+     # Set the retention policy for a feed.
+    [PSObject] SetFeedRetentionPolicies([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
+        return $this.Request($useTargetProject, 'put', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $body)
     }
-     # Create a new view on the referenced feed.
+
+    # Create a new view on the referenced feed.
     [PSObject] CreateFeedView([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
         return $this.Request($useTargetProject, 'post', "packaging/Feeds/$feedId/views", $this.apiVersion, $body)
     }
-
-    # Update a view.
-    [PSObject] UpdateFeedView([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $viewId) {
-        return $this.Request($useTargetProject, 'patch', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $body)
+     # Get all views for a feed.
+    [PSObject] GetFeedViews([bool] $useTargetProject, [string] $feedId) {
+        return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/views", $this.apiVersion, $null)
     }
-     # Get a view by Id.
+
+    # Get a view by Id.
     [PSObject] GetFeedView([bool] $useTargetProject, [string] $feedId, [string] $viewId) {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $null)
     }
@@ -121,14 +117,18 @@ class FeedOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] DeleteFeedView([bool] $useTargetProject, [string] $feedId, [string] $viewId) {
         return $this.Request($useTargetProject, 'delete', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $null)
     }
-
-    # Set service-wide permissions that govern feed creation.
-    [PSObject] SetGlobalPermissions([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'patch', "packaging/globalpermissions", $this.apiVersion, $body)
+     # Update a view.
+    [PSObject] UpdateFeedView([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $viewId) {
+        return $this.Request($useTargetProject, 'patch', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $body)
     }
-     # Get all service-wide feed creation permissions.
+
+    # Get all service-wide feed creation permissions.
     [PSObject] GetGlobalPermissions([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "packaging/globalpermissions", $this.apiVersion, $null)
+    }
+     # Set service-wide permissions that govern feed creation.
+    [PSObject] SetGlobalPermissions([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'patch', "packaging/globalpermissions", $this.apiVersion, $body)
     }
 
     # Generate a SVG badge for the latest version of a package.  The generated SVG is typically used as the image in an HTML link which takes users to the feed containing the package to accelerate discovery and consumption.

@@ -21,22 +21,22 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "git/deletedrepositories", $this.apiVersion, $null)
     }
 
-    # Gets the refs favorites for a repo and an identity.
-    [PSObject] GetRefFavorites([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "git/favorites/refs", $this.apiVersion, $null)
-    }
-     # Creates a ref favorite
+    # Creates a ref favorite
     [PSObject] CreateFavorite([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "git/favorites/refs", $this.apiVersion, $body)
     }
-
-    # Gets the refs favorite for a favorite Id.
-    [PSObject] GetRefFavorite([bool] $useTargetProject, [int] $favoriteId) {
-        return $this.Request($useTargetProject, 'get', "git/favorites/refs/$favoriteId", $this.apiVersion, $null)
+     # Gets the refs favorites for a repo and an identity.
+    [PSObject] GetRefFavorites([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "git/favorites/refs", $this.apiVersion, $null)
     }
-     # Deletes the refs favorite specified
+
+    # Deletes the refs favorite specified
     [PSObject] DeleteRefFavorite([bool] $useTargetProject, [int] $favoriteId) {
         return $this.Request($useTargetProject, 'delete', "git/favorites/refs/$favoriteId", $this.apiVersion, $null)
+    }
+     # Gets the refs favorite for a favorite Id.
+    [PSObject] GetRefFavorite([bool] $useTargetProject, [int] $favoriteId) {
+        return $this.Request($useTargetProject, 'get', "git/favorites/refs/$favoriteId", $this.apiVersion, $null)
     }
 
     # Retrieve all pull requests matching a specified criteria.
@@ -49,35 +49,35 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "git/recycleBin/repositories", $this.apiVersion, $null)
     }
 
-    # Recover a soft-deleted Git repository. Recently deleted repositories go into a soft-delete state for a period of time before they are hard deleted and become unrecoverable.
-    [PSObject] RestoreRepositoryFromRecycleBin([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId) {
-        return $this.Request($useTargetProject, 'patch', "git/recycleBin/repositories/$repositoryId", $this.apiVersion, $body)
-    }
-     # Destroy (hard delete) a soft-deleted Git repository.
+    # Destroy (hard delete) a soft-deleted Git repository.
     [PSObject] DeleteRepositoryFromRecycleBin([bool] $useTargetProject, [string] $repositoryId) {
         return $this.Request($useTargetProject, 'delete', "git/recycleBin/repositories/$repositoryId", $this.apiVersion, $null)
     }
-
-    # Retrieve git repositories.
-    [PSObject] GetRepositories([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "git/repositories", $this.apiVersion, $null)
+     # Recover a soft-deleted Git repository. Recently deleted repositories go into a soft-delete state for a period of time before they are hard deleted and become unrecoverable.
+    [PSObject] RestoreRepositoryFromRecycleBin([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId) {
+        return $this.Request($useTargetProject, 'patch', "git/recycleBin/repositories/$repositoryId", $this.apiVersion, $body)
     }
-     # Create a git repository in a team project.
+
+    # Create a git repository in a team project.
     [PSObject] CreateRepository([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "git/repositories", $this.apiVersion, $body)
     }
-
-    # Updates the Git repository with either a new repo name or a new default branch.
-    [PSObject] UpdateRepository([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId) {
-        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId", $this.apiVersion, $body)
+     # Retrieve git repositories.
+    [PSObject] GetRepositories([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "git/repositories", $this.apiVersion, $null)
     }
-     # Retrieve a git repository.
+
+    # Retrieve a git repository.
     [PSObject] GetRepository([bool] $useTargetProject, [string] $repositoryId) {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId", $this.apiVersion, $null)
     }
      # Delete a git repository
     [PSObject] DeleteRepository([bool] $useTargetProject, [string] $repositoryId) {
         return $this.Request($useTargetProject, 'delete', "git/repositories/$repositoryId", $this.apiVersion, $null)
+    }
+     # Updates the Git repository with either a new repo name or a new default branch.
+    [PSObject] UpdateRepository([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId) {
+        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId", $this.apiVersion, $body)
     }
 
     # Create an annotated tag.Repositories have both a name and an identifier. Identifiers are globally unique, but several projectsmay contain a repository of the same name. You don't need to include the project if you specify arepository by ID. However, if you specify a repository by name, you must also specify the project (by name or ID).
@@ -100,13 +100,13 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/blobs/$sha1", $this.apiVersion, $null)
     }
 
-    # Retrieve information about a cherry pick for a specific branch.
-    [PSObject] GetCherryPickForRefName([bool] $useTargetProject, [string] $repositoryId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/cherryPicks", $this.apiVersion, $null)
-    }
-     # Cherry pick a specific commit or commits that are associated to a pull request into a new branch.
+    # Cherry pick a specific commit or commits that are associated to a pull request into a new branch.
     [PSObject] CreateCherryPick([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/cherryPicks", $this.apiVersion, $body)
+    }
+     # Retrieve information about a cherry pick for a specific branch.
+    [PSObject] GetCherryPickForRefName([bool] $useTargetProject, [string] $repositoryId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/cherryPicks", $this.apiVersion, $null)
     }
 
     # Retrieve information about a cherry pick by cherry pick Id.
@@ -129,13 +129,13 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/commits/$commitId/changes", $this.apiVersion, $null)
     }
 
-    # Get statuses associated with the Git commit.
-    [PSObject] GetStatuses([bool] $useTargetProject, [string] $commitId, [string] $repositoryId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/commits/$commitId/statuses", $this.apiVersion, $null)
-    }
-     # Create Git commit status.
+    # Create Git commit status.
     [PSObject] CreateCommitStatus([bool] $useTargetProject, [PSObject] $body, [string] $commitId, [string] $repositoryId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/commits/$commitId/statuses", $this.apiVersion, $body)
+    }
+     # Get statuses associated with the Git commit.
+    [PSObject] GetStatuses([bool] $useTargetProject, [string] $commitId, [string] $repositoryId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/commits/$commitId/statuses", $this.apiVersion, $null)
     }
 
     # Retrieve git commits for a project matching the search criteria
@@ -148,22 +148,22 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/diffs/commits", $this.apiVersion, $null)
     }
 
-    # Retrieve import requests for a repository.
-    [PSObject] QueryImportRequests([bool] $useTargetProject, [string] $repositoryId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/importRequests", $this.apiVersion, $null)
-    }
-     # Create an import request.
+    # Create an import request.
     [PSObject] CreateImportRequest([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/importRequests", $this.apiVersion, $body)
     }
-
-    # Retry or abandon a failed import request.There can only be one active import request associated with a repository. Marking a failed import request abandoned makes it inactive.
-    [PSObject] UpdateImportRequest([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $importRequestId) {
-        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/importRequests/$importRequestId", $this.apiVersion, $body)
+     # Retrieve import requests for a repository.
+    [PSObject] QueryImportRequests([bool] $useTargetProject, [string] $repositoryId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/importRequests", $this.apiVersion, $null)
     }
-     # Retrieve a particular import request.
+
+    # Retrieve a particular import request.
     [PSObject] GetImportRequest([bool] $useTargetProject, [string] $repositoryId, [int] $importRequestId) {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/importRequests/$importRequestId", $this.apiVersion, $null)
+    }
+     # Retry or abandon a failed import request.There can only be one active import request associated with a repository. Marking a failed import request abandoned makes it inactive.
+    [PSObject] UpdateImportRequest([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $importRequestId) {
+        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/importRequests/$importRequestId", $this.apiVersion, $body)
     }
 
     # Get Item Metadata and/or Content for a collection of items. The download parameter is to indicate whether the content should be available as a download or just sent as a stream in the response. Doesn't apply to zipped content which is always returned as a download.
@@ -181,22 +181,22 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/pullrequestquery", $this.apiVersion, $body)
     }
 
-    # Retrieve all pull requests matching a specified criteria.
-    [PSObject] GetPullRequests([bool] $useTargetProject, [string] $repositoryId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullrequests", $this.apiVersion, $null)
-    }
-     # Create a pull request.
+    # Create a pull request.
     [PSObject] CreatePullRequest([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/pullrequests", $this.apiVersion, $body)
     }
-
-    # Update a pull request.
-    [PSObject] UpdatePullRequest([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId) {
-        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullrequests/$pullRequestId", $this.apiVersion, $body)
+     # Retrieve all pull requests matching a specified criteria.
+    [PSObject] GetPullRequests([bool] $useTargetProject, [string] $repositoryId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullrequests", $this.apiVersion, $null)
     }
-     # Retrieve a pull request.
+
+    # Retrieve a pull request.
     [PSObject] GetPullRequest([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId) {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullrequests/$pullRequestId", $this.apiVersion, $null)
+    }
+     # Update a pull request.
+    [PSObject] UpdatePullRequest([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId) {
+        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullrequests/$pullRequestId", $this.apiVersion, $body)
     }
 
     # Get a list of files attached to a given pull request.
@@ -204,17 +204,17 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/attachments", $this.apiVersion, $null)
     }
 
-    # Get the file content of a pull request attachment.
-    [PSObject] GetAttachment([bool] $useTargetProject, [string] $fileName, [string] $repositoryId, [int] $pullRequestId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/attachments/$fileName", $this.apiVersion, $null)
-    }
-     # Delete a pull request attachment.
+    # Delete a pull request attachment.
     [PSObject] DeleteAttachment([bool] $useTargetProject, [string] $fileName, [string] $repositoryId, [int] $pullRequestId) {
         return $this.Request($useTargetProject, 'delete', "git/repositories/$repositoryId/pullRequests/$pullRequestId/attachments/$fileName", $this.apiVersion, $null)
     }
      # Attach a new file to a pull request.
     [PSObject] CreateAttachment([bool] $useTargetProject, [PSObject] $body, [string] $fileName, [string] $repositoryId, [int] $pullRequestId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/pullRequests/$pullRequestId/attachments/$fileName", $this.apiVersion, $body)
+    }
+     # Get the file content of a pull request attachment.
+    [PSObject] GetAttachment([bool] $useTargetProject, [string] $fileName, [string] $repositoryId, [int] $pullRequestId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/attachments/$fileName", $this.apiVersion, $null)
     }
 
     # Get the commits for the specified pull request.
@@ -242,11 +242,7 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/iterations/$iterationId/commits", $this.apiVersion, $null)
     }
 
-    # Update pull request iteration statuses collection. The only supported operation type is `remove`.This operation allows to delete multiple statuses in one call.The path of the `remove` operation should refer to the ID of the pull request status.For example `path="/1"` refers to the pull request status with ID 1.
-    [PSObject] UpdatePullRequestIterationStatuses([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId, [int] $iterationId) {
-        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/iterations/$iterationId/statuses", $this.apiVersion, $body)
-    }
-     # Get all the statuses associated with a pull request iteration.
+    # Get all the statuses associated with a pull request iteration.
     [PSObject] GetPullRequestIterationStatuses([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $iterationId) {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/iterations/$iterationId/statuses", $this.apiVersion, $null)
     }
@@ -254,48 +250,48 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] CreatePullRequestIterationStatus([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId, [int] $iterationId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/pullRequests/$pullRequestId/iterations/$iterationId/statuses", $this.apiVersion, $body)
     }
-
-    # Get the specific pull request iteration status by ID. The status ID is unique within the pull request across all iterations.
-    [PSObject] GetPullRequestIterationStatus([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $iterationId, [int] $statusId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/iterations/$iterationId/statuses/$statusId", $this.apiVersion, $null)
+     # Update pull request iteration statuses collection. The only supported operation type is `remove`.This operation allows to delete multiple statuses in one call.The path of the `remove` operation should refer to the ID of the pull request status.For example `path="/1"` refers to the pull request status with ID 1.
+    [PSObject] UpdatePullRequestIterationStatuses([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId, [int] $iterationId) {
+        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/iterations/$iterationId/statuses", $this.apiVersion, $body)
     }
-     # Delete pull request iteration status.You can remove multiple statuses in one call by using Update operation.
+
+    # Delete pull request iteration status.You can remove multiple statuses in one call by using Update operation.
     [PSObject] DeletePullRequestIterationStatus([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $iterationId, [int] $statusId) {
         return $this.Request($useTargetProject, 'delete', "git/repositories/$repositoryId/pullRequests/$pullRequestId/iterations/$iterationId/statuses/$statusId", $this.apiVersion, $null)
     }
-
-    # Get all the labels assigned to a pull request.
-    [PSObject] GetPullRequestLabels([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/labels", $this.apiVersion, $null)
+     # Get the specific pull request iteration status by ID. The status ID is unique within the pull request across all iterations.
+    [PSObject] GetPullRequestIterationStatus([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $iterationId, [int] $statusId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/iterations/$iterationId/statuses/$statusId", $this.apiVersion, $null)
     }
-     # Create a label for a specified pull request. The only required field is the name of the new label.
+
+    # Create a label for a specified pull request. The only required field is the name of the new label.
     [PSObject] CreatePullRequestLabel([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/pullRequests/$pullRequestId/labels", $this.apiVersion, $body)
     }
-
-    # Retrieves a single label that has been assigned to a pull request.
-    [PSObject] GetPullRequestLabel([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [string] $labelIdOrName) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/labels/$labelIdOrName", $this.apiVersion, $null)
+     # Get all the labels assigned to a pull request.
+    [PSObject] GetPullRequestLabels([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/labels", $this.apiVersion, $null)
     }
-     # Removes a label from the set of those assigned to the pull request.
+
+    # Removes a label from the set of those assigned to the pull request.
     [PSObject] DeletePullRequestLabels([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [string] $labelIdOrName) {
         return $this.Request($useTargetProject, 'delete', "git/repositories/$repositoryId/pullRequests/$pullRequestId/labels/$labelIdOrName", $this.apiVersion, $null)
     }
-
-    # Create or update pull request external properties. The patch operation can be `add`, `replace` or `remove`. For `add` operation, the path can be empty. If the path is empty, the value must be a list of key value pairs. For `replace` operation, the path cannot be empty. If the path does not exist, the property will be added to the collection. For `remove` operation, the path cannot be empty. If the path does not exist, no action will be performed.
-    [PSObject] UpdatePullRequestProperties([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId) {
-        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/properties", $this.apiVersion, $body)
+     # Retrieves a single label that has been assigned to a pull request.
+    [PSObject] GetPullRequestLabel([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [string] $labelIdOrName) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/labels/$labelIdOrName", $this.apiVersion, $null)
     }
-     # Get external properties of the pull request.
+
+    # Get external properties of the pull request.
     [PSObject] GetPullRequestProperties([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId) {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/properties", $this.apiVersion, $null)
     }
-
-    # Reset the votes of multiple reviewers on a pull request.
-    [PSObject] UpdatePullRequestReviewers([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId) {
-        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/reviewers", $this.apiVersion, $body)
+     # Create or update pull request external properties. The patch operation can be `add`, `replace` or `remove`. For `add` operation, the path can be empty. If the path is empty, the value must be a list of key value pairs. For `replace` operation, the path cannot be empty. If the path does not exist, the property will be added to the collection. For `remove` operation, the path cannot be empty. If the path does not exist, no action will be performed.
+    [PSObject] UpdatePullRequestProperties([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId) {
+        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/properties", $this.apiVersion, $body)
     }
-     # Retrieve the reviewers for a pull request
+
+    # Retrieve the reviewers for a pull request
     [PSObject] GetPullRequestReviewers([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId) {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/reviewers", $this.apiVersion, $null)
     }
@@ -303,12 +299,12 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] CreatePullRequestReviewers([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/pullRequests/$pullRequestId/reviewers", $this.apiVersion, $body)
     }
-
-    # Retrieve information about a particular reviewer on a pull request
-    [PSObject] GetPullRequestReviewer([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [string] $reviewerId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/reviewers/$reviewerId", $this.apiVersion, $null)
+     # Reset the votes of multiple reviewers on a pull request.
+    [PSObject] UpdatePullRequestReviewers([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId) {
+        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/reviewers", $this.apiVersion, $body)
     }
-     # Remove a reviewer from a pull request.
+
+    # Remove a reviewer from a pull request.
     [PSObject] DeletePullRequestReviewer([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [string] $reviewerId) {
         return $this.Request($useTargetProject, 'delete', "git/repositories/$repositoryId/pullRequests/$pullRequestId/reviewers/$reviewerId", $this.apiVersion, $null)
     }
@@ -316,17 +312,17 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] CreatePullRequestReviewer([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId, [string] $reviewerId) {
         return $this.Request($useTargetProject, 'put', "git/repositories/$repositoryId/pullRequests/$pullRequestId/reviewers/$reviewerId", $this.apiVersion, $body)
     }
+     # Retrieve information about a particular reviewer on a pull request
+    [PSObject] GetPullRequestReviewer([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [string] $reviewerId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/reviewers/$reviewerId", $this.apiVersion, $null)
+    }
 
     # Sends an e-mail notification about a specific pull request to a set of recipients
     [PSObject] SharePullRequest([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/pullRequests/$pullRequestId/share", $this.apiVersion, $body)
     }
 
-    # Update pull request statuses collection. The only supported operation type is `remove`.This operation allows to delete multiple statuses in one call.The path of the `remove` operation should refer to the ID of the pull request status.For example `path="/1"` refers to the pull request status with ID 1.
-    [PSObject] UpdatePullRequestStatuses([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId) {
-        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/statuses", $this.apiVersion, $body)
-    }
-     # Get all the statuses associated with a pull request.
+    # Get all the statuses associated with a pull request.
     [PSObject] GetPullRequestStatuses([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId) {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/statuses", $this.apiVersion, $null)
     }
@@ -334,48 +330,48 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] CreatePullRequestStatus([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/pullRequests/$pullRequestId/statuses", $this.apiVersion, $body)
     }
-
-    # Get the specific pull request status by ID. The status ID is unique within the pull request across all iterations.
-    [PSObject] GetPullRequestStatus([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $statusId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/statuses/$statusId", $this.apiVersion, $null)
+     # Update pull request statuses collection. The only supported operation type is `remove`.This operation allows to delete multiple statuses in one call.The path of the `remove` operation should refer to the ID of the pull request status.For example `path="/1"` refers to the pull request status with ID 1.
+    [PSObject] UpdatePullRequestStatuses([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId) {
+        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/statuses", $this.apiVersion, $body)
     }
-     # Delete pull request status.You can remove multiple statuses in one call by using Update operation.
+
+    # Delete pull request status.You can remove multiple statuses in one call by using Update operation.
     [PSObject] DeletePullRequestStatus([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $statusId) {
         return $this.Request($useTargetProject, 'delete', "git/repositories/$repositoryId/pullRequests/$pullRequestId/statuses/$statusId", $this.apiVersion, $null)
     }
-
-    # Retrieve all threads in a pull request.
-    [PSObject] GetThreads([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads", $this.apiVersion, $null)
+     # Get the specific pull request status by ID. The status ID is unique within the pull request across all iterations.
+    [PSObject] GetPullRequestStatus([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $statusId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/statuses/$statusId", $this.apiVersion, $null)
     }
-     # Create a thread in a pull request.
+
+    # Create a thread in a pull request.
     [PSObject] CreateThread([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads", $this.apiVersion, $body)
     }
-
-    # Update a thread in a pull request.
-    [PSObject] UpdateThread([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId, [int] $threadId) {
-        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId", $this.apiVersion, $body)
+     # Retrieve all threads in a pull request.
+    [PSObject] GetThreads([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads", $this.apiVersion, $null)
     }
-     # Retrieve a thread in a pull request.
+
+    # Retrieve a thread in a pull request.
     [PSObject] GetPullRequestThread([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $threadId) {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId", $this.apiVersion, $null)
     }
-
-    # Retrieve all comments associated with a specific thread in a pull request.
-    [PSObject] GetComments([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $threadId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId/comments", $this.apiVersion, $null)
+     # Update a thread in a pull request.
+    [PSObject] UpdateThread([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId, [int] $threadId) {
+        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId", $this.apiVersion, $body)
     }
-     # Create a comment on a specific thread in a pull request.
+
+    # Create a comment on a specific thread in a pull request.
     [PSObject] CreateComment([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId, [int] $threadId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId/comments", $this.apiVersion, $body)
     }
-
-    # Update a comment associated with a specific thread in a pull request.
-    [PSObject] UpdateComment([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId, [int] $threadId, [int] $commentId) {
-        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId/comments/$commentId", $this.apiVersion, $body)
+     # Retrieve all comments associated with a specific thread in a pull request.
+    [PSObject] GetComments([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $threadId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId/comments", $this.apiVersion, $null)
     }
-     # Retrieve a comment associated with a specific thread in a pull request.
+
+    # Retrieve a comment associated with a specific thread in a pull request.
     [PSObject] GetComment([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $threadId, [int] $commentId) {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId/comments/$commentId", $this.apiVersion, $null)
     }
@@ -383,12 +379,12 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] DeleteComment([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $threadId, [int] $commentId) {
         return $this.Request($useTargetProject, 'delete', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId/comments/$commentId", $this.apiVersion, $null)
     }
-
-    # Get likes for a comment.
-    [PSObject] GetLikes([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $threadId, [int] $commentId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId/comments/$commentId/likes", $this.apiVersion, $null)
+     # Update a comment associated with a specific thread in a pull request.
+    [PSObject] UpdateComment([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId, [int] $pullRequestId, [int] $threadId, [int] $commentId) {
+        return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId/comments/$commentId", $this.apiVersion, $body)
     }
-     # Delete a like on a comment.
+
+    # Delete a like on a comment.
     [PSObject] DeleteLike([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $threadId, [int] $commentId) {
         return $this.Request($useTargetProject, 'delete', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId/comments/$commentId/likes", $this.apiVersion, $null)
     }
@@ -396,19 +392,23 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] CreateLike([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $threadId, [int] $commentId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId/comments/$commentId/likes", $this.apiVersion, $null)
     }
+     # Get likes for a comment.
+    [PSObject] GetLikes([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId, [int] $threadId, [int] $commentId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/threads/$threadId/comments/$commentId/likes", $this.apiVersion, $null)
+    }
 
     # Retrieve a list of work items associated with a pull request.
     [PSObject] GetPullRequestWorkItemRefs([bool] $useTargetProject, [string] $repositoryId, [int] $pullRequestId) {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pullRequests/$pullRequestId/workitems", $this.apiVersion, $null)
     }
 
-    # Retrieves pushes associated with the specified repository.
-    [PSObject] GetPushes([bool] $useTargetProject, [string] $repositoryId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pushes", $this.apiVersion, $null)
-    }
-     # Push changes to the repository.
+    # Push changes to the repository.
     [PSObject] CreatePush([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/pushes", $this.apiVersion, $body)
+    }
+     # Retrieves pushes associated with the specified repository.
+    [PSObject] GetPushes([bool] $useTargetProject, [string] $repositoryId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pushes", $this.apiVersion, $null)
     }
 
     # Retrieves a particular push.
@@ -416,11 +416,7 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/pushes/$pushId", $this.apiVersion, $null)
     }
 
-    # Creating, updating, or deleting refs(branches).Updating a ref means making it point at a different commit than it used to. You must specify both the old and new commit to avoid race conditions.
-    [PSObject] UpdateRefs([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId) {
-        return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/refs", $this.apiVersion, $body)
-    }
-     # Lock or Unlock a branch.
+    # Lock or Unlock a branch.
     [PSObject] UpdateRef([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId) {
         return $this.Request($useTargetProject, 'patch', "git/repositories/$repositoryId/refs", $this.apiVersion, $body)
     }
@@ -428,14 +424,18 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] GetRefs([bool] $useTargetProject, [string] $repositoryId) {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/refs", $this.apiVersion, $null)
     }
-
-    # Retrieve information about a revert operation for a specific branch.
-    [PSObject] GetRevertForRefName([bool] $useTargetProject, [string] $repositoryId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/reverts", $this.apiVersion, $null)
+     # Creating, updating, or deleting refs(branches).Updating a ref means making it point at a different commit than it used to. You must specify both the old and new commit to avoid race conditions.
+    [PSObject] UpdateRefs([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId) {
+        return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/refs", $this.apiVersion, $body)
     }
-     # Starts the operation to create a new branch which reverts changes introduced by either a specific commit or commits that are associated to a pull request.
+
+    # Starts the operation to create a new branch which reverts changes introduced by either a specific commit or commits that are associated to a pull request.
     [PSObject] CreateRevert([bool] $useTargetProject, [PSObject] $body, [string] $repositoryId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryId/reverts", $this.apiVersion, $body)
+    }
+     # Retrieve information about a revert operation for a specific branch.
+    [PSObject] GetRevertForRefName([bool] $useTargetProject, [string] $repositoryId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryId/reverts", $this.apiVersion, $null)
     }
 
     # Retrieve information about a revert operation by revert Id.
@@ -468,13 +468,13 @@ class GitOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryNameOrId/forks/Id", $this.apiVersion, $null)
     }
 
-    # Retrieve all requested fork sync operations on this repository.
-    [PSObject] GetForkSyncRequests([bool] $useTargetProject, [string] $repositoryNameOrId) {
-        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryNameOrId/forkSyncRequests", $this.apiVersion, $null)
-    }
-     # Request that another repository's refs be fetched into this one.
+    # Request that another repository's refs be fetched into this one.
     [PSObject] CreateForkSyncRequest([bool] $useTargetProject, [PSObject] $body, [string] $repositoryNameOrId) {
         return $this.Request($useTargetProject, 'post', "git/repositories/$repositoryNameOrId/forkSyncRequests", $this.apiVersion, $body)
+    }
+     # Retrieve all requested fork sync operations on this repository.
+    [PSObject] GetForkSyncRequests([bool] $useTargetProject, [string] $repositoryNameOrId) {
+        return $this.Request($useTargetProject, 'get', "git/repositories/$repositoryNameOrId/forkSyncRequests", $this.apiVersion, $null)
     }
 
     # Get a specific fork sync operation's details.
