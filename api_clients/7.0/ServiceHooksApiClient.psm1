@@ -66,22 +66,22 @@ class ServiceHooksApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "hooks/publishersquery", $this.apiVersion, $body)
     }
 
-    # Create a subscription.
-    [PSObject] CreateSubscription([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "hooks/subscriptions", $this.apiVersion, $body)
-    }
-     # Get a list of subscriptions.
+    # Get a list of subscriptions.
     [PSObject] ListSubscriptions([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "hooks/subscriptions", $this.apiVersion, $null)
     }
-
-    # Get a specific service hooks subscription.
-    [PSObject] GetSubscription([bool] $useTargetProject, [string] $subscriptionId) {
-        return $this.Request($useTargetProject, 'get', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $null)
+     # Create a subscription.
+    [PSObject] CreateSubscription([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "hooks/subscriptions", $this.apiVersion, $body)
     }
-     # Delete a specific service hooks subscription.
+
+    # Delete a specific service hooks subscription.
     [PSObject] DeleteSubscription([bool] $useTargetProject, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'delete', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $null)
+    }
+     # Get a specific service hooks subscription.
+    [PSObject] GetSubscription([bool] $useTargetProject, [string] $subscriptionId) {
+        return $this.Request($useTargetProject, 'get', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $null)
     }
      # Update a subscription. <param name="subscriptionId">ID for a subscription that you wish to update.</param>
     [PSObject] ReplaceSubscription([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {
@@ -89,12 +89,12 @@ class ServiceHooksApiClient : AzureDevOpsApiClient {
     }
 
     # empty
-    [PSObject] GetSubscriptionDiagnostics([bool] $useTargetProject, [string] $subscriptionId) {
-        return $this.Request($useTargetProject, 'get', "hooks/subscriptions/$subscriptionId/diagnostics", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] UpdateSubscriptionDiagnostics([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'put', "hooks/subscriptions/$subscriptionId/diagnostics", $this.apiVersion, $body)
+    }
+     # empty
+    [PSObject] GetSubscriptionDiagnostics([bool] $useTargetProject, [string] $subscriptionId) {
+        return $this.Request($useTargetProject, 'get', "hooks/subscriptions/$subscriptionId/diagnostics", $this.apiVersion, $null)
     }
 
     # Get a list of notifications for a specific subscription. A notification includes details about the event, the request to and the response from the consumer service.

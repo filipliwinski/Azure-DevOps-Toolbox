@@ -12,21 +12,21 @@ class FavoriteApiClient : AzureDevOpsApiClient {
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
     # empty
-    [PSObject] CreateFavorite([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "favorite/favorites", $this.apiVersion, $body)
-    }
-     # empty
     [PSObject] GetFavorites([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "favorite/favorites", $this.apiVersion, $null)
     }
+     # empty
+    [PSObject] CreateFavorite([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "favorite/favorites", $this.apiVersion, $body)
+    }
 
     # empty
-    [PSObject] DeleteFavoriteById([bool] $useTargetProject, [string] $favoriteId) {
-        return $this.Request($useTargetProject, 'delete', "favorite/favorites/$favoriteId", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] GetFavoriteById([bool] $useTargetProject, [string] $favoriteId) {
         return $this.Request($useTargetProject, 'get', "favorite/favorites/$favoriteId", $this.apiVersion, $null)
+    }
+     # empty
+    [PSObject] DeleteFavoriteById([bool] $useTargetProject, [string] $favoriteId) {
+        return $this.Request($useTargetProject, 'delete', "favorite/favorites/$favoriteId", $this.apiVersion, $null)
     }
 
 }
