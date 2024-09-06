@@ -16,18 +16,23 @@ class AlertApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "alert/repositories/$repository/alerts", $this.apiVersion, $null)
     }
 
-    # Get an alert.
-    [PSObject] GetAlertAsync([bool] $useTargetProject, [int] $alertId, [string] $repository) {
-        return $this.Request($useTargetProject, 'get', "alert/repositories/$repository/alerts/$alertId", $this.apiVersion, $null)
-    }
-     # Update the status of an alert
+    # Update the status of an alert
     [PSObject] UpdateAlertAsync([bool] $useTargetProject, [PSObject] $body, [int] $alertId, [string] $repository) {
         return $this.Request($useTargetProject, 'patch', "alert/repositories/$repository/alerts/$alertId", $this.apiVersion, $body)
+    }
+     # Get an alert.
+    [PSObject] GetAlertAsync([bool] $useTargetProject, [int] $alertId, [string] $repository) {
+        return $this.Request($useTargetProject, 'get', "alert/repositories/$repository/alerts/$alertId", $this.apiVersion, $null)
     }
 
     # Get instances of an alert.
     [PSObject] GetAlertInstancesAsync([bool] $useTargetProject, [int] $alertId, [string] $repository) {
         return $this.Request($useTargetProject, 'get', "alert/repositories/$repository/alerts/$alertId/instances", $this.apiVersion, $null)
+    }
+
+    # Returns the branches for which analysis results were submitted.
+    [PSObject] GetBranchesAsync([bool] $useTargetProject, [string] $repository) {
+        return $this.Request($useTargetProject, 'get', "alert/repositories/$repository/filters/branches", $this.apiVersion, $null)
     }
 
 }
