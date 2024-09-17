@@ -81,17 +81,17 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/classificationnodes", $this.apiVersion, $null)
     }
 
-    # Update an existing classification node.
+    # Delete an existing classification node.
+    [PSObject] DeleteClassificationNode([bool] $useTargetProject, [string] $structureGroup, [string] $path) {
+        return $this.Request($useTargetProject, 'delete', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $null)
+    }
+     # Update an existing classification node.
     [PSObject] UpdateClassificationNode([bool] $useTargetProject, [PSObject] $body, [string] $structureGroup, [string] $path) {
         return $this.Request($useTargetProject, 'patch', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $body)
     }
      # Create new or update an existing classification node.
     [PSObject] CreateOrUpdateClassificationNode([bool] $useTargetProject, [PSObject] $body, [string] $structureGroup, [string] $path) {
         return $this.Request($useTargetProject, 'post', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $body)
-    }
-     # Delete an existing classification node.
-    [PSObject] DeleteClassificationNode([bool] $useTargetProject, [string] $structureGroup, [string] $path) {
-        return $this.Request($useTargetProject, 'delete', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $null)
     }
      # Gets the classification node for a given node path.
     [PSObject] GetClassificationNode([bool] $useTargetProject, [string] $structureGroup, [string] $path) {
@@ -103,13 +103,13 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/fields", $this.apiVersion, $null)
     }
 
-    # Deletes the field.
-    [PSObject] DeleteField([bool] $useTargetProject, [string] $fieldNameOrRefName) {
-        return $this.Request($useTargetProject, 'delete', "wit/fields/$fieldNameOrRefName", $this.apiVersion, $null)
-    }
-     # Gets information on a specific field.
+    # Gets information on a specific field.
     [PSObject] GetField([bool] $useTargetProject, [string] $fieldNameOrRefName) {
         return $this.Request($useTargetProject, 'get', "wit/fields/$fieldNameOrRefName", $this.apiVersion, $null)
+    }
+     # Deletes the field.
+    [PSObject] DeleteField([bool] $useTargetProject, [string] $fieldNameOrRefName) {
+        return $this.Request($useTargetProject, 'delete', "wit/fields/$fieldNameOrRefName", $this.apiVersion, $null)
     }
      # Updates the field.
     [PSObject] UpdateField([bool] $useTargetProject, [PSObject] $body, [string] $fieldNameOrRefName) {
@@ -121,17 +121,17 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/queries", $this.apiVersion, $null)
     }
 
-    # Update a query or a folder. This allows you to update, rename and move queries and folders.
+    # Delete a query or a folder. This deletes any permission change on the deleted query or folder and any of its descendants if it is a folder. It is important to note that the deleted permission changes cannot be recovered upon undeleting the query or folder.
+    [PSObject] DeleteQuery([bool] $useTargetProject, [string] $query) {
+        return $this.Request($useTargetProject, 'delete', "wit/queries/$query", $this.apiVersion, $null)
+    }
+     # Update a query or a folder. This allows you to update, rename and move queries and folders.
     [PSObject] UpdateQuery([bool] $useTargetProject, [PSObject] $body, [string] $query) {
         return $this.Request($useTargetProject, 'patch', "wit/queries/$query", $this.apiVersion, $body)
     }
      # Creates a query, or moves a query.
     [PSObject] CreateQuery([bool] $useTargetProject, [PSObject] $body, [string] $query) {
         return $this.Request($useTargetProject, 'post', "wit/queries/$query", $this.apiVersion, $body)
-    }
-     # Delete a query or a folder. This deletes any permission change on the deleted query or folder and any of its descendants if it is a folder. It is important to note that the deleted permission changes cannot be recovered upon undeleting the query or folder.
-    [PSObject] DeleteQuery([bool] $useTargetProject, [string] $query) {
-        return $this.Request($useTargetProject, 'delete', "wit/queries/$query", $this.apiVersion, $null)
     }
      # Retrieves an individual query and its children
     [PSObject] GetQuery([bool] $useTargetProject, [string] $query) {
@@ -143,13 +143,13 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/recyclebin", $this.apiVersion, $null)
     }
 
-    # Destroys the specified work item permanently from the Recycle Bin. This action can not be undone.
-    [PSObject] DestroyWorkItem([bool] $useTargetProject, [int] $id) {
-        return $this.Request($useTargetProject, 'delete', "wit/recyclebin/$id", $this.apiVersion, $null)
-    }
-     # Gets a deleted work item from Recycle Bin.
+    # Gets a deleted work item from Recycle Bin.
     [PSObject] GetDeletedWorkItem([bool] $useTargetProject, [int] $id) {
         return $this.Request($useTargetProject, 'get', "wit/recyclebin/$id", $this.apiVersion, $null)
+    }
+     # Destroys the specified work item permanently from the Recycle Bin. This action can not be undone.
+    [PSObject] DestroyWorkItem([bool] $useTargetProject, [int] $id) {
+        return $this.Request($useTargetProject, 'delete', "wit/recyclebin/$id", $this.apiVersion, $null)
     }
      # Restores the deleted work item from Recycle Bin.
     [PSObject] RestoreWorkItem([bool] $useTargetProject, [PSObject] $body, [int] $id) {
@@ -184,13 +184,13 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "wit/workitems/$type", $this.apiVersion, $body)
     }
 
-    # Deletes the specified work item and sends it to the Recycle Bin, so that it can be restored back, if required. Optionally, if the destroy parameter has been set to true, it destroys the work item permanently.
-    [PSObject] DeleteWorkItem([bool] $useTargetProject, [int] $id) {
-        return $this.Request($useTargetProject, 'delete', "wit/workitems/$id", $this.apiVersion, $null)
-    }
-     # Returns a single work item.
+    # Returns a single work item.
     [PSObject] GetWorkItem([bool] $useTargetProject, [int] $id) {
         return $this.Request($useTargetProject, 'get', "wit/workitems/$id", $this.apiVersion, $null)
+    }
+     # Deletes the specified work item and sends it to the Recycle Bin, so that it can be restored back, if required. Optionally, if the destroy parameter has been set to true, it destroys the work item permanently.
+    [PSObject] DeleteWorkItem([bool] $useTargetProject, [int] $id) {
+        return $this.Request($useTargetProject, 'delete', "wit/workitems/$id", $this.apiVersion, $null)
     }
      # Updates a single work item.
     [PSObject] UpdateWorkItem([bool] $useTargetProject, [PSObject] $body, [int] $id) {
@@ -251,13 +251,13 @@ class WorkItemTrackingApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "$team/wit/templates", $this.apiVersion, $body)
     }
 
-    # Deletes the template with given id
-    [PSObject] DeleteTemplate([bool] $useTargetProject, [string] $team, [string] $templateId) {
-        return $this.Request($useTargetProject, 'delete', "$team/wit/templates/$templateId", $this.apiVersion, $null)
-    }
-     # Gets the template with specified id
+    # Gets the template with specified id
     [PSObject] GetTemplate([bool] $useTargetProject, [string] $team, [string] $templateId) {
         return $this.Request($useTargetProject, 'get', "$team/wit/templates/$templateId", $this.apiVersion, $null)
+    }
+     # Deletes the template with given id
+    [PSObject] DeleteTemplate([bool] $useTargetProject, [string] $team, [string] $templateId) {
+        return $this.Request($useTargetProject, 'delete', "$team/wit/templates/$templateId", $this.apiVersion, $null)
     }
      # Replace template contents
     [PSObject] ReplaceTemplate([bool] $useTargetProject, [PSObject] $body, [string] $team, [string] $templateId) {

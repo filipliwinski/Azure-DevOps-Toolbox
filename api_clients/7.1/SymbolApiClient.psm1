@@ -3,7 +3,7 @@
 using module .\..\AzureDevOpsApiClient.psm1
 
 class SymbolApiClient : AzureDevOpsApiClient {
-    [string] $apiVersion = '7.1-preview'
+    [string] $apiVersion = '7.1'
 
     # SymbolApiClient([string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)
     #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}
@@ -26,7 +26,11 @@ class SymbolApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "symbol/client/$clientType", $this.apiVersion, $null)
     }
 
-    # Update a symbol request by request name.
+    # Delete a symbol request by request name.
+    [PSObject] DeleteRequestsRequestNameAsync([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'delete', "symbol/requests", $this.apiVersion, $null)
+    }
+     # Update a symbol request by request name.
     [PSObject] UpdateRequestsRequestNameAsync([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "symbol/requests", $this.apiVersion, $body)
     }
@@ -34,26 +38,22 @@ class SymbolApiClient : AzureDevOpsApiClient {
     [PSObject] CreateRequestsAsync([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "symbol/requests", $this.apiVersion, $body)
     }
-     # Delete a symbol request by request name.
-    [PSObject] DeleteRequestsRequestNameAsync([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'delete', "symbol/requests", $this.apiVersion, $null)
-    }
      # Get a symbol request by request name.
     [PSObject] GetRequestsRequestNameAsync([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "symbol/requests", $this.apiVersion, $null)
     }
 
-    # Update a symbol request by request identifier.
+    # Delete a symbol request by request identifier.
+    [PSObject] DeleteRequestsRequestIdAsync([bool] $useTargetProject, [string] $requestId) {
+        return $this.Request($useTargetProject, 'delete', "symbol/requests/$requestId", $this.apiVersion, $null)
+    }
+     # Update a symbol request by request identifier.
     [PSObject] UpdateRequestsRequestIdAsync([bool] $useTargetProject, [PSObject] $body, [string] $requestId) {
         return $this.Request($useTargetProject, 'patch', "symbol/requests/$requestId", $this.apiVersion, $body)
     }
      # Create debug entries for a symbol request as specified by its identifier.
     [PSObject] CreateRequestsRequestIdDebugEntriesAsync([bool] $useTargetProject, [PSObject] $body, [string] $requestId) {
         return $this.Request($useTargetProject, 'post', "symbol/requests/$requestId", $this.apiVersion, $body)
-    }
-     # Delete a symbol request by request identifier.
-    [PSObject] DeleteRequestsRequestIdAsync([bool] $useTargetProject, [string] $requestId) {
-        return $this.Request($useTargetProject, 'delete', "symbol/requests/$requestId", $this.apiVersion, $null)
     }
      # Get a symbol request by request identifier.
     [PSObject] GetRequestsRequestIdAsync([bool] $useTargetProject, [string] $requestId) {

@@ -20,13 +20,13 @@ class PipelinesChecksApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "pipelines/checks/configurations", $this.apiVersion, $body)
     }
 
-    # Delete check configuration by id
-    [PSObject] DeleteCheckConfiguration([bool] $useTargetProject, [int] $id) {
-        return $this.Request($useTargetProject, 'delete', "pipelines/checks/configurations/$id", $this.apiVersion, $null)
-    }
-     # Get Check configuration by Id
+    # Get Check configuration by Id
     [PSObject] GetCheckConfiguration([bool] $useTargetProject, [int] $id) {
         return $this.Request($useTargetProject, 'get', "pipelines/checks/configurations/$id", $this.apiVersion, $null)
+    }
+     # Delete check configuration by id
+    [PSObject] DeleteCheckConfiguration([bool] $useTargetProject, [int] $id) {
+        return $this.Request($useTargetProject, 'delete', "pipelines/checks/configurations/$id", $this.apiVersion, $null)
     }
      # Update check configuration
     [PSObject] UpdateCheckConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $id) {

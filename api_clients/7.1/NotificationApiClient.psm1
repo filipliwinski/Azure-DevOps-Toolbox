@@ -3,7 +3,7 @@
 using module .\..\AzureDevOpsApiClient.psm1
 
 class NotificationApiClient : AzureDevOpsApiClient {
-    [string] $apiVersion = '7.1-preview'
+    [string] $apiVersion = '7.1'
 
     # NotificationApiClient([string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)
     #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}
@@ -58,13 +58,13 @@ class NotificationApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "notification/subscriptions", $this.apiVersion, $body)
     }
 
-    # Delete a subscription.
-    [PSObject] DeleteSubscription([bool] $useTargetProject, [string] $subscriptionId) {
-        return $this.Request($useTargetProject, 'delete', "notification/subscriptions/$subscriptionId", $this.apiVersion, $null)
-    }
-     # Get a notification subscription by its ID.
+    # Get a notification subscription by its ID.
     [PSObject] GetSubscription([bool] $useTargetProject, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'get', "notification/subscriptions/$subscriptionId", $this.apiVersion, $null)
+    }
+     # Delete a subscription.
+    [PSObject] DeleteSubscription([bool] $useTargetProject, [string] $subscriptionId) {
+        return $this.Request($useTargetProject, 'delete', "notification/subscriptions/$subscriptionId", $this.apiVersion, $null)
     }
      # Update an existing subscription. Depending on the type of subscription and permissions, the caller can update the description, filter settings, channel (delivery) settings and more.
     [PSObject] UpdateSubscription([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {

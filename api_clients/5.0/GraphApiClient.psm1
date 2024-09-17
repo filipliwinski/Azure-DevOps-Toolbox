@@ -25,13 +25,13 @@ class GraphApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "graph/groups", $this.apiVersion, $body)
     }
 
-    # Removes a VSTS group from all of its parent groups.The group will still be visible, but membership checks for the group, and all descendants which derive membership through it, will return false.”
-    [PSObject] DeleteGroup([bool] $useTargetProject, [string] $groupDescriptor) {
-        return $this.Request($useTargetProject, 'delete', "graph/groups/$groupDescriptor", $this.apiVersion, $null)
-    }
-     # Get a group by its descriptor.The group will be returned even if it has been deleted from the account or has had all its membershipsdeleted.
+    # Get a group by its descriptor.The group will be returned even if it has been deleted from the account or has had all its membershipsdeleted.
     [PSObject] GetGroup([bool] $useTargetProject, [string] $groupDescriptor) {
         return $this.Request($useTargetProject, 'get', "graph/groups/$groupDescriptor", $this.apiVersion, $null)
+    }
+     # Removes a VSTS group from all of its parent groups.The group will still be visible, but membership checks for the group, and all descendants which derive membership through it, will return false.”
+    [PSObject] DeleteGroup([bool] $useTargetProject, [string] $groupDescriptor) {
+        return $this.Request($useTargetProject, 'delete', "graph/groups/$groupDescriptor", $this.apiVersion, $null)
     }
      # Update the properties of a VSTS group.Currently limited to only changing the description and account name.
     [PSObject] UpdateGroup([bool] $useTargetProject, [string] $groupDescriptor, [PSObject] $body) {
@@ -43,17 +43,17 @@ class GraphApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "graph/Memberships/$subjectDescriptor", $this.apiVersion, $null)
     }
 
-    # Deletes a membership between a container and subject.
+    # Check to see if a membership relationship between a container and subject exists.
+    [PSObject] CheckMembershipExistence_Head([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
+        return $this.Request($useTargetProject, 'head', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
+    }
+     # Deletes a membership between a container and subject.
     [PSObject] RemoveMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
         return $this.Request($useTargetProject, 'delete', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
     }
      # Create a new membership between a container and subject.
     [PSObject] AddMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
         return $this.Request($useTargetProject, 'put', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
-    }
-     # Check to see if a membership relationship between a container and subject exists.
-    [PSObject] CheckMembershipExistence_Head([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
-        return $this.Request($useTargetProject, 'head', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
     }
      # Get a membership relationship between a container and subject.
     [PSObject] GetMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
