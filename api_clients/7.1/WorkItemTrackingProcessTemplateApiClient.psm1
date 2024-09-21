@@ -3,7 +3,7 @@
 using module .\..\AzureDevOpsApiClient.psm1
 
 class WorkItemTrackingProcessTemplateApiClient : AzureDevOpsApiClient {
-    [string] $apiVersion = '7.1-preview'
+    [string] $apiVersion = '7.1'
 
     # WorkItemTrackingProcessTemplateApiClient([string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)
     #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}

@@ -3,7 +3,7 @@
 using module .\..\AzureDevOpsApiClient.psm1
 
 class ReleaseApiClient : AzureDevOpsApiClient {
-    [string] $apiVersion = '7.1-preview'
+    [string] $apiVersion = '7.1'
 
     # ReleaseApiClient([string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)
     #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}
@@ -21,13 +21,13 @@ class ReleaseApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'patch', "release/approvals/$approvalId", $this.apiVersion, $body)
     }
 
-    # Create a release definition
-    [PSObject] CreateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "release/definitions", $this.apiVersion, $body)
-    }
-     # Get a list of release definitions.
+    # Get a list of release definitions.
     [PSObject] GetReleaseDefinitions([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "release/definitions", $this.apiVersion, $null)
+    }
+     # Create a release definition
+    [PSObject] CreateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "release/definitions", $this.apiVersion, $body)
     }
      # Update a release definition.
     [PSObject] UpdateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
@@ -58,17 +58,17 @@ class ReleaseApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "release/deployments", $this.apiVersion, $null)
     }
 
-    # Updates an existing folder at given existing path.
+    # Deletes a definition folder for given folder name and path and all it's existing definitions.
+    [PSObject] DeleteFolder([bool] $useTargetProject, [string] $path) {
+        return $this.Request($useTargetProject, 'delete', "release/folders/$path", $this.apiVersion, $null)
+    }
+     # Updates an existing folder at given existing path.
     [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
         return $this.Request($useTargetProject, 'patch', "release/folders/$path", $this.apiVersion, $body)
     }
      # This method is no longer supported. Use CreateFolder with folder parameter API.
     [PSObject] CreateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
         return $this.Request($useTargetProject, 'post', "release/folders/$path", $this.apiVersion, $body)
-    }
-     # Deletes a definition folder for given folder name and path and all it's existing definitions.
-    [PSObject] DeleteFolder([bool] $useTargetProject, [string] $path) {
-        return $this.Request($useTargetProject, 'delete', "release/folders/$path", $this.apiVersion, $null)
     }
      # Gets folders.
     [PSObject] GetFolders([bool] $useTargetProject, [string] $path) {
@@ -89,13 +89,13 @@ class ReleaseApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "release/releases", $this.apiVersion, $null)
     }
 
-    # Get release for a given revision number.
-    [PSObject] GetReleaseRevision([bool] $useTargetProject, [int] $releaseId) {
-        return $this.Request($useTargetProject, 'get', "release/releases/$releaseId", $this.apiVersion, $null)
-    }
-     # Update a complete release object.
+    # Update a complete release object.
     [PSObject] UpdateRelease([bool] $useTargetProject, [PSObject] $body, [int] $releaseId) {
         return $this.Request($useTargetProject, 'put', "release/releases/$releaseId", $this.apiVersion, $body)
+    }
+     # Get release for a given revision number.
+    [PSObject] GetReleaseRevision([bool] $useTargetProject, [int] $releaseId) {
+        return $this.Request($useTargetProject, 'get', "release/releases/$releaseId", $this.apiVersion, $null)
     }
      # Update few properties of a release.
     [PSObject] UpdateReleaseResource([bool] $useTargetProject, [PSObject] $body, [int] $releaseId) {

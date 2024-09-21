@@ -3,7 +3,7 @@
 using module .\..\AzureDevOpsApiClient.psm1
 
 class PolicyApiClient : AzureDevOpsApiClient {
-    [string] $apiVersion = '7.1-preview'
+    [string] $apiVersion = '7.1'
 
     # PolicyApiClient([string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)
     #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}
@@ -20,13 +20,13 @@ class PolicyApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "policy/configurations", $this.apiVersion, $body)
     }
 
-    # Delete a policy configuration by its ID.
-    [PSObject] DeletePolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {
-        return $this.Request($useTargetProject, 'delete', "policy/configurations/$configurationId", $this.apiVersion, $null)
-    }
-     # Get a policy configuration by its ID.
+    # Get a policy configuration by its ID.
     [PSObject] GetPolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {
         return $this.Request($useTargetProject, 'get', "policy/configurations/$configurationId", $this.apiVersion, $null)
+    }
+     # Delete a policy configuration by its ID.
+    [PSObject] DeletePolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {
+        return $this.Request($useTargetProject, 'delete', "policy/configurations/$configurationId", $this.apiVersion, $null)
     }
      # Update a policy configuration by its ID.
     [PSObject] UpdatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $configurationId) {

@@ -20,13 +20,13 @@ class MemberEntitlementManagementApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "groupentitlements", $this.apiVersion, $body)
     }
 
-    # Delete a group entitlement.
-    [PSObject] DeleteGroupEntitlement([bool] $useTargetProject, [string] $groupId) {
-        return $this.Request($useTargetProject, 'delete', "groupentitlements/$groupId", $this.apiVersion, $null)
-    }
-     # Get a group entitlement.If the group entitlement does not exist, returns null.
+    # Get a group entitlement.If the group entitlement does not exist, returns null.
     [PSObject] GetGroupEntitlement([bool] $useTargetProject, [string] $groupId) {
         return $this.Request($useTargetProject, 'get', "groupentitlements/$groupId", $this.apiVersion, $null)
+    }
+     # Delete a group entitlement.
+    [PSObject] DeleteGroupEntitlement([bool] $useTargetProject, [string] $groupId) {
+        return $this.Request($useTargetProject, 'delete', "groupentitlements/$groupId", $this.apiVersion, $null)
     }
      # Update entitlements (License Rule, Extensions Rule, Project memberships etc.) for a group.
     [PSObject] UpdateGroupEntitlement([bool] $useTargetProject, [PSObject] $body, [string] $groupId) {
@@ -61,39 +61,39 @@ class MemberEntitlementManagementApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "serviceprincipalentitlements", $this.apiVersion, $body)
     }
 
-    # Delete a service principal from the account.The delete operation includes unassigning Extensions and Licenses and removing the service principal from all project memberships.The service principal would continue to have access to the account if it is member of an AAD group, that is added directly to the account.
-    [PSObject] DeleteServicePrincipalEntitlement([bool] $useTargetProject, [string] $servicePrincipalId) {
-        return $this.Request($useTargetProject, 'delete', "serviceprincipalentitlements/$servicePrincipalId", $this.apiVersion, $null)
-    }
-     # Get Service principal Entitlement for a service principal.
+    # Get Service principal Entitlement for a service principal.
     [PSObject] GetServicePrincipalEntitlement([bool] $useTargetProject, [string] $servicePrincipalId) {
         return $this.Request($useTargetProject, 'get', "serviceprincipalentitlements/$servicePrincipalId", $this.apiVersion, $null)
+    }
+     # Delete a service principal from the account.The delete operation includes unassigning Extensions and Licenses and removing the service principal from all project memberships.The service principal would continue to have access to the account if it is member of an AAD group, that is added directly to the account.
+    [PSObject] DeleteServicePrincipalEntitlement([bool] $useTargetProject, [string] $servicePrincipalId) {
+        return $this.Request($useTargetProject, 'delete', "serviceprincipalentitlements/$servicePrincipalId", $this.apiVersion, $null)
     }
      # Edit the entitlements (License, Extensions, Projects, Teams etc) for a service principal.
     [PSObject] UpdateServicePrincipalEntitlement([bool] $useTargetProject, [PSObject] $body, [string] $servicePrincipalId) {
         return $this.Request($useTargetProject, 'patch', "serviceprincipalentitlements/$servicePrincipalId", $this.apiVersion, $body)
     }
 
-    # Add a user, assign license and extensions and make them a member of a project group in an account.
-    [PSObject] AddUserEntitlement([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "userentitlements", $this.apiVersion, $body)
-    }
-     # Get a paged set of user entitlements matching the filter and sort criteria built with properties that match the select input.
+    # Get a paged set of user entitlements matching the filter and sort criteria built with properties that match the select input.
     [PSObject] SearchUserEntitlements([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "userentitlements", $this.apiVersion, $null)
+    }
+     # Add a user, assign license and extensions and make them a member of a project group in an account.
+    [PSObject] AddUserEntitlement([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "userentitlements", $this.apiVersion, $body)
     }
      # Edit the entitlements (License, Extensions, Projects, Teams etc) for one or more users.MSA Backed organizations may face limitation when using this API.
     [PSObject] UpdateUserEntitlements([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "userentitlements", $this.apiVersion, $body)
     }
 
-    # Delete a user from the account.The delete operation includes unassigning Extensions and Licenses and removing the user from all project memberships.The user would continue to have access to the account if she is member of an AAD group, that is added directly to the account.
-    [PSObject] DeleteUserEntitlement([bool] $useTargetProject, [string] $userId) {
-        return $this.Request($useTargetProject, 'delete', "userentitlements/$userId", $this.apiVersion, $null)
-    }
-     # Get User Entitlement for a user.
+    # Get User Entitlement for a user.
     [PSObject] GetUserEntitlement([bool] $useTargetProject, [string] $userId) {
         return $this.Request($useTargetProject, 'get', "userentitlements/$userId", $this.apiVersion, $null)
+    }
+     # Delete a user from the account.The delete operation includes unassigning Extensions and Licenses and removing the user from all project memberships.The user would continue to have access to the account if she is member of an AAD group, that is added directly to the account.
+    [PSObject] DeleteUserEntitlement([bool] $useTargetProject, [string] $userId) {
+        return $this.Request($useTargetProject, 'delete', "userentitlements/$userId", $this.apiVersion, $null)
     }
      # Edit the entitlements (License, Extensions, Projects, Teams etc) for a user.MSA Backed organizations may face limitation when using this API.
     [PSObject] UpdateUserEntitlement([bool] $useTargetProject, [PSObject] $body, [string] $userId) {
