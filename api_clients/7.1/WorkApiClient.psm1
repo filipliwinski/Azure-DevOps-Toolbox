@@ -3,7 +3,7 @@
 using module .\..\AzureDevOpsApiClient.psm1
 
 class WorkApiClient : AzureDevOpsApiClient {
-    [string] $apiVersion = '7.1-preview'
+    [string] $apiVersion = '7.1'
 
     # WorkApiClient([string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)
     #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}
@@ -35,13 +35,13 @@ class WorkApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "work/plans", $this.apiVersion, $body)
     }
 
-    # Delete the specified plan
-    [PSObject] DeletePlan([bool] $useTargetProject, [string] $id) {
-        return $this.Request($useTargetProject, 'delete', "work/plans/$id", $this.apiVersion, $null)
-    }
-     # Get the information for the specified plan
+    # Get the information for the specified plan
     [PSObject] GetPlan([bool] $useTargetProject, [string] $id) {
         return $this.Request($useTargetProject, 'get', "work/plans/$id", $this.apiVersion, $null)
+    }
+     # Delete the specified plan
+    [PSObject] DeletePlan([bool] $useTargetProject, [string] $id) {
+        return $this.Request($useTargetProject, 'delete', "work/plans/$id", $this.apiVersion, $null)
     }
      # Update the information for the specified plan
     [PSObject] UpdatePlan([bool] $useTargetProject, [PSObject] $body, [string] $id) {

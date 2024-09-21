@@ -75,13 +75,13 @@ class ServiceHooksApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "hooks/subscriptions", $this.apiVersion, $body)
     }
 
-    # Delete a specific service hooks subscription.
-    [PSObject] DeleteSubscription([bool] $useTargetProject, [string] $subscriptionId) {
-        return $this.Request($useTargetProject, 'delete', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $null)
-    }
-     # Get a specific service hooks subscription.
+    # Get a specific service hooks subscription.
     [PSObject] GetSubscription([bool] $useTargetProject, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'get', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $null)
+    }
+     # Delete a specific service hooks subscription.
+    [PSObject] DeleteSubscription([bool] $useTargetProject, [string] $subscriptionId) {
+        return $this.Request($useTargetProject, 'delete', "hooks/subscriptions/$subscriptionId", $this.apiVersion, $null)
     }
      # Update a subscription. <param name="subscriptionId">ID for a subscription that you wish to update.</param>
     [PSObject] ReplaceSubscription([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {

@@ -21,13 +21,13 @@ class ReleaseOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'patch', "release/approvals/$approvalId", $this.apiVersion, $body)
     }
 
-    # Create a release definition
-    [PSObject] CreateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "release/definitions", $this.apiVersion, $body)
-    }
-     # Get a list of release definitions.
+    # Get a list of release definitions.
     [PSObject] GetReleaseDefinitions([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "release/definitions", $this.apiVersion, $null)
+    }
+     # Create a release definition
+    [PSObject] CreateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "release/definitions", $this.apiVersion, $body)
     }
      # Update a release definition.
     [PSObject] UpdateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
@@ -72,13 +72,13 @@ class ReleaseOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "release/releases", $this.apiVersion, $null)
     }
 
-    # Get release for a given revision number.
-    [PSObject] GetReleaseRevision([bool] $useTargetProject, [int] $releaseId) {
-        return $this.Request($useTargetProject, 'get', "release/releases/$releaseId", $this.apiVersion, $null)
-    }
-     # Update a complete release object.
+    # Update a complete release object.
     [PSObject] UpdateRelease([bool] $useTargetProject, [PSObject] $body, [int] $releaseId) {
         return $this.Request($useTargetProject, 'put', "release/releases/$releaseId", $this.apiVersion, $body)
+    }
+     # Get release for a given revision number.
+    [PSObject] GetReleaseRevision([bool] $useTargetProject, [int] $releaseId) {
+        return $this.Request($useTargetProject, 'get', "release/releases/$releaseId", $this.apiVersion, $null)
     }
      # Update few properties of a release.
     [PSObject] UpdateReleaseResource([bool] $useTargetProject, [PSObject] $body, [int] $releaseId) {

@@ -3,7 +3,7 @@
 using module .\..\AzureDevOpsApiClient.psm1
 
 class CoreApiClient : AzureDevOpsApiClient {
-    [string] $apiVersion = '7.1-preview'
+    [string] $apiVersion = '7.1'
 
     # CoreApiClient([string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)
     #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}
@@ -30,13 +30,13 @@ class CoreApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "projects", $this.apiVersion, $null)
     }
 
-    # Get project with the specified id or name, optionally including capabilities.
-    [PSObject] GetProject([bool] $useTargetProject, [string] $projectId) {
-        return $this.Request($useTargetProject, 'get', "projects/Id", $this.apiVersion, $null)
-    }
-     # Queues a project to be deleted. Use the [GetOperation](../../operations/operations/get) to periodically check for delete project status.
+    # Queues a project to be deleted. Use the [GetOperation](../../operations/operations/get) to periodically check for delete project status.
     [PSObject] QueueDeleteProject([bool] $useTargetProject, [string] $projectId) {
         return $this.Request($useTargetProject, 'delete', "projects/Id", $this.apiVersion, $null)
+    }
+     # Get project with the specified id or name, optionally including capabilities.
+    [PSObject] GetProject([bool] $useTargetProject, [string] $projectId) {
+        return $this.Request($useTargetProject, 'get', "projects/Id", $this.apiVersion, $null)
     }
      # Update an existing project's name, abbreviation, description, or restore a project.
     [PSObject] UpdateProject([bool] $useTargetProject, [PSObject] $body, [string] $projectId) {
@@ -75,13 +75,13 @@ class CoreApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "projects/Id/teams", $this.apiVersion, $body)
     }
 
-    # Delete a team.
-    [PSObject] DeleteTeam([bool] $useTargetProject, [string] $projectId, [string] $teamId) {
-        return $this.Request($useTargetProject, 'delete', "projects/Id/teams/$teamId", $this.apiVersion, $null)
-    }
-     # Get a specific team.
+    # Get a specific team.
     [PSObject] GetTeam([bool] $useTargetProject, [string] $projectId, [string] $teamId) {
         return $this.Request($useTargetProject, 'get', "projects/Id/teams/$teamId", $this.apiVersion, $null)
+    }
+     # Delete a team.
+    [PSObject] DeleteTeam([bool] $useTargetProject, [string] $projectId, [string] $teamId) {
+        return $this.Request($useTargetProject, 'delete', "projects/Id/teams/$teamId", $this.apiVersion, $null)
     }
      # Update a team's name and/or description.
     [PSObject] UpdateTeam([bool] $useTargetProject, [PSObject] $body, [string] $projectId, [string] $teamId) {

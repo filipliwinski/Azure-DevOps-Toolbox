@@ -3,7 +3,7 @@
 using module .\..\AzureDevOpsApiClient.psm1
 
 class FeedApiClient : AzureDevOpsApiClient {
-    [string] $apiVersion = '7.1-preview'
+    [string] $apiVersion = '7.1'
 
     # FeedApiClient([string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)
     #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}
@@ -53,13 +53,13 @@ class FeedApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "packaging/feeds", $this.apiVersion, $body)
     }
 
-    # Remove a feed and all its packages. The feed moves to the recycle bin and is reversible.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
-    [PSObject] DeleteFeed([bool] $useTargetProject, [string] $feedId) {
-        return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId", $this.apiVersion, $null)
-    }
-     # Get the settings for a specific feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
+    # Get the settings for a specific feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
     [PSObject] GetFeed([bool] $useTargetProject, [string] $feedId) {
         return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId", $this.apiVersion, $null)
+    }
+     # Remove a feed and all its packages. The feed moves to the recycle bin and is reversible.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
+    [PSObject] DeleteFeed([bool] $useTargetProject, [string] $feedId) {
+        return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId", $this.apiVersion, $null)
     }
      # Change the attributes of a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
     [PSObject] UpdateFeed([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
@@ -139,13 +139,13 @@ class FeedApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/RecycleBin/Packages/$packageId/Versions/$packageVersionId", $this.apiVersion, $null)
     }
 
-    # Delete the retention policy for a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
-    [PSObject] DeleteFeedRetentionPolicies([bool] $useTargetProject, [string] $feedId) {
-        return $this.Request($useTargetProject, 'delete', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $null)
-    }
-     # Get the retention policy for a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
+    # Get the retention policy for a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
     [PSObject] GetFeedRetentionPolicies([bool] $useTargetProject, [string] $feedId) {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $null)
+    }
+     # Delete the retention policy for a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
+    [PSObject] DeleteFeedRetentionPolicies([bool] $useTargetProject, [string] $feedId) {
+        return $this.Request($useTargetProject, 'delete', "packaging/Feeds/$feedId/retentionpolicies", $this.apiVersion, $null)
     }
      # Set the retention policy for a feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
     [PSObject] SetFeedRetentionPolicies([bool] $useTargetProject, [PSObject] $body, [string] $feedId) {
@@ -161,13 +161,13 @@ class FeedApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "packaging/Feeds/$feedId/views", $this.apiVersion, $body)
     }
 
-    # Delete a feed view.The project parameter must be supplied if the feed was created in a project.
-    [PSObject] DeleteFeedView([bool] $useTargetProject, [string] $feedId, [string] $viewId) {
-        return $this.Request($useTargetProject, 'delete', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $null)
-    }
-     # Get a view by Id.The project parameter must be supplied if the feed was created in a project.
+    # Get a view by Id.The project parameter must be supplied if the feed was created in a project.
     [PSObject] GetFeedView([bool] $useTargetProject, [string] $feedId, [string] $viewId) {
         return $this.Request($useTargetProject, 'get', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $null)
+    }
+     # Delete a feed view.The project parameter must be supplied if the feed was created in a project.
+    [PSObject] DeleteFeedView([bool] $useTargetProject, [string] $feedId, [string] $viewId) {
+        return $this.Request($useTargetProject, 'delete', "packaging/Feeds/$feedId/views/$viewId", $this.apiVersion, $null)
     }
      # Update a view.The project parameter must be supplied if the feed was created in a project.
     [PSObject] UpdateFeedView([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $viewId) {

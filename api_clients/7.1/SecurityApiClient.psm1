@@ -3,7 +3,7 @@
 using module .\..\AzureDevOpsApiClient.psm1
 
 class SecurityApiClient : AzureDevOpsApiClient {
-    [string] $apiVersion = '7.1-preview'
+    [string] $apiVersion = '7.1'
 
     # SecurityApiClient([string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)
     #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}
@@ -20,13 +20,13 @@ class SecurityApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'delete', "accesscontrolentries/$securityNamespaceId", $this.apiVersion, $null)
     }
 
-    # Return a list of access control lists for the specified security namespace and token. All ACLs in the security namespace will be retrieved if no optional parameters are provided.
-    [PSObject] QueryAccessControlLists([bool] $useTargetProject, [string] $securityNamespaceId) {
-        return $this.Request($useTargetProject, 'get', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $null)
-    }
-     # Remove access control lists under the specfied security namespace.
+    # Remove access control lists under the specfied security namespace.
     [PSObject] RemoveAccessControlLists([bool] $useTargetProject, [string] $securityNamespaceId) {
         return $this.Request($useTargetProject, 'delete', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $null)
+    }
+     # Return a list of access control lists for the specified security namespace and token. All ACLs in the security namespace will be retrieved if no optional parameters are provided.
+    [PSObject] QueryAccessControlLists([bool] $useTargetProject, [string] $securityNamespaceId) {
+        return $this.Request($useTargetProject, 'get', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $null)
     }
      # Create or update one or more access control lists. All data that currently exists for the ACLs supplied will be overwritten.
     [PSObject] SetAccessControlLists([bool] $useTargetProject, [PSObject] $body, [string] $securityNamespaceId) {

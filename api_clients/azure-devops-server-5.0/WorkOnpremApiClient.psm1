@@ -30,13 +30,13 @@ class WorkOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "work/plans", $this.apiVersion, $body)
     }
 
-    # Delete the specified plan
-    [PSObject] DeletePlan([bool] $useTargetProject, [string] $id) {
-        return $this.Request($useTargetProject, 'delete', "work/plans/$id", $this.apiVersion, $null)
-    }
-     # Get the information for the specified plan
+    # Get the information for the specified plan
     [PSObject] GetPlan([bool] $useTargetProject, [string] $id) {
         return $this.Request($useTargetProject, 'get', "work/plans/$id", $this.apiVersion, $null)
+    }
+     # Delete the specified plan
+    [PSObject] DeletePlan([bool] $useTargetProject, [string] $id) {
+        return $this.Request($useTargetProject, 'delete', "work/plans/$id", $this.apiVersion, $null)
     }
      # Update the information for the specified plan
     [PSObject] UpdatePlan([bool] $useTargetProject, [PSObject] $body, [string] $id) {

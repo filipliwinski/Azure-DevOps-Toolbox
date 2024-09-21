@@ -3,7 +3,7 @@
 using module .\..\AzureDevOpsApiClient.psm1
 
 class ServiceEndpointApiClient : AzureDevOpsApiClient {
-    [string] $apiVersion = '7.1-preview'
+    [string] $apiVersion = '7.1'
 
     # ServiceEndpointApiClient([string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)
     #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}
@@ -20,13 +20,13 @@ class ServiceEndpointApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "serviceendpoint/endpoints", $this.apiVersion, $body)
     }
 
-    # Delete a service endpoint
-    [PSObject] DeleteServiceEndpoint([bool] $useTargetProject, [string] $endpointId) {
-        return $this.Request($useTargetProject, 'delete', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $null)
-    }
-     # Share service endpoint across projects
+    # Share service endpoint across projects
     [PSObject] ShareServiceEndpoint([bool] $useTargetProject, [PSObject] $body, [string] $endpointId) {
         return $this.Request($useTargetProject, 'patch', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $body)
+    }
+     # Delete a service endpoint
+    [PSObject] DeleteServiceEndpoint([bool] $useTargetProject, [string] $endpointId) {
+        return $this.Request($useTargetProject, 'delete', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $null)
     }
      # Update the service endpoint
     [PSObject] UpdateServiceEndpoint([bool] $useTargetProject, [PSObject] $body, [string] $endpointId) {

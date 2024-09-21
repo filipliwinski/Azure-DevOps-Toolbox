@@ -20,13 +20,13 @@ class EnvironmentsApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "pipelines/environments", $this.apiVersion, $body)
     }
 
-    # Delete the specified environment.
-    [PSObject] DeleteEnvironment([bool] $useTargetProject, [int] $environmentId) {
-        return $this.Request($useTargetProject, 'delete', "pipelines/environments/$environmentId", $this.apiVersion, $null)
-    }
-     # Get an environment by its ID.
+    # Get an environment by its ID.
     [PSObject] GetEnvironmentById([bool] $useTargetProject, [int] $environmentId) {
         return $this.Request($useTargetProject, 'get', "pipelines/environments/$environmentId", $this.apiVersion, $null)
+    }
+     # Delete the specified environment.
+    [PSObject] DeleteEnvironment([bool] $useTargetProject, [int] $environmentId) {
+        return $this.Request($useTargetProject, 'delete', "pipelines/environments/$environmentId", $this.apiVersion, $null)
     }
      # Update the specified environment.
     [PSObject] UpdateEnvironment([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {
@@ -56,17 +56,17 @@ class EnvironmentsApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'delete', "pipelines/environments/$environmentId/providers/kubernetes/$resourceId", $this.apiVersion, $null)
     }
 
-    # Update Virtual Machine Resource
+    # Get Virtual Machine Resources
+    [PSObject] GetVirtualMachineResources([bool] $useTargetProject, [int] $environmentId) {
+        return $this.Request($useTargetProject, 'get', "pipelines/environments/$environmentId/providers/virtualmachines", $this.apiVersion, $null)
+    }
+     # Update Virtual Machine Resource
     [PSObject] UpdateVirtualMachineResource([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {
         return $this.Request($useTargetProject, 'patch', "pipelines/environments/$environmentId/providers/virtualmachines", $this.apiVersion, $body)
     }
      # Add Virtual Machine Resource
     [PSObject] AddVirtualMachineResource([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {
         return $this.Request($useTargetProject, 'post', "pipelines/environments/$environmentId/providers/virtualmachines", $this.apiVersion, $body)
-    }
-     # Get Virtual Machine Resources
-    [PSObject] GetVirtualMachineResources([bool] $useTargetProject, [int] $environmentId) {
-        return $this.Request($useTargetProject, 'get', "pipelines/environments/$environmentId/providers/virtualmachines", $this.apiVersion, $null)
     }
      # Replace Virtual Machine Resource
     [PSObject] ReplaceVirtualMachineResource([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {

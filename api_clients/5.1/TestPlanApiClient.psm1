@@ -16,17 +16,17 @@ class TestPlanApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "testplan/suites", $this.apiVersion, $null)
     }
 
-    # Update a test configuration by its ID.
+    # Delete a test configuration by its ID.
+    [PSObject] DeleteTestConfguration([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'delete', "testplan/configurations", $this.apiVersion, $null)
+    }
+     # Update a test configuration by its ID.
     [PSObject] UpdateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "testplan/configurations", $this.apiVersion, $body)
     }
      # Create a test configuration.
     [PSObject] CreateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "testplan/configurations", $this.apiVersion, $body)
-    }
-     # Delete a test configuration by its ID.
-    [PSObject] DeleteTestConfguration([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'delete', "testplan/configurations", $this.apiVersion, $null)
     }
      # Get a list of test configurations.
     [PSObject] GetTestConfigurations([bool] $useTargetProject) {
@@ -47,13 +47,13 @@ class TestPlanApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "testplan/plans", $this.apiVersion, $body)
     }
 
-    # Delete a test plan.
-    [PSObject] DeleteTestPlan([bool] $useTargetProject, [int] $planId) {
-        return $this.Request($useTargetProject, 'delete', "testplan/plans/$planId", $this.apiVersion, $null)
-    }
-     # Get a test plan by Id.
+    # Get a test plan by Id.
     [PSObject] GetTestPlanById([bool] $useTargetProject, [int] $planId) {
         return $this.Request($useTargetProject, 'get', "testplan/plans/$planId", $this.apiVersion, $null)
+    }
+     # Delete a test plan.
+    [PSObject] DeleteTestPlan([bool] $useTargetProject, [int] $planId) {
+        return $this.Request($useTargetProject, 'delete', "testplan/plans/$planId", $this.apiVersion, $null)
     }
      # Update a test plan.
     [PSObject] UpdateTestPlan([bool] $useTargetProject, [PSObject] $body, [int] $planId) {
@@ -69,26 +69,26 @@ class TestPlanApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "testplan/Plans/$planId/suites", $this.apiVersion, $body)
     }
 
-    # Delete test suite.
-    [PSObject] DeleteTestSuite([bool] $useTargetProject, [int] $planId, [int] $suiteId) {
-        return $this.Request($useTargetProject, 'delete', "testplan/Plans/$planId/suites/$suiteId", $this.apiVersion, $null)
-    }
-     # Get test suite by suite id.
+    # Get test suite by suite id.
     [PSObject] GetTestSuiteById([bool] $useTargetProject, [int] $planId, [int] $suiteId) {
         return $this.Request($useTargetProject, 'get', "testplan/Plans/$planId/suites/$suiteId", $this.apiVersion, $null)
+    }
+     # Delete test suite.
+    [PSObject] DeleteTestSuite([bool] $useTargetProject, [int] $planId, [int] $suiteId) {
+        return $this.Request($useTargetProject, 'delete', "testplan/Plans/$planId/suites/$suiteId", $this.apiVersion, $null)
     }
      # Update test suite.
     [PSObject] UpdateTestSuite([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
         return $this.Request($useTargetProject, 'patch', "testplan/Plans/$planId/suites/$suiteId", $this.apiVersion, $body)
     }
 
-    # Add test cases to a suite with specified configurations
-    [PSObject] AddTestCasesToSuite([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
-        return $this.Request($useTargetProject, 'post', "testplan/Plans/$planId/Suites/$suiteId/TestCase", $this.apiVersion, $body)
-    }
-     # Get Test Case List return those test cases which have all the configuration Ids as mentioned in the optional parameter. If configuration Ids is null, it return all the test cases
+    # Get Test Case List return those test cases which have all the configuration Ids as mentioned in the optional parameter. If configuration Ids is null, it return all the test cases
     [PSObject] GetTestCaseList([bool] $useTargetProject, [int] $planId, [int] $suiteId) {
         return $this.Request($useTargetProject, 'get', "testplan/Plans/$planId/Suites/$suiteId/TestCase", $this.apiVersion, $null)
+    }
+     # Add test cases to a suite with specified configurations
+    [PSObject] AddTestCasesToSuite([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
+        return $this.Request($useTargetProject, 'post', "testplan/Plans/$planId/Suites/$suiteId/TestCase", $this.apiVersion, $body)
     }
      # Update the configurations for test cases
     [PSObject] UpdateSuiteTestCases([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
@@ -161,13 +161,13 @@ class TestPlanApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "testplan/variables", $this.apiVersion, $body)
     }
 
-    # Delete a test variable by its ID.
-    [PSObject] DeleteTestVariable([bool] $useTargetProject, [int] $testVariableId) {
-        return $this.Request($useTargetProject, 'delete', "testplan/variables/$testVariableId", $this.apiVersion, $null)
-    }
-     # Get a test variable by its ID.
+    # Get a test variable by its ID.
     [PSObject] GetTestVariableById([bool] $useTargetProject, [int] $testVariableId) {
         return $this.Request($useTargetProject, 'get', "testplan/variables/$testVariableId", $this.apiVersion, $null)
+    }
+     # Delete a test variable by its ID.
+    [PSObject] DeleteTestVariable([bool] $useTargetProject, [int] $testVariableId) {
+        return $this.Request($useTargetProject, 'delete', "testplan/variables/$testVariableId", $this.apiVersion, $null)
     }
      # Update a test variable by its ID.
     [PSObject] UpdateTestVariable([bool] $useTargetProject, [PSObject] $body, [int] $testVariableId) {

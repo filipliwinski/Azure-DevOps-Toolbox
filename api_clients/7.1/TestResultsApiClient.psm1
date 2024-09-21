@@ -3,7 +3,7 @@
 using module .\..\AzureDevOpsApiClient.psm1
 
 class TestResultsApiClient : AzureDevOpsApiClient {
-    [string] $apiVersion = '7.1-preview'
+    [string] $apiVersion = '7.1'
 
     # TestResultsApiClient([string] $serviceHost, [string] $organization, [string] $projectName, [string] $personalAccessToken)
     #     : base ($serviceHost, $organization, $projectName, $personalAccessToken, $serviceHost, $organization, $projectName, $personalAccessToken) {}
@@ -154,12 +154,12 @@ class TestResultsApiClient : AzureDevOpsApiClient {
     }
 
     # empty
-    [PSObject] DeleteTestRun([bool] $useTargetProject, [int] $runId) {
-        return $this.Request($useTargetProject, 'delete', "testresults/runs/$runId", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] GetTestRunById([bool] $useTargetProject, [int] $runId) {
         return $this.Request($useTargetProject, 'get', "testresults/runs/$runId", $this.apiVersion, $null)
+    }
+     # empty
+    [PSObject] DeleteTestRun([bool] $useTargetProject, [int] $runId) {
+        return $this.Request($useTargetProject, 'delete', "testresults/runs/$runId", $this.apiVersion, $null)
     }
      # empty
     [PSObject] UpdateTestRun([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
@@ -200,12 +200,12 @@ class TestResultsApiClient : AzureDevOpsApiClient {
     }
 
     # empty
-    [PSObject] AddTestResultsToTestRun([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
-        return $this.Request($useTargetProject, 'post', "testresults/runs/$runId/results", $this.apiVersion, $body)
-    }
-     # empty
     [PSObject] GetTestResults([bool] $useTargetProject, [int] $runId) {
         return $this.Request($useTargetProject, 'get', "testresults/runs/$runId/results", $this.apiVersion, $null)
+    }
+     # empty
+    [PSObject] AddTestResultsToTestRun([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
+        return $this.Request($useTargetProject, 'post', "testresults/runs/$runId/results", $this.apiVersion, $body)
     }
      # empty
     [PSObject] UpdateTestResults([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
@@ -279,13 +279,13 @@ class TestResultsApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'patch', "testresults/runs/$runId/tags", $this.apiVersion, $body)
     }
 
-    # Creates an attachment in the LogStore for the specified runId.
-    [PSObject] CreateTestRunLogStoreAttachment([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
-        return $this.Request($useTargetProject, 'post', "testresults/runs/$runId/testattachments", $this.apiVersion, $body)
-    }
-     # Deletes the attachment with the specified filename for the specified runId from the LogStore.
+    # Deletes the attachment with the specified filename for the specified runId from the LogStore.
     [PSObject] DeleteTestRunLogStoreAttachment([bool] $useTargetProject, [int] $runId) {
         return $this.Request($useTargetProject, 'delete', "testresults/runs/$runId/testattachments", $this.apiVersion, $null)
+    }
+     # Creates an attachment in the LogStore for the specified runId.
+    [PSObject] CreateTestRunLogStoreAttachment([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
+        return $this.Request($useTargetProject, 'post', "testresults/runs/$runId/testattachments", $this.apiVersion, $body)
     }
      # Returns a list of attachments for the specified runId from the LogStore.
     [PSObject] GetTestRunLogStoreAttachments([bool] $useTargetProject, [int] $runId) {
@@ -363,12 +363,12 @@ class TestResultsApiClient : AzureDevOpsApiClient {
     }
 
     # empty
-    [PSObject] CreateTestSettings([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "testresults/testsettings", $this.apiVersion, $body)
-    }
-     # empty
     [PSObject] DeleteTestSettings([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'delete', "testresults/testsettings", $this.apiVersion, $null)
+    }
+     # empty
+    [PSObject] CreateTestSettings([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "testresults/testsettings", $this.apiVersion, $body)
     }
      # empty
     [PSObject] GetTestSettingsById([bool] $useTargetProject) {
