@@ -26,7 +26,11 @@ class ServiceEndpointApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "serviceendpoint/endpointproxy", $this.apiVersion, $body)
     }
 
-    # Get the service endpoints by name.
+    # Update the service endpoints.
+    [PSObject] UpdateServiceEndpoints([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'put', "serviceendpoint/endpoints", $this.apiVersion, $body)
+    }
+     # Get the service endpoints by name.
     [PSObject] GetServiceEndpointsByNames([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "serviceendpoint/endpoints", $this.apiVersion, $null)
     }
@@ -34,22 +38,18 @@ class ServiceEndpointApiClient : AzureDevOpsApiClient {
     [PSObject] CreateServiceEndpoint([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "serviceendpoint/endpoints", $this.apiVersion, $body)
     }
-     # Update the service endpoints.
-    [PSObject] UpdateServiceEndpoints([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'put', "serviceendpoint/endpoints", $this.apiVersion, $body)
-    }
 
-    # Get the service endpoint details.
+    # Update a service endpoint.
+    [PSObject] UpdateServiceEndpoint([bool] $useTargetProject, [PSObject] $body, [string] $endpointId) {
+        return $this.Request($useTargetProject, 'put', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $body)
+    }
+     # Get the service endpoint details.
     [PSObject] GetServiceEndpointDetails([bool] $useTargetProject, [string] $endpointId) {
         return $this.Request($useTargetProject, 'get', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $null)
     }
      # Delete a service endpoint.
     [PSObject] DeleteServiceEndpoint([bool] $useTargetProject, [string] $endpointId) {
         return $this.Request($useTargetProject, 'delete', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $null)
-    }
-     # Update a service endpoint.
-    [PSObject] UpdateServiceEndpoint([bool] $useTargetProject, [PSObject] $body, [string] $endpointId) {
-        return $this.Request($useTargetProject, 'put', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $body)
     }
 
 }
