@@ -21,26 +21,26 @@ class ReleaseApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'patch', "release/approvals/$approvalId", $this.apiVersion, $body)
     }
 
-    # Get a list of release definitions.
-    [PSObject] GetReleaseDefinitions([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "release/definitions", $this.apiVersion, $null)
+    # Update a release definition.
+    [PSObject] UpdateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'put', "release/definitions", $this.apiVersion, $body)
     }
      # Create a release definition
     [PSObject] CreateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "release/definitions", $this.apiVersion, $body)
     }
-     # Update a release definition.
-    [PSObject] UpdateReleaseDefinition([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'put', "release/definitions", $this.apiVersion, $body)
+     # Get a list of release definitions.
+    [PSObject] GetReleaseDefinitions([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "release/definitions", $this.apiVersion, $null)
     }
 
-    # Get a release definition.
-    [PSObject] GetReleaseDefinition([bool] $useTargetProject, [int] $definitionId) {
-        return $this.Request($useTargetProject, 'get', "release/definitions/$definitionId", $this.apiVersion, $null)
-    }
-     # Delete a release definition.
+    # Delete a release definition.
     [PSObject] DeleteReleaseDefinition([bool] $useTargetProject, [int] $definitionId) {
         return $this.Request($useTargetProject, 'delete', "release/definitions/$definitionId", $this.apiVersion, $null)
+    }
+     # Get a release definition.
+    [PSObject] GetReleaseDefinition([bool] $useTargetProject, [int] $definitionId) {
+        return $this.Request($useTargetProject, 'get', "release/definitions/$definitionId", $this.apiVersion, $null)
     }
 
     # Get revision history for a release definition
@@ -58,7 +58,15 @@ class ReleaseApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "release/deployments", $this.apiVersion, $null)
     }
 
-    # Deletes a definition folder for given folder name and path and all it's existing definitions.
+    # Gets folders.
+    [PSObject] GetFolders([bool] $useTargetProject, [string] $path) {
+        return $this.Request($useTargetProject, 'get', "release/folders/$path", $this.apiVersion, $null)
+    }
+     # This method is no longer supported. Use CreateFolder with folder parameter API.
+    [PSObject] CreateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
+        return $this.Request($useTargetProject, 'post', "release/folders/$path", $this.apiVersion, $body)
+    }
+     # Deletes a definition folder for given folder name and path and all it's existing definitions.
     [PSObject] DeleteFolder([bool] $useTargetProject, [string] $path) {
         return $this.Request($useTargetProject, 'delete', "release/folders/$path", $this.apiVersion, $null)
     }
@@ -66,49 +74,41 @@ class ReleaseApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
         return $this.Request($useTargetProject, 'patch', "release/folders/$path", $this.apiVersion, $body)
     }
-     # This method is no longer supported. Use CreateFolder with folder parameter API.
-    [PSObject] CreateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
-        return $this.Request($useTargetProject, 'post', "release/folders/$path", $this.apiVersion, $body)
-    }
-     # Gets folders.
-    [PSObject] GetFolders([bool] $useTargetProject, [string] $path) {
-        return $this.Request($useTargetProject, 'get', "release/folders/$path", $this.apiVersion, $null)
-    }
 
     # Updates the gate for a deployment.
     [PSObject] UpdateGates([bool] $useTargetProject, [PSObject] $body, [int] $gateStepId) {
         return $this.Request($useTargetProject, 'patch', "release/gates/$gateStepId", $this.apiVersion, $body)
     }
 
-    # Create a release.
-    [PSObject] CreateRelease([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "release/releases", $this.apiVersion, $body)
-    }
-     # Get a list of releases
+    # Get a list of releases
     [PSObject] GetReleases([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "release/releases", $this.apiVersion, $null)
     }
+     # Create a release.
+    [PSObject] CreateRelease([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "release/releases", $this.apiVersion, $body)
+    }
 
-    # Update a complete release object.
-    [PSObject] UpdateRelease([bool] $useTargetProject, [PSObject] $body, [int] $releaseId) {
-        return $this.Request($useTargetProject, 'put', "release/releases/$releaseId", $this.apiVersion, $body)
+    # Update few properties of a release.
+    [PSObject] UpdateReleaseResource([bool] $useTargetProject, [PSObject] $body, [int] $releaseId) {
+        return $this.Request($useTargetProject, 'patch', "release/releases/$releaseId", $this.apiVersion, $body)
     }
      # Get release for a given revision number.
     [PSObject] GetReleaseRevision([bool] $useTargetProject, [int] $releaseId) {
         return $this.Request($useTargetProject, 'get', "release/releases/$releaseId", $this.apiVersion, $null)
     }
-     # Update few properties of a release.
-    [PSObject] UpdateReleaseResource([bool] $useTargetProject, [PSObject] $body, [int] $releaseId) {
-        return $this.Request($useTargetProject, 'patch', "release/releases/$releaseId", $this.apiVersion, $body)
+     # Update a complete release object.
+    [PSObject] UpdateRelease([bool] $useTargetProject, [PSObject] $body, [int] $releaseId) {
+        return $this.Request($useTargetProject, 'put', "release/releases/$releaseId", $this.apiVersion, $body)
     }
 
-    # Update the status of a release environment
-    [PSObject] UpdateReleaseEnvironment([bool] $useTargetProject, [PSObject] $body, [int] $releaseId, [int] $environmentId) {
-        return $this.Request($useTargetProject, 'patch', "Release/releases/$releaseId/environments/$environmentId", $this.apiVersion, $body)
-    }
-     # Get a release environment.
+    # Get a release environment.
     [PSObject] GetReleaseEnvironment([bool] $useTargetProject, [int] $releaseId, [int] $environmentId) {
         return $this.Request($useTargetProject, 'get', "Release/releases/$releaseId/environments/$environmentId", $this.apiVersion, $null)
+    }
+     # Update the status of a release environment
+    [PSObject] UpdateReleaseEnvironment([bool] $useTargetProject, [PSObject] $body, [int] $releaseId, [int] $environmentId) {
+        return $this.Request($useTargetProject, 'patch', "Release/releases/$releaseId/environments/$environmentId", $this.apiVersion, $body)
     }
 
     # Get the release task attachments.
@@ -146,13 +146,13 @@ class ReleaseApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "Release/releases/$releaseId/manualinterventions", $this.apiVersion, $null)
     }
 
-    # Update manual intervention.
-    [PSObject] UpdateManualIntervention([bool] $useTargetProject, [PSObject] $body, [int] $releaseId, [int] $manualInterventionId) {
-        return $this.Request($useTargetProject, 'patch', "Release/releases/$releaseId/manualinterventions/$manualInterventionId", $this.apiVersion, $body)
-    }
-     # Get manual intervention for a given release and manual intervention id.
+    # Get manual intervention for a given release and manual intervention id.
     [PSObject] GetManualIntervention([bool] $useTargetProject, [int] $releaseId, [int] $manualInterventionId) {
         return $this.Request($useTargetProject, 'get', "Release/releases/$releaseId/manualinterventions/$manualInterventionId", $this.apiVersion, $null)
+    }
+     # Update manual intervention.
+    [PSObject] UpdateManualIntervention([bool] $useTargetProject, [PSObject] $body, [int] $releaseId, [int] $manualInterventionId) {
+        return $this.Request($useTargetProject, 'patch', "Release/releases/$releaseId/manualinterventions/$manualInterventionId", $this.apiVersion, $body)
     }
 
 }
