@@ -16,16 +16,16 @@ class AlertApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "alert/repositories/$repository/alerts", $this.apiVersion, $null)
     }
 
-    # Update the status of an alert
-    [PSObject] UpdateAlertAsync([bool] $useTargetProject, [PSObject] $body, [int] $alertId, [string] $repository) {
-        return $this.Request($useTargetProject, 'patch', "alert/repositories/$repository/alerts/$alertId", $this.apiVersion, $body)
-    }
-     # Get an alert.
+    # Get an alert.
     [PSObject] GetAlertAsync([bool] $useTargetProject, [int] $alertId, [string] $repository) {
         return $this.Request($useTargetProject, 'get', "alert/repositories/$repository/alerts/$alertId", $this.apiVersion, $null)
     }
+     # Update the status of an alert
+    [PSObject] UpdateAlertAsync([bool] $useTargetProject, [PSObject] $body, [int] $alertId, [string] $repository) {
+        return $this.Request($useTargetProject, 'patch', "alert/repositories/$repository/alerts/$alertId", $this.apiVersion, $body)
+    }
 
-    # Get instances of an alert.
+    # Get instances of an alert on a branch specified with @ref. If @ref is not provided, return instances of an alert on default branch(if the alert exist in default branch) or latest affected branch.
     [PSObject] GetAlertInstancesAsync([bool] $useTargetProject, [int] $alertId, [string] $repository) {
         return $this.Request($useTargetProject, 'get', "alert/repositories/$repository/alerts/$alertId/instances", $this.apiVersion, $null)
     }

@@ -21,33 +21,41 @@ class DashboardOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "dashboard/widgettypes/$contributionId", $this.apiVersion, $null)
     }
 
-    # Get a list of dashboards under a project.
-    [PSObject] GetDashboardsByProject([bool] $useTargetProject, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/dashboard/dashboards", $this.apiVersion, $null)
+    # Update the name and position of dashboards in the supplied group, and remove omitted dashboards. Does not modify dashboard content.
+    [PSObject] ReplaceDashboards([bool] $useTargetProject, [PSObject] $body, [string] $team) {
+        return $this.Request($useTargetProject, 'put', "$team/dashboard/dashboards", $this.apiVersion, $body)
     }
      # Create the supplied dashboard.
     [PSObject] CreateDashboard([bool] $useTargetProject, [PSObject] $body, [string] $team) {
         return $this.Request($useTargetProject, 'post', "$team/dashboard/dashboards", $this.apiVersion, $body)
     }
-     # Update the name and position of dashboards in the supplied group, and remove omitted dashboards. Does not modify dashboard content.
-    [PSObject] ReplaceDashboards([bool] $useTargetProject, [PSObject] $body, [string] $team) {
-        return $this.Request($useTargetProject, 'put', "$team/dashboard/dashboards", $this.apiVersion, $body)
+     # Get a list of dashboards under a project.
+    [PSObject] GetDashboardsByProject([bool] $useTargetProject, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/dashboard/dashboards", $this.apiVersion, $null)
     }
 
-    # Get a dashboard by its ID.
-    [PSObject] GetDashboard([bool] $useTargetProject, [string] $dashboardId, [string] $team) {
-        return $this.Request($useTargetProject, 'get', "$team/dashboard/dashboards/$dashboardId", $this.apiVersion, $null)
+    # Replace configuration for the specified dashboard. Replaces Widget list on Dashboard, only if property is supplied.
+    [PSObject] ReplaceDashboard([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $team) {
+        return $this.Request($useTargetProject, 'put', "$team/dashboard/dashboards/$dashboardId", $this.apiVersion, $body)
     }
      # Delete a dashboard given its ID. This also deletes the widgets associated with this dashboard.
     [PSObject] DeleteDashboard([bool] $useTargetProject, [string] $dashboardId, [string] $team) {
         return $this.Request($useTargetProject, 'delete', "$team/dashboard/dashboards/$dashboardId", $this.apiVersion, $null)
     }
-     # Replace configuration for the specified dashboard. Replaces Widget list on Dashboard, only if property is supplied.
-    [PSObject] ReplaceDashboard([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $team) {
-        return $this.Request($useTargetProject, 'put', "$team/dashboard/dashboards/$dashboardId", $this.apiVersion, $body)
+     # Get a dashboard by its ID.
+    [PSObject] GetDashboard([bool] $useTargetProject, [string] $dashboardId, [string] $team) {
+        return $this.Request($useTargetProject, 'get', "$team/dashboard/dashboards/$dashboardId", $this.apiVersion, $null)
     }
 
-    # Get widgets contained on the specified dashboard.
+    # Replace the widgets on specified dashboard with the supplied widgets.
+    [PSObject] ReplaceWidgets([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $team) {
+        return $this.Request($useTargetProject, 'put', "$team/dashboard/dashboards/$dashboardId/widgets", $this.apiVersion, $body)
+    }
+     # Create a widget on the specified dashboard.
+    [PSObject] CreateWidget([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $team) {
+        return $this.Request($useTargetProject, 'post', "$team/dashboard/dashboards/$dashboardId/widgets", $this.apiVersion, $body)
+    }
+     # Get widgets contained on the specified dashboard.
     [PSObject] GetWidgets([bool] $useTargetProject, [string] $dashboardId, [string] $team) {
         return $this.Request($useTargetProject, 'get', "$team/dashboard/dashboards/$dashboardId/widgets", $this.apiVersion, $null)
     }
@@ -55,30 +63,22 @@ class DashboardOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateWidgets([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $team) {
         return $this.Request($useTargetProject, 'patch', "$team/dashboard/dashboards/$dashboardId/widgets", $this.apiVersion, $body)
     }
-     # Create a widget on the specified dashboard.
-    [PSObject] CreateWidget([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $team) {
-        return $this.Request($useTargetProject, 'post', "$team/dashboard/dashboards/$dashboardId/widgets", $this.apiVersion, $body)
-    }
-     # Replace the widgets on specified dashboard with the supplied widgets.
-    [PSObject] ReplaceWidgets([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $team) {
-        return $this.Request($useTargetProject, 'put', "$team/dashboard/dashboards/$dashboardId/widgets", $this.apiVersion, $body)
-    }
 
-    # Get the current state of the specified widget.
+    # Override the  state of the specified widget.
+    [PSObject] ReplaceWidget([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $widgetId, [string] $team) {
+        return $this.Request($useTargetProject, 'put', "$team/dashboard/dashboards/$dashboardId/widgets/$widgetId", $this.apiVersion, $body)
+    }
+     # Delete the specified widget.
+    [PSObject] DeleteWidget([bool] $useTargetProject, [string] $dashboardId, [string] $widgetId, [string] $team) {
+        return $this.Request($useTargetProject, 'delete', "$team/dashboard/dashboards/$dashboardId/widgets/$widgetId", $this.apiVersion, $null)
+    }
+     # Get the current state of the specified widget.
     [PSObject] GetWidget([bool] $useTargetProject, [string] $dashboardId, [string] $widgetId, [string] $team) {
         return $this.Request($useTargetProject, 'get', "$team/dashboard/dashboards/$dashboardId/widgets/$widgetId", $this.apiVersion, $null)
     }
      # Perform a partial update of the specified widget.
     [PSObject] UpdateWidget([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $widgetId, [string] $team) {
         return $this.Request($useTargetProject, 'patch', "$team/dashboard/dashboards/$dashboardId/widgets/$widgetId", $this.apiVersion, $body)
-    }
-     # Delete the specified widget.
-    [PSObject] DeleteWidget([bool] $useTargetProject, [string] $dashboardId, [string] $widgetId, [string] $team) {
-        return $this.Request($useTargetProject, 'delete', "$team/dashboard/dashboards/$dashboardId/widgets/$widgetId", $this.apiVersion, $null)
-    }
-     # Override the  state of the specified widget.
-    [PSObject] ReplaceWidget([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $widgetId, [string] $team) {
-        return $this.Request($useTargetProject, 'put', "$team/dashboard/dashboards/$dashboardId/widgets/$widgetId", $this.apiVersion, $body)
     }
 
 }
