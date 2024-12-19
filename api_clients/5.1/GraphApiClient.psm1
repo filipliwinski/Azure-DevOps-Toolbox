@@ -29,13 +29,13 @@ class GraphApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateGroup([bool] $useTargetProject, [string] $groupDescriptor, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "graph/groups/$groupDescriptor", $this.apiVersion, $body)
     }
-     # Get a group by its descriptor.The group will be returned even if it has been deleted from the account or has had all its membershipsdeleted.
-    [PSObject] GetGroup([bool] $useTargetProject, [string] $groupDescriptor) {
-        return $this.Request($useTargetProject, 'get', "graph/groups/$groupDescriptor", $this.apiVersion, $null)
-    }
      # Removes an Azure DevOps group from all of its parent groups.The group will still be visible, but membership checks for the group, and all descendants which derive membership through it, will return false.”
     [PSObject] DeleteGroup([bool] $useTargetProject, [string] $groupDescriptor) {
         return $this.Request($useTargetProject, 'delete', "graph/groups/$groupDescriptor", $this.apiVersion, $null)
+    }
+     # Get a group by its descriptor.The group will be returned even if it has been deleted from the account or has had all its membershipsdeleted.
+    [PSObject] GetGroup([bool] $useTargetProject, [string] $groupDescriptor) {
+        return $this.Request($useTargetProject, 'get', "graph/groups/$groupDescriptor", $this.apiVersion, $null)
     }
 
     # Get all the memberships where this descriptor is a member in the relationship.The default value for direction is 'up' meaning return all memberships where the subject is a member (e.g. all groups the subject is a member of). Alternatively, passing the direction as 'down' will return all memberships where the subject is a container (e.g. all members of the subject group).
@@ -47,17 +47,17 @@ class GraphApiClient : AzureDevOpsApiClient {
     [PSObject] GetMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
         return $this.Request($useTargetProject, 'get', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
     }
-     # Deletes a membership between a container and subject.
-    [PSObject] RemoveMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
-        return $this.Request($useTargetProject, 'delete', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
+     # Create a new membership between a container and subject.
+    [PSObject] AddMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
+        return $this.Request($useTargetProject, 'put', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
     }
      # Check to see if a membership relationship between a container and subject exists.
     [PSObject] CheckMembershipExistence_Head([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
         return $this.Request($useTargetProject, 'head', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
     }
-     # Create a new membership between a container and subject.
-    [PSObject] AddMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
-        return $this.Request($useTargetProject, 'put', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
+     # Deletes a membership between a container and subject.
+    [PSObject] RemoveMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
+        return $this.Request($useTargetProject, 'delete', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
     }
 
     # Check whether a subject is active or inactive.
@@ -85,12 +85,12 @@ class GraphApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'put', "graph/Subjects/$subjectDescriptor/avatars", $this.apiVersion, $body)
     }
      # empty
-    [PSObject] GetAvatar([bool] $useTargetProject, [string] $subjectDescriptor) {
-        return $this.Request($useTargetProject, 'get', "graph/Subjects/$subjectDescriptor/avatars", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] DeleteAvatar([bool] $useTargetProject, [string] $subjectDescriptor) {
         return $this.Request($useTargetProject, 'delete', "graph/Subjects/$subjectDescriptor/avatars", $this.apiVersion, $null)
+    }
+     # empty
+    [PSObject] GetAvatar([bool] $useTargetProject, [string] $subjectDescriptor) {
+        return $this.Request($useTargetProject, 'get', "graph/Subjects/$subjectDescriptor/avatars", $this.apiVersion, $null)
     }
 
     # Materialize an existing AAD or MSA user into the VSTS account.NOTE: Created users are not active in an account unless they have been explicitly assigned a parent group at creation time or have signed in  and been autolicensed through AAD group memberships. Adding a user to an account is required before the user can be added to VSTS groups or assigned an asset. The body of the request must be a derived type of GraphUserCreationContext:  * GraphUserMailAddressCreationContext - Create a new user using the mail address as a reference to an existing user from an external AD or AAD backed provider.  * GraphUserOriginIdCreationContext - Create a new user using the OriginID as a reference to an existing user from an external AD or AAD backed provider.  * GraphUserPrincipalNameCreationContext - Create a new user using the principal name as a reference to an existing user from an external AD or AAD backed provider. If the user to be added corresponds to a user that was previously deleted, then that user will be restored. Optionally, you can add the newly created user as a member of an existing VSTS group and/or specify a custom storage key for the user.
@@ -106,13 +106,13 @@ class GraphApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateUser([bool] $useTargetProject, [PSObject] $body, [string] $userDescriptor) {
         return $this.Request($useTargetProject, 'patch', "graph/users/$userDescriptor", $this.apiVersion, $body)
     }
-     # Get a user by its descriptor.
-    [PSObject] GetUser([bool] $useTargetProject, [string] $userDescriptor) {
-        return $this.Request($useTargetProject, 'get', "graph/users/$userDescriptor", $this.apiVersion, $null)
-    }
      # Disables a user.The user will still be visible, but membership checks for the user will return false.”
     [PSObject] DeleteUser([bool] $useTargetProject, [string] $userDescriptor) {
         return $this.Request($useTargetProject, 'delete', "graph/users/$userDescriptor", $this.apiVersion, $null)
+    }
+     # Get a user by its descriptor.
+    [PSObject] GetUser([bool] $useTargetProject, [string] $userDescriptor) {
+        return $this.Request($useTargetProject, 'get', "graph/users/$userDescriptor", $this.apiVersion, $null)
     }
 
     # empty
