@@ -30,26 +30,26 @@ class AuditApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateStream([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'put', "audit/streams", $this.apiVersion, $body)
     }
-     # Return all Audit Streams scoped to an organization
-    [PSObject] QueryAllStreams([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "audit/streams", $this.apiVersion, $null)
-    }
      # Create new Audit Stream
     [PSObject] CreateStream([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "audit/streams", $this.apiVersion, $body)
+    }
+     # Return all Audit Streams scoped to an organization
+    [PSObject] QueryAllStreams([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "audit/streams", $this.apiVersion, $null)
     }
 
     # Update existing Audit Stream status
     [PSObject] UpdateStatus([bool] $useTargetProject, [int] $streamId) {
         return $this.Request($useTargetProject, 'put', "audit/streams/$streamId", $this.apiVersion, $null)
     }
-     # Return Audit Stream with id of streamId if one exists otherwise throw
-    [PSObject] QueryStreamById([bool] $useTargetProject, [int] $streamId) {
-        return $this.Request($useTargetProject, 'get', "audit/streams/$streamId", $this.apiVersion, $null)
-    }
      # Delete Audit Stream
     [PSObject] DeleteStream([bool] $useTargetProject, [int] $streamId) {
         return $this.Request($useTargetProject, 'delete', "audit/streams/$streamId", $this.apiVersion, $null)
+    }
+     # Return Audit Stream with id of streamId if one exists otherwise throw
+    [PSObject] QueryStreamById([bool] $useTargetProject, [int] $streamId) {
+        return $this.Request($useTargetProject, 'get', "audit/streams/$streamId", $this.apiVersion, $null)
     }
 
 }

@@ -30,13 +30,13 @@ class AuditApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateStream([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'put', "audit/streams", $this.apiVersion, $body)
     }
-     # Return all Audit Streams scoped to an organization
-    [PSObject] QueryAllStreams([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "audit/streams", $this.apiVersion, $null)
-    }
      # Create new Audit Stream
     [PSObject] CreateStream([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "audit/streams", $this.apiVersion, $body)
+    }
+     # Return all Audit Streams scoped to an organization
+    [PSObject] QueryAllStreams([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "audit/streams", $this.apiVersion, $null)
     }
 
     # Delete Audit Stream
