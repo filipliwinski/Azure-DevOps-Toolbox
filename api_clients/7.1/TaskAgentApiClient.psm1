@@ -78,13 +78,13 @@ class TaskAgentApiClient : AzureDevOpsApiClient {
     [PSObject] ReplaceAgent([bool] $useTargetProject, [PSObject] $body, [int] $poolId, [int] $agentId) {
         return $this.Request($useTargetProject, 'put', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $body)
     }
-     # Update agent details.
-    [PSObject] UpdateAgent([bool] $useTargetProject, [PSObject] $body, [int] $poolId, [int] $agentId) {
-        return $this.Request($useTargetProject, 'patch', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $body)
-    }
      # Get Permissions on Pool.
     [PSObject] GetPoolPermission([bool] $useTargetProject, [int] $poolId, [int] $agentId) {
         return $this.Request($useTargetProject, 'get', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $null)
+    }
+     # Update agent details.
+    [PSObject] UpdateAgent([bool] $useTargetProject, [PSObject] $body, [int] $poolId, [int] $agentId) {
+        return $this.Request($useTargetProject, 'patch', "distributedtask/pools/$poolId/agents/$agentId", $this.apiVersion, $body)
     }
      # Delete an agent.  You probably don't want to call this endpoint directly. Instead, [use the agent configuration script](https://docs.microsoft.com/azure/devops/pipelines/agents/agents) to remove an agent from your organization.
     [PSObject] DeleteAgent([bool] $useTargetProject, [int] $poolId, [int] $agentId) {

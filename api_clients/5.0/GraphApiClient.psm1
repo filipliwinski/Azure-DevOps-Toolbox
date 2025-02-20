@@ -47,13 +47,13 @@ class GraphApiClient : AzureDevOpsApiClient {
     [PSObject] GetMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
         return $this.Request($useTargetProject, 'get', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
     }
-     # Deletes a membership between a container and subject.
-    [PSObject] RemoveMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
-        return $this.Request($useTargetProject, 'delete', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
-    }
      # Check to see if a membership relationship between a container and subject exists.
     [PSObject] CheckMembershipExistence_Head([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
         return $this.Request($useTargetProject, 'head', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
+    }
+     # Deletes a membership between a container and subject.
+    [PSObject] RemoveMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {
+        return $this.Request($useTargetProject, 'delete', "graph/memberships/$subjectDescriptor/$containerDescriptor", $this.apiVersion, $null)
     }
      # Create a new membership between a container and subject.
     [PSObject] AddMembership([bool] $useTargetProject, [string] $subjectDescriptor, [string] $containerDescriptor) {

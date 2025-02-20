@@ -74,13 +74,13 @@ class WorkItemTrackingOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] GetClassificationNode([bool] $useTargetProject, [string] $structureGroup, [string] $path) {
         return $this.Request($useTargetProject, 'get', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $null)
     }
-     # Update an existing classification node.
-    [PSObject] UpdateClassificationNode([bool] $useTargetProject, [PSObject] $body, [string] $structureGroup, [string] $path) {
-        return $this.Request($useTargetProject, 'patch', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $body)
-    }
      # Delete an existing classification node.
     [PSObject] DeleteClassificationNode([bool] $useTargetProject, [string] $structureGroup, [string] $path) {
         return $this.Request($useTargetProject, 'delete', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $null)
+    }
+     # Update an existing classification node.
+    [PSObject] UpdateClassificationNode([bool] $useTargetProject, [PSObject] $body, [string] $structureGroup, [string] $path) {
+        return $this.Request($useTargetProject, 'patch', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $body)
     }
      # Create new or update an existing classification node.
     [PSObject] CreateOrUpdateClassificationNode([bool] $useTargetProject, [PSObject] $body, [string] $structureGroup, [string] $path) {
@@ -123,13 +123,13 @@ class WorkItemTrackingOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] GetQuery([bool] $useTargetProject, [string] $query) {
         return $this.Request($useTargetProject, 'get', "wit/queries/$query", $this.apiVersion, $null)
     }
-     # Update a query or a folder. This allows you to update, rename and move queries and folders.
-    [PSObject] UpdateQuery([bool] $useTargetProject, [PSObject] $body, [string] $query) {
-        return $this.Request($useTargetProject, 'patch', "wit/queries/$query", $this.apiVersion, $body)
-    }
      # Delete a query or a folder. This deletes any permission change on the deleted query or folder and any of its descendants if it is a folder. It is important to note that the deleted permission changes cannot be recovered upon undeleting the query or folder.
     [PSObject] DeleteQuery([bool] $useTargetProject, [string] $query) {
         return $this.Request($useTargetProject, 'delete', "wit/queries/$query", $this.apiVersion, $null)
+    }
+     # Update a query or a folder. This allows you to update, rename and move queries and folders.
+    [PSObject] UpdateQuery([bool] $useTargetProject, [PSObject] $body, [string] $query) {
+        return $this.Request($useTargetProject, 'patch', "wit/queries/$query", $this.apiVersion, $body)
     }
      # Creates a query, or moves a query.Learn more about Work Item Query Language (WIQL) syntax [here](https://docs.microsoft.com/en-us/vsts/collaborate/wiql-syntax?toc=/vsts/work/track/toc.json&bc=/vsts/work/track/breadcrumb/toc.json&view=vsts).
     [PSObject] CreateQuery([bool] $useTargetProject, [PSObject] $body, [string] $query) {

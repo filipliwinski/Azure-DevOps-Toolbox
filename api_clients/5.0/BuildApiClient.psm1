@@ -164,13 +164,13 @@ class BuildApiClient : AzureDevOpsApiClient {
     [PSObject] RestoreDefinition([bool] $useTargetProject, [int] $definitionId) {
         return $this.Request($useTargetProject, 'patch', "build/definitions/$definitionId", $this.apiVersion, $null)
     }
-     # Updates an existing definition.
-    [PSObject] UpdateDefinition([bool] $useTargetProject, [PSObject] $body, [int] $definitionId) {
-        return $this.Request($useTargetProject, 'put', "build/definitions/$definitionId", $this.apiVersion, $body)
-    }
      # Gets a definition, optionally at a specific revision.
     [PSObject] GetDefinition([bool] $useTargetProject, [int] $definitionId) {
         return $this.Request($useTargetProject, 'get', "build/definitions/$definitionId", $this.apiVersion, $null)
+    }
+     # Updates an existing definition.
+    [PSObject] UpdateDefinition([bool] $useTargetProject, [PSObject] $body, [int] $definitionId) {
+        return $this.Request($useTargetProject, 'put', "build/definitions/$definitionId", $this.apiVersion, $body)
     }
      # Deletes a definition and all associated builds.
     [PSObject] DeleteDefinition([bool] $useTargetProject, [int] $definitionId) {
@@ -245,13 +245,13 @@ class BuildApiClient : AzureDevOpsApiClient {
     [PSObject] GetFolders([bool] $useTargetProject, [string] $path) {
         return $this.Request($useTargetProject, 'get', "build/folders/$path", $this.apiVersion, $null)
     }
-     # Updates an existing folder at given  existing path
-    [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
-        return $this.Request($useTargetProject, 'post', "build/folders/$path", $this.apiVersion, $body)
-    }
      # Deletes a definition folder. Definitions and their corresponding builds will also be deleted.
     [PSObject] DeleteFolder([bool] $useTargetProject, [string] $path) {
         return $this.Request($useTargetProject, 'delete', "build/folders/$path", $this.apiVersion, $null)
+    }
+     # Updates an existing folder at given  existing path
+    [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
+        return $this.Request($useTargetProject, 'post', "build/folders/$path", $this.apiVersion, $body)
     }
      # Creates a new folder.
     [PSObject] CreateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
