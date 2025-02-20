@@ -183,13 +183,13 @@ class BuildApiClient : AzureDevOpsApiClient {
     [PSObject] RestoreDefinition([bool] $useTargetProject, [int] $definitionId) {
         return $this.Request($useTargetProject, 'patch', "build/definitions/$definitionId", $this.apiVersion, $null)
     }
-     # Updates an existing build definition.  In order for this operation to succeed, the value of the "Revision" property of the request body must match the existing build definition's. It is recommended that you obtain the existing build definition by using GET, modify the build definition as necessary, and then submit the modified definition with PUT.
-    [PSObject] UpdateDefinition([bool] $useTargetProject, [PSObject] $body, [int] $definitionId) {
-        return $this.Request($useTargetProject, 'put', "build/definitions/$definitionId", $this.apiVersion, $body)
-    }
      # Gets a definition, optionally at a specific revision.
     [PSObject] GetDefinition([bool] $useTargetProject, [int] $definitionId) {
         return $this.Request($useTargetProject, 'get', "build/definitions/$definitionId", $this.apiVersion, $null)
+    }
+     # Updates an existing build definition.  In order for this operation to succeed, the value of the "Revision" property of the request body must match the existing build definition's. It is recommended that you obtain the existing build definition by using GET, modify the build definition as necessary, and then submit the modified definition with PUT.
+    [PSObject] UpdateDefinition([bool] $useTargetProject, [PSObject] $body, [int] $definitionId) {
+        return $this.Request($useTargetProject, 'put', "build/definitions/$definitionId", $this.apiVersion, $body)
     }
      # Deletes a definition and all associated builds.
     [PSObject] DeleteDefinition([bool] $useTargetProject, [int] $definitionId) {

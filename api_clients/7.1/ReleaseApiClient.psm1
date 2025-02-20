@@ -62,13 +62,13 @@ class ReleaseApiClient : AzureDevOpsApiClient {
     [PSObject] GetFolders([bool] $useTargetProject, [string] $path) {
         return $this.Request($useTargetProject, 'get', "release/folders/$path", $this.apiVersion, $null)
     }
-     # Updates an existing folder at given existing path.
-    [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
-        return $this.Request($useTargetProject, 'patch', "release/folders/$path", $this.apiVersion, $body)
-    }
      # Deletes a definition folder for given folder name and path and all it's existing definitions.
     [PSObject] DeleteFolder([bool] $useTargetProject, [string] $path) {
         return $this.Request($useTargetProject, 'delete', "release/folders/$path", $this.apiVersion, $null)
+    }
+     # Updates an existing folder at given existing path.
+    [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
+        return $this.Request($useTargetProject, 'patch', "release/folders/$path", $this.apiVersion, $body)
     }
      # This method is no longer supported. Use CreateFolder with folder parameter API.
     [PSObject] CreateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {

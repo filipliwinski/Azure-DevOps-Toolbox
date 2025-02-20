@@ -20,13 +20,13 @@ class TestPlanApiClient : AzureDevOpsApiClient {
     [PSObject] GetTestConfigurations([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "testplan/configurations", $this.apiVersion, $null)
     }
-     # Update a test configuration by its ID.
-    [PSObject] UpdateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'patch', "testplan/configurations", $this.apiVersion, $body)
-    }
      # Delete a test configuration by its ID.
     [PSObject] DeleteTestConfguration([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'delete', "testplan/configurations", $this.apiVersion, $null)
+    }
+     # Update a test configuration by its ID.
+    [PSObject] UpdateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'patch', "testplan/configurations", $this.apiVersion, $body)
     }
      # Create a test configuration.
     [PSObject] CreateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {

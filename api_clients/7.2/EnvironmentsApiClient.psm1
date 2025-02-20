@@ -60,13 +60,13 @@ class EnvironmentsApiClient : AzureDevOpsApiClient {
     [PSObject] ReplaceVirtualMachineResource([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {
         return $this.Request($useTargetProject, 'put', "pipelines/environments/$environmentId/providers/virtualmachines", $this.apiVersion, $body)
     }
-     # Update Virtual Machine Resource
-    [PSObject] UpdateVirtualMachineResource([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {
-        return $this.Request($useTargetProject, 'patch', "pipelines/environments/$environmentId/providers/virtualmachines", $this.apiVersion, $body)
-    }
      # Get Virtual Machine Resources
     [PSObject] GetVirtualMachineResources([bool] $useTargetProject, [int] $environmentId) {
         return $this.Request($useTargetProject, 'get', "pipelines/environments/$environmentId/providers/virtualmachines", $this.apiVersion, $null)
+    }
+     # Update Virtual Machine Resource
+    [PSObject] UpdateVirtualMachineResource([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {
+        return $this.Request($useTargetProject, 'patch', "pipelines/environments/$environmentId/providers/virtualmachines", $this.apiVersion, $body)
     }
      # Add Virtual Machine Resource
     [PSObject] AddVirtualMachineResource([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {

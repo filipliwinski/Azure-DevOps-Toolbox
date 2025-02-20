@@ -51,13 +51,13 @@ class DashboardApiClient : AzureDevOpsApiClient {
     [PSObject] ReplaceWidgets([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $team) {
         return $this.Request($useTargetProject, 'put', "$team/dashboard/dashboards/$dashboardId/widgets", $this.apiVersion, $body)
     }
-     # Update the supplied widgets on the dashboard using supplied state. State of existing Widgets not passed in the widget list is preserved.
-    [PSObject] UpdateWidgets([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $team) {
-        return $this.Request($useTargetProject, 'patch', "$team/dashboard/dashboards/$dashboardId/widgets", $this.apiVersion, $body)
-    }
      # Get widgets contained on the specified dashboard.
     [PSObject] GetWidgets([bool] $useTargetProject, [string] $dashboardId, [string] $team) {
         return $this.Request($useTargetProject, 'get', "$team/dashboard/dashboards/$dashboardId/widgets", $this.apiVersion, $null)
+    }
+     # Update the supplied widgets on the dashboard using supplied state. State of existing Widgets not passed in the widget list is preserved.
+    [PSObject] UpdateWidgets([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $team) {
+        return $this.Request($useTargetProject, 'patch', "$team/dashboard/dashboards/$dashboardId/widgets", $this.apiVersion, $body)
     }
      # Create a widget on the specified dashboard.
     [PSObject] CreateWidget([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $team) {
@@ -68,13 +68,13 @@ class DashboardApiClient : AzureDevOpsApiClient {
     [PSObject] ReplaceWidget([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $widgetId, [string] $team) {
         return $this.Request($useTargetProject, 'put', "$team/dashboard/dashboards/$dashboardId/widgets/$widgetId", $this.apiVersion, $body)
     }
-     # Perform a partial update of the specified widget.
-    [PSObject] UpdateWidget([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $widgetId, [string] $team) {
-        return $this.Request($useTargetProject, 'patch', "$team/dashboard/dashboards/$dashboardId/widgets/$widgetId", $this.apiVersion, $body)
-    }
      # Get the current state of the specified widget.
     [PSObject] GetWidget([bool] $useTargetProject, [string] $dashboardId, [string] $widgetId, [string] $team) {
         return $this.Request($useTargetProject, 'get', "$team/dashboard/dashboards/$dashboardId/widgets/$widgetId", $this.apiVersion, $null)
+    }
+     # Perform a partial update of the specified widget.
+    [PSObject] UpdateWidget([bool] $useTargetProject, [PSObject] $body, [string] $dashboardId, [string] $widgetId, [string] $team) {
+        return $this.Request($useTargetProject, 'patch', "$team/dashboard/dashboards/$dashboardId/widgets/$widgetId", $this.apiVersion, $body)
     }
      # Delete the specified widget.
     [PSObject] DeleteWidget([bool] $useTargetProject, [string] $dashboardId, [string] $widgetId, [string] $team) {

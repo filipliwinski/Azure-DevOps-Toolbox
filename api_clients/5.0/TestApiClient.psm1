@@ -89,13 +89,13 @@ class TestApiClient : AzureDevOpsApiClient {
     [PSObject] GetTestSuiteById([bool] $useTargetProject, [int] $planId, [int] $suiteId) {
         return $this.Request($useTargetProject, 'get', "test/Plans/$planId/suites/$suiteId", $this.apiVersion, $null)
     }
-     # Update a test suite.
-    [PSObject] UpdateTestSuite([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
-        return $this.Request($useTargetProject, 'patch', "test/Plans/$planId/suites/$suiteId", $this.apiVersion, $body)
-    }
      # Delete test suite.
     [PSObject] DeleteTestSuite([bool] $useTargetProject, [int] $planId, [int] $suiteId) {
         return $this.Request($useTargetProject, 'delete', "test/Plans/$planId/suites/$suiteId", $this.apiVersion, $null)
+    }
+     # Update a test suite.
+    [PSObject] UpdateTestSuite([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
+        return $this.Request($useTargetProject, 'patch', "test/Plans/$planId/suites/$suiteId", $this.apiVersion, $body)
     }
      # Create a test suite.
     [PSObject] CreateTestSuite([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
@@ -125,13 +125,13 @@ class TestApiClient : AzureDevOpsApiClient {
     [PSObject] RemoveTestCasesFromSuiteUrl([bool] $useTargetProject, [int] $planId, [int] $suiteId, [string] $testCaseIds) {
         return $this.Request($useTargetProject, 'delete', "test/Plans/$planId/suites/$suiteId/testcases/$testCaseIds", $this.apiVersion, $null)
     }
-     # Updates the properties of the test case association in a suite.
-    [PSObject] UpdateSuiteTestCases([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId, [string] $testCaseIds) {
-        return $this.Request($useTargetProject, 'patch', "test/Plans/$planId/suites/$suiteId/testcases/$testCaseIds", $this.apiVersion, $body)
-    }
      # Get a specific test case in a test suite with test case id.
     [PSObject] GetTestCaseById([bool] $useTargetProject, [int] $planId, [int] $suiteId, [int] $testCaseIds) {
         return $this.Request($useTargetProject, 'get', "test/Plans/$planId/suites/$suiteId/testcases/$testCaseIds", $this.apiVersion, $null)
+    }
+     # Updates the properties of the test case association in a suite.
+    [PSObject] UpdateSuiteTestCases([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId, [string] $testCaseIds) {
+        return $this.Request($useTargetProject, 'patch', "test/Plans/$planId/suites/$suiteId/testcases/$testCaseIds", $this.apiVersion, $body)
     }
      # Add test cases to suite.
     [PSObject] AddTestCasesToSuite([bool] $useTargetProject, [int] $planId, [int] $suiteId, [string] $testCaseIds) {

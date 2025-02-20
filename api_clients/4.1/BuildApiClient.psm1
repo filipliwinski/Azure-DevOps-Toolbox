@@ -242,13 +242,13 @@ class BuildApiClient : AzureDevOpsApiClient {
     [PSObject] GetFolders([bool] $useTargetProject, [string] $path) {
         return $this.Request($useTargetProject, 'get', "build/folders/$path", $this.apiVersion, $null)
     }
-     # Updates an existing folder at given  existing path
-    [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
-        return $this.Request($useTargetProject, 'post', "build/folders/$path", $this.apiVersion, $body)
-    }
      # Deletes a definition folder. Definitions and their corresponding builds will also be deleted.
     [PSObject] DeleteFolder([bool] $useTargetProject, [string] $path) {
         return $this.Request($useTargetProject, 'delete', "build/folders/$path", $this.apiVersion, $null)
+    }
+     # Updates an existing folder at given  existing path
+    [PSObject] UpdateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {
+        return $this.Request($useTargetProject, 'post', "build/folders/$path", $this.apiVersion, $body)
     }
      # Creates a new folder.
     [PSObject] CreateFolder([bool] $useTargetProject, [PSObject] $body, [string] $path) {

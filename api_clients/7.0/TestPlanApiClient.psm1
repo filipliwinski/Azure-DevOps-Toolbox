@@ -20,13 +20,13 @@ class TestPlanApiClient : AzureDevOpsApiClient {
     [PSObject] GetTestConfigurations([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "testplan/configurations", $this.apiVersion, $null)
     }
-     # Update a test configuration by its ID.
-    [PSObject] UpdateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'patch', "testplan/configurations", $this.apiVersion, $body)
-    }
      # Delete a test configuration by its ID.
     [PSObject] DeleteTestConfguration([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'delete', "testplan/configurations", $this.apiVersion, $null)
+    }
+     # Update a test configuration by its ID.
+    [PSObject] UpdateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'patch', "testplan/configurations", $this.apiVersion, $body)
     }
      # Create a test configuration.
     [PSObject] CreateTestConfiguration([bool] $useTargetProject, [PSObject] $body) {
@@ -86,13 +86,13 @@ class TestPlanApiClient : AzureDevOpsApiClient {
     [PSObject] RemoveTestCasesListFromSuite([bool] $useTargetProject, [int] $planId, [int] $suiteId) {
         return $this.Request($useTargetProject, 'delete', "testplan/Plans/$planId/Suites/$suiteId/TestCase", $this.apiVersion, $null)
     }
-     # Update the configurations for test cases
-    [PSObject] UpdateSuiteTestCases([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
-        return $this.Request($useTargetProject, 'patch', "testplan/Plans/$planId/Suites/$suiteId/TestCase", $this.apiVersion, $body)
-    }
      # Get Test Case List return those test cases which have all the configuration Ids as mentioned in the optional parameter. If configuration Ids is null, it return all the test cases
     [PSObject] GetTestCaseList([bool] $useTargetProject, [int] $planId, [int] $suiteId) {
         return $this.Request($useTargetProject, 'get', "testplan/Plans/$planId/Suites/$suiteId/TestCase", $this.apiVersion, $null)
+    }
+     # Update the configurations for test cases
+    [PSObject] UpdateSuiteTestCases([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
+        return $this.Request($useTargetProject, 'patch', "testplan/Plans/$planId/Suites/$suiteId/TestCase", $this.apiVersion, $body)
     }
      # Add test cases to a suite with specified configurations
     [PSObject] AddTestCasesToSuite([bool] $useTargetProject, [PSObject] $body, [int] $planId, [int] $suiteId) {
