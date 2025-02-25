@@ -39,13 +39,13 @@ class TestResultsApiClient : AzureDevOpsApiClient {
     [PSObject] UpdateCustomField([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "testresults/extensionfields", $this.apiVersion, $body)
     }
-     # Returns List of custom test fields for the given custom test field scope.
-    [PSObject] QueryCustomFields([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "testresults/extensionfields", $this.apiVersion, $null)
-    }
      # Creates custom test fields based on the data provided.
     [PSObject] AddCustomFields([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "testresults/extensionfields", $this.apiVersion, $body)
+    }
+     # Returns List of custom test fields for the given custom test field scope.
+    [PSObject] QueryCustomFields([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "testresults/extensionfields", $this.apiVersion, $null)
     }
 
     # Returns details of the custom test field for the specified testExtensionFieldId.
@@ -181,12 +181,12 @@ class TestResultsApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'patch', "testresults/runs/$runId", $this.apiVersion, $body)
     }
      # empty
-    [PSObject] GetTestRunById([bool] $useTargetProject, [int] $runId) {
-        return $this.Request($useTargetProject, 'get', "testresults/runs/$runId", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] DeleteTestRun([bool] $useTargetProject, [int] $runId) {
         return $this.Request($useTargetProject, 'delete', "testresults/runs/$runId", $this.apiVersion, $null)
+    }
+     # empty
+    [PSObject] GetTestRunById([bool] $useTargetProject, [int] $runId) {
+        return $this.Request($useTargetProject, 'get', "testresults/runs/$runId", $this.apiVersion, $null)
     }
 
     # empty
@@ -227,12 +227,12 @@ class TestResultsApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'patch', "testresults/runs/$runId/results", $this.apiVersion, $body)
     }
      # empty
-    [PSObject] GetTestResults([bool] $useTargetProject, [int] $runId) {
-        return $this.Request($useTargetProject, 'get', "testresults/runs/$runId/results", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] AddTestResultsToTestRun([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
         return $this.Request($useTargetProject, 'post', "testresults/runs/$runId/results", $this.apiVersion, $body)
+    }
+     # empty
+    [PSObject] GetTestResults([bool] $useTargetProject, [int] $runId) {
+        return $this.Request($useTargetProject, 'get', "testresults/runs/$runId/results", $this.apiVersion, $null)
     }
 
     # Get list of test result attachments reference
@@ -306,13 +306,13 @@ class TestResultsApiClient : AzureDevOpsApiClient {
     [PSObject] GetTestRunLogStoreAttachments([bool] $useTargetProject, [int] $runId) {
         return $this.Request($useTargetProject, 'get', "testresults/runs/$runId/testattachments", $this.apiVersion, $null)
     }
-     # Deletes the attachment with the specified filename for the specified runId from the LogStore.
-    [PSObject] DeleteTestRunLogStoreAttachment([bool] $useTargetProject, [int] $runId) {
-        return $this.Request($useTargetProject, 'delete', "testresults/runs/$runId/testattachments", $this.apiVersion, $null)
-    }
      # Creates an attachment in the LogStore for the specified runId.
     [PSObject] CreateTestRunLogStoreAttachment([bool] $useTargetProject, [PSObject] $body, [int] $runId) {
         return $this.Request($useTargetProject, 'post', "testresults/runs/$runId/testattachments", $this.apiVersion, $body)
+    }
+     # Deletes the attachment with the specified filename for the specified runId from the LogStore.
+    [PSObject] DeleteTestRunLogStoreAttachment([bool] $useTargetProject, [int] $runId) {
+        return $this.Request($useTargetProject, 'delete', "testresults/runs/$runId/testattachments", $this.apiVersion, $null)
     }
 
     # Get list of test run attachments reference
@@ -390,12 +390,12 @@ class TestResultsApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "testresults/testsettings", $this.apiVersion, $null)
     }
      # empty
-    [PSObject] DeleteTestSettings([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'delete', "testresults/testsettings", $this.apiVersion, $null)
-    }
-     # empty
     [PSObject] CreateTestSettings([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "testresults/testsettings", $this.apiVersion, $body)
+    }
+     # empty
+    [PSObject] DeleteTestSettings([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'delete', "testresults/testsettings", $this.apiVersion, $null)
     }
 
     # Creates an attachment in the LogStore for the specified buildId.
