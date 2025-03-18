@@ -20,13 +20,13 @@ class PolicyOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "policy/configurations", $this.apiVersion, $null)
     }
 
-    # Update a policy configuration by its ID.
-    [PSObject] UpdatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $configurationId) {
-        return $this.Request($useTargetProject, 'put', "policy/configurations/$configurationId", $this.apiVersion, $body)
-    }
-     # Get a policy configuration by its ID.
+    # Get a policy configuration by its ID.
     [PSObject] GetPolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {
         return $this.Request($useTargetProject, 'get', "policy/configurations/$configurationId", $this.apiVersion, $null)
+    }
+     # Update a policy configuration by its ID.
+    [PSObject] UpdatePolicyConfiguration([bool] $useTargetProject, [PSObject] $body, [int] $configurationId) {
+        return $this.Request($useTargetProject, 'put', "policy/configurations/$configurationId", $this.apiVersion, $body)
     }
      # Delete a policy configuration by its ID.
     [PSObject] DeletePolicyConfiguration([bool] $useTargetProject, [int] $configurationId) {

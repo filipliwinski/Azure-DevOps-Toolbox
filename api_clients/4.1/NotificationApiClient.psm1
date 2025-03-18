@@ -54,13 +54,13 @@ class NotificationApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "notification/subscriptions", $this.apiVersion, $null)
     }
 
-    # Update an existing subscription. Depending on the type of subscription and permissions, the caller can update the description, filter settings, channel (delivery) settings and more.
-    [PSObject] UpdateSubscription([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {
-        return $this.Request($useTargetProject, 'patch', "notification/subscriptions/$subscriptionId", $this.apiVersion, $body)
-    }
-     # Get a notification subscription by its ID.
+    # Get a notification subscription by its ID.
     [PSObject] GetSubscription([bool] $useTargetProject, [string] $subscriptionId) {
         return $this.Request($useTargetProject, 'get', "notification/subscriptions/$subscriptionId", $this.apiVersion, $null)
+    }
+     # Update an existing subscription. Depending on the type of subscription and permissions, the caller can update the description, filter settings, channel (delivery) settings and more.
+    [PSObject] UpdateSubscription([bool] $useTargetProject, [PSObject] $body, [string] $subscriptionId) {
+        return $this.Request($useTargetProject, 'patch', "notification/subscriptions/$subscriptionId", $this.apiVersion, $body)
     }
      # Delete a subscription.
     [PSObject] DeleteSubscription([bool] $useTargetProject, [string] $subscriptionId) {
