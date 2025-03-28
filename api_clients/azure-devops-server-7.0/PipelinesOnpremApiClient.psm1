@@ -11,13 +11,13 @@ class PipelinesOnpremApiClient : AzureDevOpsApiClient {
     PipelinesOnpremApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Create a pipeline.
-    [PSObject] CreatePipeline([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "pipelines", $this.apiVersion, $body)
-    }
-     # Get a list of pipelines.
+    # Get a list of pipelines.
     [PSObject] ListPipelines([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "pipelines", $this.apiVersion, $null)
+    }
+     # Create a pipeline.
+    [PSObject] CreatePipeline([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "pipelines", $this.apiVersion, $body)
     }
 
     # Gets a pipeline, optionally at the specified version
@@ -30,13 +30,13 @@ class PipelinesOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "pipelines/$pipelineId/preview", $this.apiVersion, $body)
     }
 
-    # Gets top 10000 runs for a particular pipeline.
-    [PSObject] ListRuns([bool] $useTargetProject, [int] $pipelineId) {
-        return $this.Request($useTargetProject, 'get', "pipelines/$pipelineId/runs", $this.apiVersion, $null)
-    }
-     # Runs a pipeline.
+    # Runs a pipeline.
     [PSObject] RunPipeline([bool] $useTargetProject, [PSObject] $body, [int] $pipelineId) {
         return $this.Request($useTargetProject, 'post', "pipelines/$pipelineId/runs", $this.apiVersion, $body)
+    }
+     # Gets top 10000 runs for a particular pipeline.
+    [PSObject] ListRuns([bool] $useTargetProject, [int] $pipelineId) {
+        return $this.Request($useTargetProject, 'get', "pipelines/$pipelineId/runs", $this.apiVersion, $null)
     }
 
     # Gets a run for a particular pipeline.
