@@ -21,6 +21,11 @@ class SearchApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "search/codesearchresults", $this.apiVersion, $body)
     }
 
+    # Provides a set of results which match the posted query. Returning HttpResponseMessage object so as to obtain the response headers in the auto generated rest client.
+    [PSObject] FetchCommitSearchResults([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "search/commitsearchresults", $this.apiVersion, $body)
+    }
+
     # Provides status of Repository.
     [PSObject] GetRepositoryStatus([bool] $useTargetProject, [string] $repository) {
         return $this.Request($useTargetProject, 'get', "search/status/repositories/$repository", $this.apiVersion, $null)
