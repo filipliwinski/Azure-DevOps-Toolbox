@@ -15,22 +15,22 @@ class SecurityApiClient : AzureDevOpsApiClient {
     [PSObject] RemoveAccessControlEntries([bool] $useTargetProject, [string] $securityNamespaceId) {
         return $this.Request($useTargetProject, 'delete', "accesscontrolentries/$securityNamespaceId", $this.apiVersion, $null)
     }
-     # Add or update ACEs in the ACL for the provided token. The request body contains the target token, a list of [ACEs](https://docs.microsoft.com/en-us/rest/api/azure/devops/security/access-control-entries/set-access-control-entries?#accesscontrolentry) and a optional merge parameter. In the case of a collision (by identity descriptor) with an existing ACE in the ACL, the "merge" parameter determines the behavior. If set, the existing ACE has its allow and deny merged with the incoming ACE's allow and deny. If unset, the existing ACE is displaced.
+     # Add or update ACEs in the ACL for the provided token. The request body contains the target token, a list of [ACEs](https://docs.microsoft.com/en-us/rest/api/azure/devops/security/access-control-entries/set-access-control-entries?#accesscontrolentry) and a optional merge parameter. In the case of a collision (by identity descriptor) with an existing ACE in the ACL, the "merge" parameter determines the behavior. If set, the existing ACE has its allow and deny merged with the incoming ACE's allow and deny. If unset, the existing ACE is displaced. For optimal performance and reliability, it is strongly recommended to batch multiple ACEs in a single request rather than sending individual requests. Batching requests improves efficiency, reduces overhead, and helps ensure successful completion of your operations.
     [PSObject] SetAccessControlEntries([bool] $useTargetProject, [PSObject] $body, [string] $securityNamespaceId) {
         return $this.Request($useTargetProject, 'post', "accesscontrolentries/$securityNamespaceId", $this.apiVersion, $body)
     }
 
-    # Create or update one or more access control lists. All data that currently exists for the ACLs supplied will be overwritten.
-    [PSObject] SetAccessControlLists([bool] $useTargetProject, [PSObject] $body, [string] $securityNamespaceId) {
-        return $this.Request($useTargetProject, 'post', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $body)
-    }
-     # Remove access control lists under the specfied security namespace.
+    # Remove access control lists under the specfied security namespace.
     [PSObject] RemoveAccessControlLists([bool] $useTargetProject, [string] $securityNamespaceId) {
         return $this.Request($useTargetProject, 'delete', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $null)
     }
-     # Return a list of access control lists for the specified security namespace and token. All ACLs in the security namespace will be retrieved if no optional parameters are provided.
+     # Return a list of access control lists for the specified security namespace and token. All ACLs in the security namespace will be retrieved if no optional parameters are provided.Note that the response will include all project IDs, including projects the current user does not have access to.
     [PSObject] QueryAccessControlLists([bool] $useTargetProject, [string] $securityNamespaceId) {
         return $this.Request($useTargetProject, 'get', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $null)
+    }
+     # Create or update one or more access control lists. All data that currently exists for the ACLs supplied will be overwritten.
+    [PSObject] SetAccessControlLists([bool] $useTargetProject, [PSObject] $body, [string] $securityNamespaceId) {
+        return $this.Request($useTargetProject, 'post', "accesscontrollists/$securityNamespaceId", $this.apiVersion, $body)
     }
 
     # Evaluates whether the caller has the specified permissions on the specified set of security tokens.
