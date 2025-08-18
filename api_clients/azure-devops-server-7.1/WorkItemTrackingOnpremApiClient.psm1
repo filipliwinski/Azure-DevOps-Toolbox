@@ -70,11 +70,7 @@ class WorkItemTrackingOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/classificationnodes", $this.apiVersion, $null)
     }
 
-    # Gets the classification node for a given node path.
-    [PSObject] GetClassificationNode([bool] $useTargetProject, [string] $structureGroup, [string] $path) {
-        return $this.Request($useTargetProject, 'get', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $null)
-    }
-     # Update an existing classification node.
+    # Update an existing classification node.
     [PSObject] UpdateClassificationNode([bool] $useTargetProject, [PSObject] $body, [string] $structureGroup, [string] $path) {
         return $this.Request($useTargetProject, 'patch', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $body)
     }
@@ -86,6 +82,10 @@ class WorkItemTrackingOnpremApiClient : AzureDevOpsApiClient {
     [PSObject] CreateOrUpdateClassificationNode([bool] $useTargetProject, [PSObject] $body, [string] $structureGroup, [string] $path) {
         return $this.Request($useTargetProject, 'post', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $body)
     }
+     # Gets the classification node for a given node path.
+    [PSObject] GetClassificationNode([bool] $useTargetProject, [string] $structureGroup, [string] $path) {
+        return $this.Request($useTargetProject, 'get', "wit/classificationnodes/$structureGroup/$path", $this.apiVersion, $null)
+    }
 
     # Create a new field.
     [PSObject] CreateWorkItemField([bool] $useTargetProject, [PSObject] $body) {
@@ -96,17 +96,17 @@ class WorkItemTrackingOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/fields", $this.apiVersion, $null)
     }
 
-    # Update a field.
-    [PSObject] UpdateWorkItemField([bool] $useTargetProject, [PSObject] $body, [string] $fieldNameOrRefName) {
-        return $this.Request($useTargetProject, 'patch', "wit/fields/$fieldNameOrRefName", $this.apiVersion, $body)
-    }
-     # Gets information on a specific field.
+    # Gets information on a specific field.
     [PSObject] GetWorkItemField([bool] $useTargetProject, [string] $fieldNameOrRefName) {
         return $this.Request($useTargetProject, 'get', "wit/fields/$fieldNameOrRefName", $this.apiVersion, $null)
     }
      # Deletes the field. To undelete a filed, see "Update Field" API.
     [PSObject] DeleteWorkItemField([bool] $useTargetProject, [string] $fieldNameOrRefName) {
         return $this.Request($useTargetProject, 'delete', "wit/fields/$fieldNameOrRefName", $this.apiVersion, $null)
+    }
+     # Update a field.
+    [PSObject] UpdateWorkItemField([bool] $useTargetProject, [PSObject] $body, [string] $fieldNameOrRefName) {
+        return $this.Request($useTargetProject, 'patch', "wit/fields/$fieldNameOrRefName", $this.apiVersion, $body)
     }
 
     # Migrates a project to a different process within the same OOB type. For example, you can only migrate a project from agile/custom-agile to agile/custom-agile.
@@ -119,11 +119,7 @@ class WorkItemTrackingOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/queries", $this.apiVersion, $null)
     }
 
-    # Retrieves an individual query and its children
-    [PSObject] GetQuery([bool] $useTargetProject, [string] $query) {
-        return $this.Request($useTargetProject, 'get', "wit/queries/$query", $this.apiVersion, $null)
-    }
-     # Update a query or a folder. This allows you to update, rename and move queries and folders.
+    # Update a query or a folder. This allows you to update, rename and move queries and folders.
     [PSObject] UpdateQuery([bool] $useTargetProject, [PSObject] $body, [string] $query) {
         return $this.Request($useTargetProject, 'patch', "wit/queries/$query", $this.apiVersion, $body)
     }
@@ -134,6 +130,10 @@ class WorkItemTrackingOnpremApiClient : AzureDevOpsApiClient {
      # Creates a query, or moves a query.Learn more about Work Item Query Language (WIQL) syntax [here](https://docs.microsoft.com/en-us/vsts/collaborate/wiql-syntax?toc=/vsts/work/track/toc.json&bc=/vsts/work/track/breadcrumb/toc.json&view=vsts).
     [PSObject] CreateQuery([bool] $useTargetProject, [PSObject] $body, [string] $query) {
         return $this.Request($useTargetProject, 'post', "wit/queries/$query", $this.apiVersion, $body)
+    }
+     # Retrieves an individual query and its children
+    [PSObject] GetQuery([bool] $useTargetProject, [string] $query) {
+        return $this.Request($useTargetProject, 'get', "wit/queries/$query", $this.apiVersion, $null)
     }
 
     # Gets a list of queries by ids (Maximum 1000)
@@ -146,17 +146,17 @@ class WorkItemTrackingOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/recyclebin", $this.apiVersion, $null)
     }
 
-    # Restores the deleted work item from Recycle Bin.
-    [PSObject] RestoreWorkItem([bool] $useTargetProject, [PSObject] $body, [int] $id) {
-        return $this.Request($useTargetProject, 'patch', "wit/recyclebin/$id", $this.apiVersion, $body)
-    }
-     # Gets a deleted work item from Recycle Bin.
+    # Gets a deleted work item from Recycle Bin.
     [PSObject] GetDeletedWorkItem([bool] $useTargetProject, [int] $id) {
         return $this.Request($useTargetProject, 'get', "wit/recyclebin/$id", $this.apiVersion, $null)
     }
      # Destroys the specified work item permanently from the Recycle Bin. This action can not be undone.
     [PSObject] DestroyWorkItem([bool] $useTargetProject, [int] $id) {
         return $this.Request($useTargetProject, 'delete', "wit/recyclebin/$id", $this.apiVersion, $null)
+    }
+     # Restores the deleted work item from Recycle Bin.
+    [PSObject] RestoreWorkItem([bool] $useTargetProject, [PSObject] $body, [int] $id) {
+        return $this.Request($useTargetProject, 'patch', "wit/recyclebin/$id", $this.apiVersion, $body)
     }
 
     # Get a batch of work item links
@@ -188,17 +188,17 @@ class WorkItemTrackingOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/tags", $this.apiVersion, $null)
     }
 
-    # Update the tag for the project.
-    [PSObject] UpdateTag([bool] $useTargetProject, [PSObject] $body, [string] $tagIdOrName) {
-        return $this.Request($useTargetProject, 'patch', "wit/tags/$tagIdOrName", $this.apiVersion, $body)
-    }
-     # Get the tag for the project.
+    # Get the tag for the project.
     [PSObject] GetTag([bool] $useTargetProject, [string] $tagIdOrName) {
         return $this.Request($useTargetProject, 'get', "wit/tags/$tagIdOrName", $this.apiVersion, $null)
     }
      # Delete the tag for the project. Please note, that the deleted tag will be removed from all Work Items as well as Pull Requests.
     [PSObject] DeleteTag([bool] $useTargetProject, [string] $tagIdOrName) {
         return $this.Request($useTargetProject, 'delete', "wit/tags/$tagIdOrName", $this.apiVersion, $null)
+    }
+     # Update the tag for the project.
+    [PSObject] UpdateTag([bool] $useTargetProject, [PSObject] $body, [string] $tagIdOrName) {
+        return $this.Request($useTargetProject, 'patch', "wit/tags/$tagIdOrName", $this.apiVersion, $body)
     }
 
     # Creates a temporary queryLearn more about Work Item Query Language (WIQL) syntax [here](https://docs.microsoft.com/en-us/vsts/collaborate/wiql-syntax?toc=/vsts/work/track/toc.json&bc=/vsts/work/track/breadcrumb/toc.json&view=vsts).
@@ -220,17 +220,17 @@ class WorkItemTrackingOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/workitems/$type", $this.apiVersion, $null)
     }
 
-    # Updates a single work item.
-    [PSObject] UpdateWorkItem([bool] $useTargetProject, [PSObject] $body, [int] $id) {
-        return $this.Request($useTargetProject, 'patch', "wit/workitems/$id", $this.apiVersion, $body)
-    }
-     # Returns a single work item.
+    # Returns a single work item.
     [PSObject] GetWorkItem([bool] $useTargetProject, [int] $id) {
         return $this.Request($useTargetProject, 'get', "wit/workitems/$id", $this.apiVersion, $null)
     }
      # Deletes the specified work item and sends it to the Recycle Bin, so that it can be restored back, if required. Optionally, if the destroy parameter has been set to true, it destroys the work item permanently. WARNING: If the destroy parameter is set to true, work items deleted by this command will NOT go to recycle-bin and there is no way to restore/recover them after deletion. It is recommended NOT to use this parameter. If you do, please use this parameter with extreme caution.
     [PSObject] DeleteWorkItem([bool] $useTargetProject, [int] $id) {
         return $this.Request($useTargetProject, 'delete', "wit/workitems/$id", $this.apiVersion, $null)
+    }
+     # Updates a single work item.
+    [PSObject] UpdateWorkItem([bool] $useTargetProject, [PSObject] $body, [int] $id) {
+        return $this.Request($useTargetProject, 'patch', "wit/workitems/$id", $this.apiVersion, $body)
     }
 
     # Returns the list of fully hydrated work item revisions, paged.
@@ -262,17 +262,17 @@ class WorkItemTrackingOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "wit/workItems/$workItemId/comments", $this.apiVersion, $null)
     }
 
-    # Update a comment on a work item.
-    [PSObject] UpdateComment([bool] $useTargetProject, [PSObject] $body, [int] $workItemId, [int] $commentId) {
-        return $this.Request($useTargetProject, 'patch', "wit/workItems/$workItemId/comments/$commentId", $this.apiVersion, $body)
-    }
-     # Returns a work item comment.
+    # Returns a work item comment.
     [PSObject] GetComment([bool] $useTargetProject, [int] $workItemId, [int] $commentId) {
         return $this.Request($useTargetProject, 'get', "wit/workItems/$workItemId/comments/$commentId", $this.apiVersion, $null)
     }
      # Delete a comment on a work item.
     [PSObject] DeleteComment([bool] $useTargetProject, [int] $workItemId, [int] $commentId) {
         return $this.Request($useTargetProject, 'delete', "wit/workItems/$workItemId/comments/$commentId", $this.apiVersion, $null)
+    }
+     # Update a comment on a work item.
+    [PSObject] UpdateComment([bool] $useTargetProject, [PSObject] $body, [int] $workItemId, [int] $commentId) {
+        return $this.Request($useTargetProject, 'patch', "wit/workItems/$workItemId/comments/$commentId", $this.apiVersion, $body)
     }
 
     # Gets reactions of a comment.
@@ -358,17 +358,17 @@ class WorkItemTrackingOnpremApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "$team/wit/templates", $this.apiVersion, $null)
     }
 
-    # Replace template contents
-    [PSObject] ReplaceTemplate([bool] $useTargetProject, [PSObject] $body, [string] $team, [string] $templateId) {
-        return $this.Request($useTargetProject, 'put', "$team/wit/templates/$templateId", $this.apiVersion, $body)
-    }
-     # Gets the template with specified id
+    # Gets the template with specified id
     [PSObject] GetTemplate([bool] $useTargetProject, [string] $team, [string] $templateId) {
         return $this.Request($useTargetProject, 'get', "$team/wit/templates/$templateId", $this.apiVersion, $null)
     }
      # Deletes the template with given id
     [PSObject] DeleteTemplate([bool] $useTargetProject, [string] $team, [string] $templateId) {
         return $this.Request($useTargetProject, 'delete', "$team/wit/templates/$templateId", $this.apiVersion, $null)
+    }
+     # Replace template contents
+    [PSObject] ReplaceTemplate([bool] $useTargetProject, [PSObject] $body, [string] $team, [string] $templateId) {
+        return $this.Request($useTargetProject, 'put', "$team/wit/templates/$templateId", $this.apiVersion, $body)
     }
 
     # Gets the results of the query given its WIQL.

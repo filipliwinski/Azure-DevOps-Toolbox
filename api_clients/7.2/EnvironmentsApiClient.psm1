@@ -20,17 +20,17 @@ class EnvironmentsApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "pipelines/environments", $this.apiVersion, $null)
     }
 
-    # Update the specified environment.
-    [PSObject] UpdateEnvironment([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {
-        return $this.Request($useTargetProject, 'patch', "pipelines/environments/$environmentId", $this.apiVersion, $body)
-    }
-     # Get an environment by its ID.
+    # Get an environment by its ID.
     [PSObject] GetEnvironmentById([bool] $useTargetProject, [int] $environmentId) {
         return $this.Request($useTargetProject, 'get', "pipelines/environments/$environmentId", $this.apiVersion, $null)
     }
      # Delete the specified environment.
     [PSObject] DeleteEnvironment([bool] $useTargetProject, [int] $environmentId) {
         return $this.Request($useTargetProject, 'delete', "pipelines/environments/$environmentId", $this.apiVersion, $null)
+    }
+     # Update the specified environment.
+    [PSObject] UpdateEnvironment([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {
+        return $this.Request($useTargetProject, 'patch', "pipelines/environments/$environmentId", $this.apiVersion, $body)
     }
 
     # Get environment deployment execution history
@@ -56,11 +56,7 @@ class EnvironmentsApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "pipelines/environments/$environmentId/providers/kubernetes/$resourceId", $this.apiVersion, $null)
     }
 
-    # Replace Virtual Machine Resource
-    [PSObject] ReplaceVirtualMachineResource([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {
-        return $this.Request($useTargetProject, 'put', "pipelines/environments/$environmentId/providers/virtualmachines", $this.apiVersion, $body)
-    }
-     # Update Virtual Machine Resource
+    # Update Virtual Machine Resource
     [PSObject] UpdateVirtualMachineResource([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {
         return $this.Request($useTargetProject, 'patch', "pipelines/environments/$environmentId/providers/virtualmachines", $this.apiVersion, $body)
     }
@@ -71,6 +67,10 @@ class EnvironmentsApiClient : AzureDevOpsApiClient {
      # Add Virtual Machine Resource
     [PSObject] AddVirtualMachineResource([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {
         return $this.Request($useTargetProject, 'post', "pipelines/environments/$environmentId/providers/virtualmachines", $this.apiVersion, $body)
+    }
+     # Replace Virtual Machine Resource
+    [PSObject] ReplaceVirtualMachineResource([bool] $useTargetProject, [PSObject] $body, [int] $environmentId) {
+        return $this.Request($useTargetProject, 'put', "pipelines/environments/$environmentId/providers/virtualmachines", $this.apiVersion, $body)
     }
 
     # Delete Virtual Machine Resource

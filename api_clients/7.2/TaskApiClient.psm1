@@ -11,6 +11,11 @@ class TaskApiClient : AzureDevOpsApiClient {
     TaskApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
+    # Triggers a pipeline run of pipelines which have a webhook resource defined with specified WebHook Name property of the WebHook service connection.
+    [PSObject] ReceiveExternalEvent([bool] $useTargetProject, [string] $webHookId) {
+        return $this.Request($useTargetProject, 'post', "public/distributedtask/webhooks/$webHookId", $this.apiVersion, $null)
+    }
+
     # Send a pipeline job event to be processed by the execution plan.
     [PSObject] PostEvent([bool] $useTargetProject, [PSObject] $body, [string] $scopeIdentifier, [string] $hubName, [string] $planId) {
         return $this.Request($useTargetProject, 'post', "$scopeIdentifier/distributedtask/hubs/$hubName/plans/$planId/events", $this.apiVersion, $body)
