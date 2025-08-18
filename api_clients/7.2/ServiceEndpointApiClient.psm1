@@ -20,17 +20,17 @@ class ServiceEndpointApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'put', "serviceendpoint/endpoints", $this.apiVersion, $body)
     }
 
-    # Update the service endpoint
-    [PSObject] UpdateServiceEndpoint([bool] $useTargetProject, [PSObject] $body, [string] $endpointId) {
-        return $this.Request($useTargetProject, 'put', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $body)
-    }
-     # Share service endpoint across projects
+    # Share service endpoint across projects
     [PSObject] ShareServiceEndpoint([bool] $useTargetProject, [PSObject] $body, [string] $endpointId) {
         return $this.Request($useTargetProject, 'patch', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $body)
     }
      # Delete a service endpoint
     [PSObject] DeleteServiceEndpoint([bool] $useTargetProject, [string] $endpointId) {
         return $this.Request($useTargetProject, 'delete', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $null)
+    }
+     # Update the service endpoint
+    [PSObject] UpdateServiceEndpoint([bool] $useTargetProject, [PSObject] $body, [string] $endpointId) {
+        return $this.Request($useTargetProject, 'put', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $body)
     }
 
     # Get service endpoint types.
