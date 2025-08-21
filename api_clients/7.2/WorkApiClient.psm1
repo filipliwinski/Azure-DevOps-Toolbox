@@ -35,11 +35,7 @@ class WorkApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'get', "work/plans", $this.apiVersion, $null)
     }
 
-    # Update the information for the specified plan
-    [PSObject] UpdatePlan([bool] $useTargetProject, [PSObject] $body, [string] $id) {
-        return $this.Request($useTargetProject, 'put', "work/plans/$id", $this.apiVersion, $body)
-    }
-     # Get the information for the specified plan
+    # Get the information for the specified plan
     [PSObject] GetPlan([bool] $useTargetProject, [string] $id) {
         return $this.Request($useTargetProject, 'get', "work/plans/$id", $this.apiVersion, $null)
     }
@@ -47,10 +43,24 @@ class WorkApiClient : AzureDevOpsApiClient {
     [PSObject] DeletePlan([bool] $useTargetProject, [string] $id) {
         return $this.Request($useTargetProject, 'delete', "work/plans/$id", $this.apiVersion, $null)
     }
+     # Update the information for the specified plan
+    [PSObject] UpdatePlan([bool] $useTargetProject, [PSObject] $body, [string] $id) {
+        return $this.Request($useTargetProject, 'put', "work/plans/$id", $this.apiVersion, $body)
+    }
 
     # Get Delivery View Data
     [PSObject] GetDeliveryTimelineData([bool] $useTargetProject, [string] $id) {
         return $this.Request($useTargetProject, 'get', "work/plans/$id/deliverytimeline", $this.apiVersion, $null)
+    }
+
+    # Retrieves the set of known queries
+    [PSObject] GetPredefinedQueries([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "work/predefinedqueries", $this.apiVersion, $null)
+    }
+
+    # Retrieves the specified predefined query including the query results
+    [PSObject] GetPredefinedQueryResults([bool] $useTargetProject, [string] $id) {
+        return $this.Request($useTargetProject, 'get', "work/predefinedqueries/$id", $this.apiVersion, $null)
     }
 
     # Get process configuration
