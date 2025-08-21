@@ -20,11 +20,7 @@ class CargoApi-AzureArtifactsApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feed/cargo/packages/$packageName/upstreaming", $this.apiVersion, $body)
     }
 
-    # Update state for a package version.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
-    [PSObject] UpdatePackageVersion([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $packageName, [string] $packageVersion) {
-        return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId/cargo/packages/$packageName/versions/$packageVersion", $this.apiVersion, $body)
-    }
-     # Get information about a package version.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
+    # Get information about a package version.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
     [PSObject] GetPackageVersion([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId/cargo/packages/$packageName/versions/$packageVersion", $this.apiVersion, $null)
     }
@@ -32,18 +28,22 @@ class CargoApi-AzureArtifactsApiClient : AzureDevOpsApiClient {
     [PSObject] DeletePackageVersion([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId/cargo/packages/$packageName/versions/$packageVersion", $this.apiVersion, $null)
     }
-
-    # Restore a package version from the recycle bin to its associated feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
-    [PSObject] RestorePackageVersionFromRecycleBin([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $packageName, [string] $packageVersion) {
-        return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId/cargo/RecycleBin/packages/$packageName/versions/$packageVersion", $this.apiVersion, $body)
+     # Update state for a package version.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
+    [PSObject] UpdatePackageVersion([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $packageName, [string] $packageVersion) {
+        return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId/cargo/packages/$packageName/versions/$packageVersion", $this.apiVersion, $body)
     }
-     # Get information about a package version in the recycle bin.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
+
+    # Get information about a package version in the recycle bin.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
     [PSObject] GetPackageVersionMetadataFromRecycleBin([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'get', "packaging/feeds/$feedId/cargo/RecycleBin/packages/$packageName/versions/$packageVersion", $this.apiVersion, $null)
     }
      # Delete a package version from the feed, moving it to the recycle bin.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
     [PSObject] DeletePackageVersionFromRecycleBin([bool] $useTargetProject, [string] $feedId, [string] $packageName, [string] $packageVersion) {
         return $this.Request($useTargetProject, 'delete', "packaging/feeds/$feedId/cargo/RecycleBin/packages/$packageName/versions/$packageVersion", $this.apiVersion, $null)
+    }
+     # Restore a package version from the recycle bin to its associated feed.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
+    [PSObject] RestorePackageVersionFromRecycleBin([bool] $useTargetProject, [PSObject] $body, [string] $feedId, [string] $packageName, [string] $packageVersion) {
+        return $this.Request($useTargetProject, 'patch', "packaging/feeds/$feedId/cargo/RecycleBin/packages/$packageName/versions/$packageVersion", $this.apiVersion, $body)
     }
 
     # Delete or restore several package versions from the recycle bin.The project parameter must be supplied if the feed was created in a project.If the feed is not associated with any project, omit the project parameter from the request.
