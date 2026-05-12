@@ -11,20 +11,16 @@ class ServiceEndpointApiClient : AzureDevOpsApiClient {
     ServiceEndpointApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Creates a new service endpoint
-    [PSObject] CreateServiceEndpoint([bool] $useTargetProject, [PSObject] $body) {
-        return $this.Request($useTargetProject, 'post', "serviceendpoint/endpoints", $this.apiVersion, $body)
-    }
-     # Update the service endpoints.
+    # Update the service endpoints.
     [PSObject] UpdateServiceEndpoints([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'put', "serviceendpoint/endpoints", $this.apiVersion, $body)
     }
-
-    # Update the service endpoint
-    [PSObject] UpdateServiceEndpoint([bool] $useTargetProject, [PSObject] $body, [string] $endpointId) {
-        return $this.Request($useTargetProject, 'put', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $body)
+     # Creates a new service endpoint
+    [PSObject] CreateServiceEndpoint([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "serviceendpoint/endpoints", $this.apiVersion, $body)
     }
-     # Share service endpoint across projects
+
+    # Share service endpoint across projects
     [PSObject] ShareServiceEndpoint([bool] $useTargetProject, [PSObject] $body, [string] $endpointId) {
         return $this.Request($useTargetProject, 'patch', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $body)
     }
@@ -32,8 +28,16 @@ class ServiceEndpointApiClient : AzureDevOpsApiClient {
     [PSObject] DeleteServiceEndpoint([bool] $useTargetProject, [string] $endpointId) {
         return $this.Request($useTargetProject, 'delete', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $null)
     }
+     # Update the service endpoint
+    [PSObject] UpdateServiceEndpoint([bool] $useTargetProject, [PSObject] $body, [string] $endpointId) {
+        return $this.Request($useTargetProject, 'put', "serviceendpoint/endpoints/$endpointId", $this.apiVersion, $body)
+    }
 
-    # Get service endpoint types.
+    # Get service endpoint types with passed types filter.
+    [PSObject] GetFilteredServiceEndpointTypes([bool] $useTargetProject, [PSObject] $body) {
+        return $this.Request($useTargetProject, 'post', "serviceendpoint/types", $this.apiVersion, $body)
+    }
+     # Get service endpoint types.
     [PSObject] GetServiceEndpointTypes([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "serviceendpoint/types", $this.apiVersion, $null)
     }
@@ -48,13 +52,13 @@ class ServiceEndpointApiClient : AzureDevOpsApiClient {
         return $this.Request($useTargetProject, 'post', "serviceendpoint/endpointproxy", $this.apiVersion, $body)
     }
 
-    # Get the service endpoints by name.
-    [PSObject] GetServiceEndpointsByNames([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "serviceendpoint/endpoints", $this.apiVersion, $null)
-    }
-     # Gets the service endpoints and patch new authorization parameters
+    # Gets the service endpoints and patch new authorization parameters
     [PSObject] GetServiceEndpointsWithRefreshedAuthentication([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'post', "serviceendpoint/endpoints", $this.apiVersion, $body)
+    }
+     # Get the service endpoints by name.
+    [PSObject] GetServiceEndpointsByNames([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "serviceendpoint/endpoints", $this.apiVersion, $null)
     }
 
     # Get the service endpoint details.
