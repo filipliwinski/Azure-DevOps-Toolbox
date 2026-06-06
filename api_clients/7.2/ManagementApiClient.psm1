@@ -11,66 +11,51 @@ class ManagementApiClient : AzureDevOpsApiClient {
     ManagementApiClient([string] $sourceServiceHost, [string] $sourceOrganization, [string] $sourceProjectName, [string] $sourcePersonalAccessToken, [string] $targetServiceHost, [string] $targetOrganization, [string] $targetProjectName, [string] $targetPersonalAccessToken)
         : base ($sourceServiceHost, $sourceOrganization, $sourceProjectName, $sourcePersonalAccessToken, $targetServiceHost, $targetOrganization, $targetProjectName, $targetPersonalAccessToken) {}
 
-    # Get the current status of Advanced Security for the organization
-    [PSObject] GetOrgEnablementStatus([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "management/enablement", $this.apiVersion, $null)
-    }
-     # Update the status of Advanced Security for the organization
-    [PSObject] UpdateOrgEnablementStatus([bool] $useTargetProject, [PSObject] $body) {
+    # Update the status of Advanced Security for the organization
+    [PSObject] UpdateOrgEnablementStatus2([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "management/enablement", $this.apiVersion, $body)
+    }
+     # Get the current status of Advanced Security for the organization
+    [PSObject] GetOrgEnablementStatus2([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "management/enablement", $this.apiVersion, $null)
     }
 
     # Get commiters used when calculating billing information.
-    [PSObject] GetMeterUsage([bool] $useTargetProject) {
+    [PSObject] GetMeterUsage2([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "management/meterusage/default", $this.apiVersion, $null)
     }
 
-    # Estimate the committers that would be added to the customer's usage if Advanced Security was enabled for this organization.
-    [PSObject] GetEstimatedOrgBillablePushers([bool] $useTargetProject) {
+    # Estimate the pushers that would be added to the customer's usage if Advanced Security was enabled for this organization.
+    [PSObject] GetEstimatedBillablePushersDetailsForOrg2([bool] $useTargetProject) {
         return $this.Request($useTargetProject, 'get', "management/meterUsageEstimate/default", $this.apiVersion, $null)
     }
 
-    # Estimate the pushers that would be added to the customer's usage if Advanced Security was enabled for this organization.
-    [PSObject] GetEstimatedBillablePushersDetailsForOrg([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "management/meterUsageEstimate/details", $this.apiVersion, $null)
-    }
-
-    # Get the current status of Advanced Security for a project
-    [PSObject] GetProjectEnablementStatus([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "management/enablement", $this.apiVersion, $null)
-    }
-     # Update the status of Advanced Security for the project
-    [PSObject] UpdateProjectEnablementStatus([bool] $useTargetProject, [PSObject] $body) {
+    # Update the status of Advanced Security for the project
+    [PSObject] UpdateProjectEnablementStatus2([bool] $useTargetProject, [PSObject] $body) {
         return $this.Request($useTargetProject, 'patch', "management/enablement", $this.apiVersion, $body)
     }
-
-    # Estimate the number of committers that would be added to the customer's usage if Advanced Security was enabled for this project.
-    [PSObject] GetEstimatedProjectBillablePushers([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "management/meterUsageEstimate/default", $this.apiVersion, $null)
+     # Get the current status of Advanced Security for a project
+    [PSObject] GetProjectEnablementStatus2([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "management/enablement", $this.apiVersion, $null)
     }
 
     # Estimate the pushers that would be added to the customer's usage if Advanced Security was enabled for this project.
-    [PSObject] GetEstimatedBillablePushersDetailsForProject([bool] $useTargetProject) {
-        return $this.Request($useTargetProject, 'get', "management/meterUsageEstimate/details", $this.apiVersion, $null)
+    [PSObject] GetEstimatedBillablePushersDetailsForProject2([bool] $useTargetProject) {
+        return $this.Request($useTargetProject, 'get', "management/meterUsageEstimate/default", $this.apiVersion, $null)
     }
 
-    # Determine if Advanced Security is enabled for a repository
-    [PSObject] GetRepoEnablementStatus([bool] $useTargetProject, [string] $repository) {
-        return $this.Request($useTargetProject, 'get', "management/repositories/$repository/enablement", $this.apiVersion, $null)
-    }
-     # Update the enablement of Advanced Security for a repository
-    [PSObject] UpdateRepoAdvSecEnablementStatus([bool] $useTargetProject, [PSObject] $body, [string] $repository) {
+    # Update the enablement status of Code Security and Secret Protection, along with their respective features, for a given repository.
+    [PSObject] UpdateRepoAdvSecEnablementStatus2([bool] $useTargetProject, [PSObject] $body, [string] $repository) {
         return $this.Request($useTargetProject, 'patch', "management/repositories/$repository/enablement", $this.apiVersion, $body)
     }
-
-    # Estimate the committers that would be added to the customer's usage if Advanced Security was enabled for this repository.
-    [PSObject] GetEstimatedRepoBillableCommitters([bool] $useTargetProject, [string] $repository) {
-        return $this.Request($useTargetProject, 'get', "management/repositories/$repository/meterUsageEstimate/default", $this.apiVersion, $null)
+     # Determines if Code Security, Secret Protection, and their features are enabled for the repository.
+    [PSObject] GetRepoEnablementStatus2([bool] $useTargetProject, [string] $repository) {
+        return $this.Request($useTargetProject, 'get', "management/repositories/$repository/enablement", $this.apiVersion, $null)
     }
 
     # Estimate the pushers that would be added to the customer's usage if Advanced Security was enabled for this repository.
-    [PSObject] GetEstimatedRepoBillablePushersDetails([bool] $useTargetProject, [string] $repository) {
-        return $this.Request($useTargetProject, 'get', "management/repositories/$repository/meterUsageEstimate/details", $this.apiVersion, $null)
+    [PSObject] GetEstimatedBillableCommittersDetailsForRepo2([bool] $useTargetProject, [string] $repository) {
+        return $this.Request($useTargetProject, 'get', "management/repositories/$repository/meterUsageEstimate/default", $this.apiVersion, $null)
     }
 
 }
